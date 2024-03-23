@@ -1,3 +1,5 @@
+#define N_WALKFRAMES 4
+
 namespace Player {
   const unsigned char PROGMEM runLeftSprite[] = {
   8, 8,

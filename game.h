@@ -40,21 +40,49 @@ namespace Game
     }
   }
 
-  void update() {
+  void update() 
+  {
     playerNext.y = player.y + player.vy;
-    // TODO collision check
+    
+    if (playerNext.y <= SCREENLEFT)
+    {
+      playerNext.y = SCREENLEFT;
+      player.vy = 0;
+    }
+    else if (playerNext.y > (SCREENRIGHT - PLAYER_WIDTH))
+    {
+      playerNext.y = SCREENRIGHT - PLAYER_WIDTH;
+      player.vy = 0;
+    }
+
     player.y = playerNext.y;
   }
 
   void draw() {
-    arduboy.setCursor(52, 32);
+    
+    if (player.vy != 0) 
+    {
+      if (arduboy.everyXFrames(walkAnimDelay)) 
+      {
+        player.sprite++;
+        if (player.sprite >= N_WALKFRAMES)
+        {
+          player.sprite = 0;
+        }
+      }
+    } 
+    else 
+    {
+      player.sprite = 0;
+    }
+
     if (player.dir == Direction::left)
     {
-      Sprites::drawSelfMasked(player.x, player.y, Player::runLeftSprite, 0);
+      Sprites::drawSelfMasked(player.x, player.y, Player::runLeftSprite, player.sprite);
     }
     else if (player.dir == Direction::right)
     {
-      Sprites::drawSelfMasked(player.x, player.y, Player::runRightSprite, 0);
+      Sprites::drawSelfMasked(player.x, player.y, Player::runRightSprite, player.sprite);
     }
 
   }
