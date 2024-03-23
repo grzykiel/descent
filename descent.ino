@@ -1,12 +1,16 @@
+#include <Arduboy2.h>
+
 #include "globals.h"
-#include "menu.h"
+#include "bitmaps.h"
+#include "controls.h"
 #include "game.h"
-#include "player.h"
+#include "menu.h"
+
 
 void setup()
 {
   arduboy.begin();
-  arduboy.setFrameRate(60);
+  arduboy.setFrameRate(FPS);
 }
 
 void loop() {
