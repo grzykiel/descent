@@ -59,31 +59,35 @@ namespace Game
   }
 
   void draw() {
-    
+
     if (player.vy != 0) 
     {
       if (arduboy.everyXFrames(walkAnimDelay)) 
       {
-        player.sprite++;
-        if (player.sprite >= N_WALKFRAMES)
+        player.frame++;
+        if (player.frame >= N_WALKFRAMES)
         {
-          player.sprite = 0;
+          player.frame = 0;
         }
       }
     } 
     else 
     {
-      player.sprite = 0;
+      player.frame = 0;
     }
 
     if (player.dir == Direction::left)
     {
-      Sprites::drawSelfMasked(player.x, player.y, Player::runLeftSprite, player.sprite);
+      player.sprite = Player::runLeftSprite;
+      // Sprites::drawSelfMasked(player.x, player.y, Player::runLeftSprite, player.sprite);
     }
     else if (player.dir == Direction::right)
     {
-      Sprites::drawSelfMasked(player.x, player.y, Player::runRightSprite, player.sprite);
+      player.sprite = Player::runRightSprite;
+      // Sprites::drawSelfMasked(player.x, player.y, Player::runRightSprite, player.sprite);
     }
+
+    Sprites::drawSelfMasked(player.x, player.y, player.sprite, player.frame);
 
   }
 }
