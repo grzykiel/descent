@@ -1,3 +1,6 @@
+#ifndef BITMAPS_H
+#define BITMAPS_H
+
 #define N_WALKFRAMES 4
 
 namespace Player {
@@ -48,3 +51,5 @@ namespace Tiles {
   };
     
 }
+
+#endif

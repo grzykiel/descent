@@ -5,12 +5,15 @@
 #include "controls.h"
 #include "game.h"
 #include "menu.h"
+#include "player.h"
 
 
 void setup()
 {
   arduboy.begin();
   arduboy.setFrameRate(FPS);
+  
+  Player::init();
 }
 
 void loop() {

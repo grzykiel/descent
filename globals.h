@@ -22,12 +22,32 @@
 #define PLAYER_WIDTH  8
 #define PLAYER_HEIGHT 8
 
-Arduboy2 arduboy;
-Sprites sprites;
+extern Arduboy2 arduboy;
+extern Sprites sprites;
 
-uint8_t gameState = STATE_GAME;
+extern uint8_t gameState;
 
-const uint8_t walkSpeed = 1;
-const uint8_t walkAnimDelay = 6;
+extern const uint8_t walkSpeed;
+extern const uint8_t walkAnimDelay;
+
+typedef struct 
+{
+  uint8_t x;
+  uint8_t y;
+} vector;
+
+enum class Direction : uint8_t
+{
+  up,
+  down,
+  left,
+  right
+};
+
+
+namespace Util 
+{
+
+}
 
 #endif

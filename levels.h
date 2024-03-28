@@ -1,39 +1,22 @@
-
+#ifndef LEVELS_H
+#define LEVES_H
 #include "globals.h"
+// #include "bitmaps.h"
 
 
 #define MAPWIDTH 8
 #define MAPHEIGHT 48
 
-uint8_t sandboxMap[SCREENHEIGHT][SCREENWIDTH] = {
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 1, 1, 1, 1, 1, 1, 1 },
-  { 0, 0, 0, 0, 0, 1, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 1, 1 },
-  { 1, 1, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 1, 1, 1, 1, 1, 1, 1 }
-};
+extern uint8_t sandbox[SCREENHEIGHT][SCREENWIDTH];
 
-namespace Level {
-void drawLevel();
-
-void drawLevel() {
-  for (int i = 0; i < SCREENHEIGHT; i++) {
-    for (int j = 0; j < SCREENWIDTH; j++) {
-      Sprites::drawSelfMasked((SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, Tiles::block, sandboxMap[i][j]);
-    }
-  }
+namespace Level 
+{
+  void drawLevel();
 }
 
+#endif
 
-}
+
+
+
+
