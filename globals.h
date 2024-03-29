@@ -27,13 +27,12 @@ extern Sprites sprites;
 
 extern uint8_t gameState;
 
-extern const uint8_t walkSpeed;
-extern const uint8_t walkAnimDelay;
+
 
 typedef struct 
 {
-  uint8_t x;
-  uint8_t y;
+  int8_t x;
+  int16_t y;
 } vector;
 
 enum class Direction : uint8_t

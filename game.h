@@ -14,8 +14,6 @@ namespace Game
   void input();
   void update();
   void draw();
-  void collisionCheck();
-  // vector collisionCorrect();
 }
 
 #endif
