@@ -43,7 +43,8 @@ void update() {
 
 void draw() {
   // draw player
-  Sprites::drawSelfMasked(player.x, player.y, player.sprite, player.frame);
+  // Sprites::drawSelfMasked(player.x, player.y, player.sprite, player.frame);
+  Sprites::drawSelfMasked(SCREENMID, player.y, player.sprite, player.frame);
 
 
 

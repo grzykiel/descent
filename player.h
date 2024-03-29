@@ -6,7 +6,7 @@ typedef struct {
   int8_t y;
   int16_t x;
   int8_t vy;
-  float vx;
+  int8_t vx;
   Direction dir;
   const unsigned char *sprite;
   uint8_t frame;

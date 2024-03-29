@@ -12,6 +12,7 @@
 #define SCREENRIGHT   64
 #define SCREENTOP     128
 #define SCREENBOTTOM  0
+#define SCREENMID     64
 
 //screen dimensions in blocks
 #define SCREENWIDTH   8

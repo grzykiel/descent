@@ -15,7 +15,7 @@ const uint8_t walkAnimDelay = 6;
 namespace Player {
 void init() {
   player.y = 28;
-  player.x = 64;
+  player.x = SCREENMID;
   player.vy = 0;
   player.vx = 0;
   player.dir = Direction::right;
@@ -63,11 +63,12 @@ void collisionCheck() {
   xMin = max(SCREENHEIGHT - 1 - xMin, 0);
   xMax = min(SCREENHEIGHT - 1 - xMax, SCREENHEIGHT - 1);
 
-  for (int i = xMin; i <= xMax; i++) {
-    for (int j = yMin; j <= yMax; j++) {
-      Sprites::drawSelfMasked((SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, Tiles::block, sandbox[i][j]);
+  for (int i = 0; i <= SCREENHEIGHT - 1; i++) {
+    for (int j = 0; j <= SCREENWIDTH - 1; j++) {
+      // Sprites::drawSelfMasked((SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, Tiles::block, sandbox[i][j]);
       if (sandbox[i][j]) {
         Rect blockRect = Rect((SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
+        // arduboy.drawRect(blockRect.x, blockRect.y, BLOCKSIZE, BLOCKSIZE, WHITE);
         collisionCorrect(blockRect);
       }
     }
