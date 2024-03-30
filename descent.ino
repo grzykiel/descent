@@ -14,6 +14,7 @@ void setup()
   arduboy.setFrameRate(FPS);
   
   Player::init();
+  Level::init();
 }
 
 void loop() {

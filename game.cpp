@@ -38,6 +38,7 @@ void input() {
 
 void update() {
   Player::update();
+  // Levels::update();
 
 }
 
@@ -50,6 +51,8 @@ void draw() {
 
   // draw level
   Level::drawLevel();
+  arduboy.setCursor(8, 8);
+  arduboy.print(player.x);
 
 }
 

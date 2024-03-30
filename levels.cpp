@@ -78,6 +78,10 @@ uint8_t scrollLevel[MAPHEIGHT][MAPWIDTH] = {
 
 namespace Level {
 
+void init() {
+  // copyMap(sandbox, 0, scrollLevel, 16);
+}
+
 void drawLevel() {
   // sandbox
   /*for (int i = 0; i < SCREENHEIGHT; i++) {
@@ -96,7 +100,16 @@ void drawLevel() {
 
   for (int i = xMin; i <= xMax; i++) {
     for (int j = 0; j < MAPWIDTH; j++) {
-      Sprites::drawSelfMasked((MAPHEIGHT - i - 1)*BLOCKSIZE - player.x + SCREENMID, j*BLOCKSIZE, Tiles::block, scrollLevel[i][j]);
+      Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - player.x + SCREENMID, j * BLOCKSIZE, Tiles::block, scrollLevel[i][j]);
+    }
+  }
+}
+
+//TODO out of bounds checking
+void copyMap(uint8_t fromMap[][MAPWIDTH], uint8_t fromIndex, uint8_t toMap[][MAPWIDTH], uint8_t toIndex) {
+  for (int i = 0; i < SCREENHEIGHT; i++) {
+    for (int j = 0; j < MAPWIDTH; j++) {
+      toMap[i + toIndex][j] = fromMap[i + fromIndex][j];
     }
   }
 }

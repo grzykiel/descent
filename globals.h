@@ -50,7 +50,7 @@ enum class Direction : uint8_t
 
 namespace Util 
 {
-
+  
 }
 
 #endif
