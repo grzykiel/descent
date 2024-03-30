@@ -14,6 +14,8 @@
 #define SCREENBOTTOM  0
 #define SCREENMID     64
 
+#define CAMERA_OFFSET 128
+
 //screen dimensions in blocks
 #define SCREENWIDTH   8
 #define SCREENHEIGHT  16

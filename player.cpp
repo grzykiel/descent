@@ -64,7 +64,7 @@ void collisionCheck() {
   xMax = min(MAPHEIGHT - 1 - xMax, MAPHEIGHT - 1);
 
   for (int i = xMin; i <= xMax; i++) {
-    for (int j = yMin; j <yMax; j++) {
+    for (int j = yMin; j <= yMax; j++) {
       // Sprites::drawSelfMasked((SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, Tiles::block, sandbox[i][j]);
       if (scrollLevel[i][j]) {
         Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
