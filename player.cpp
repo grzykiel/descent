@@ -15,7 +15,7 @@ const uint8_t walkAnimDelay = 6;
 namespace Player {
 void init() {
   player.y = 28;
-  player.x = SCREENMID;
+  player.x = SCREENMID + 128;
   player.vy = 0;
   player.vx = 0;
   player.dir = Direction::right;
@@ -55,13 +55,21 @@ void update() {
 }
 
 void collisionCheck() {
-  int yMin = max(floor(player.y/BLOCKSIZE) - 1, 0); 
-  int yMax = min(ceil(player.y/BLOCKSIZE) + 1, MAPWIDTH - 1);
+  int yMin = max(floor(player.y / BLOCKSIZE) - 1, 0);
+  int yMax = min(ceil(player.y / BLOCKSIZE) + 1, MAPWIDTH - 1);
 
-  int xMin = ceil(player.x/BLOCKSIZE) + 1;
-  int xMax = floor(player.x/BLOCKSIZE) - 1;
+
+  int xMin = ceil(player.x / (1.0f * BLOCKSIZE)) + 1;
+  int xMax = floor(player.x / (1.0f * BLOCKSIZE)) - 1;
+    arduboy.setCursor(8, 8);
+  // arduboy.print(player.x); arduboy.print("\n ");
+  // arduboy.print(xMin);
+  // arduboy.print("\n ");
+  // arduboy.print(xMax);
   xMin = max(MAPHEIGHT - 1 - xMin, 0);
   xMax = min(MAPHEIGHT - 1 - xMax, MAPHEIGHT - 1);
+
+
 
   for (int i = xMin; i <= xMax; i++) {
     for (int j = yMin; j <= yMax; j++) {
@@ -73,11 +81,10 @@ void collisionCheck() {
       }
     }
   }
-  
 }
 
 void collisionCorrect(Rect collision) {
-  
+
   Rect playerRect = Rect(player.x, playerNext.y, BLOCKSIZE, BLOCKSIZE);
   if (arduboy.collide(playerRect, collision)) {
     if (collision.y < playerRect.y) {
@@ -97,6 +104,5 @@ void collisionCorrect(Rect collision) {
       playerNext.x = collision.x - collision.height;
     }
   }
-
 }
 }
