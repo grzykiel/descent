@@ -38,7 +38,7 @@ void input() {
 
 void update() {
   Player::update();
-  // Levels::update();
+  Level::update();
 
 }
 

@@ -5,8 +5,9 @@
 
 #define FPS 60
 
-#define STATE_MENU  0
-#define STATE_GAME  1
+#define STATE_MENU    0
+#define STATE_GAME    1
+#define STATE_SANDBOX 2
 
 #define SCREENLEFT    0
 #define SCREENRIGHT   64
@@ -14,8 +15,7 @@
 #define SCREENBOTTOM  0
 #define SCREENMID     64
 
-// #define CAMERA_OFFSET     16
-// #define CAMERA_OFFSET_PX  128
+#define REMAP_THRESHOLD 64
 
 //screen dimensions in blocks
 #define SCREENWIDTH   8
@@ -50,7 +50,7 @@ enum class Direction : uint8_t
 
 namespace Util 
 {
-  
+  int trim(int p, int l, int h);
 }
 
 #endif

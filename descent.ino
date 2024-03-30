@@ -3,23 +3,28 @@
 #include "globals.h"
 #include "bitmaps.h"
 #include "controls.h"
-#include "game.h"
 #include "menu.h"
+#include "game.h"
+#include "sandbox.h"
 #include "player.h"
 
 
-void setup()
-{
+void setup() {
   arduboy.begin();
   arduboy.setFrameRate(FPS);
-  
-  Player::init();
-  Level::init();
+
+  switch (gameState) {
+    case STATE_GAME:
+      Player::init();
+      Level::init();
+      break;
+    case STATE_SANDBOX:
+      Sandbox::init();
+  }
 }
 
 void loop() {
-  if (!arduboy.nextFrame())
-  {
+  if (!arduboy.nextFrame()) {
     return;
   }
 
@@ -29,15 +34,16 @@ void loop() {
   arduboy.display();
 }
 
-void stateLoop()
-{
-  switch (gameState)
-  {
+void stateLoop() {
+  switch (gameState) {
     case STATE_MENU:
       Menu::loop();
       break;
     case STATE_GAME:
       Game::loop();
+      break;
+    case STATE_SANDBOX:
+      Sandbox::loop();
       break;
   }
 }

@@ -3,24 +3,25 @@
 #include "game.h"
 #include "player.h"
 #include "bitmaps.h"
+// #include "globals.h"
 
-uint8_t sandbox[SCREENHEIGHT][SCREENWIDTH] = {
+uint8_t room[SCREENHEIGHT][SCREENWIDTH] = {
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 1, 1, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 1, 0, 0, 1, 1, 1, 1 },
-  { 0, 0, 0, 0, 0, 1, 0, 0 },
+  { 0, 0, 0, 1, 0, 0, 0, 0 },
+  { 0, 0, 1, 0, 0, 0, 0, 0 },
+  { 1, 0, 0, 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1, 0, 0, 1 },
+  { 0, 0, 0, 1, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 1, 1 },
-  { 1, 1, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 1, 1, 1, 1, 1, 1, 1 }
+  { 1, 0, 0, 0, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 0, 0, 0, 1 },
+  { 1, 1, 0, 0, 0, 1, 1, 1 }
 };
 
 uint8_t scrollLevel[MAPHEIGHT][MAPWIDTH] = {
@@ -73,22 +74,17 @@ uint8_t scrollLevel[MAPHEIGHT][MAPWIDTH] = {
   { 1, 1, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 1, 1, 0, 0, 1, 1, 1 },
-  { 1, 1, 1, 1, 1, 1, 1, 1 }
+  { 1, 1, 1, 0, 0, 1, 1, 1 }
 };
 
 namespace Level {
 
 void init() {
-  // copyMap(sandbox, 0, scrollLevel, 16);
+  
 }
 
 void drawLevel() {
-  // sandbox
-  /*for (int i = 0; i < SCREENHEIGHT; i++) {
-    for (int j = 0; j < SCREENWIDTH; j++) {
-      Sprites::drawSelfMasked((SCREENHEIGHT - i - 1) * BLOCKSIZE - player.x + SCREENMID, j * BLOCKSIZE, Tiles::block, sandbox[i][j]);
-    }
-  }*/
+
 
   // arduboy.print(player.x);
 
@@ -104,6 +100,16 @@ void drawLevel() {
     }
   }
 }
+
+void update() {
+  if (player.x <= REMAP_THRESHOLD) {
+    player.x = SCREENMID + 128; //TODO #define
+    copyMap(scrollLevel, 16, scrollLevel, 0);
+    copyMap(scrollLevel, 32, scrollLevel, 16);
+    copyMap(room, 0, scrollLevel, 32);
+  }
+}
+
 
 //TODO out of bounds checking
 void copyMap(uint8_t fromMap[][MAPWIDTH], uint8_t fromIndex, uint8_t toMap[][MAPWIDTH], uint8_t toIndex) {
