@@ -56,18 +56,18 @@ void update() {
 
 void collisionCheck() {
   int yMin = max(floor(player.y/BLOCKSIZE) - 1, 0); 
-  int yMax = min(ceil(player.y/BLOCKSIZE) + 1, SCREENWIDTH - 1);
+  int yMax = min(ceil(player.y/BLOCKSIZE) + 1, MAPWIDTH - 1);
 
   int xMin = ceil(player.x/BLOCKSIZE) + 1;
   int xMax = floor(player.x/BLOCKSIZE) - 1;
-  xMin = max(SCREENHEIGHT - 1 - xMin, 0);
-  xMax = min(SCREENHEIGHT - 1 - xMax, SCREENHEIGHT - 1);
+  xMin = max(MAPHEIGHT - 1 - xMin, 0);
+  xMax = min(MAPHEIGHT - 1 - xMax, MAPHEIGHT - 1);
 
-  for (int i = 0; i <= SCREENHEIGHT - 1; i++) {
-    for (int j = 0; j <= SCREENWIDTH - 1; j++) {
+  for (int i = xMin; i <= xMax; i++) {
+    for (int j = yMin; j <yMax; j++) {
       // Sprites::drawSelfMasked((SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, Tiles::block, sandbox[i][j]);
-      if (sandbox[i][j]) {
-        Rect blockRect = Rect((SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
+      if (scrollLevel[i][j]) {
+        Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
         // arduboy.drawRect(blockRect.x, blockRect.y, BLOCKSIZE, BLOCKSIZE, WHITE);
         collisionCorrect(blockRect);
       }
