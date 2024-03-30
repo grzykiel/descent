@@ -89,7 +89,12 @@ void drawLevel() {
   // arduboy.print(player.x);
 
   // scrollLevel
-  for (int i = 0; i < MAPHEIGHT; i++) {
+  int xMin = ceil(player.x / (1.0f * BLOCKSIZE)) + 8;
+  int xMax = floor(player.x / (1.0f * BLOCKSIZE)) - 8;
+  xMin = max(MAPHEIGHT - 1 - xMin, 0);
+  xMax = min(MAPHEIGHT - 1 - xMax, MAPHEIGHT - 1);
+
+  for (int i = xMin; i <= xMax; i++) {
     for (int j = 0; j < MAPWIDTH; j++) {
       Sprites::drawSelfMasked((MAPHEIGHT - i - 1)*BLOCKSIZE - player.x + SCREENMID, j*BLOCKSIZE, Tiles::block, scrollLevel[i][j]);
     }

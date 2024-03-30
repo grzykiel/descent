@@ -61,11 +61,6 @@ void collisionCheck() {
 
   int xMin = ceil(player.x / (1.0f * BLOCKSIZE)) + 1;
   int xMax = floor(player.x / (1.0f * BLOCKSIZE)) - 1;
-    arduboy.setCursor(8, 8);
-  // arduboy.print(player.x); arduboy.print("\n ");
-  // arduboy.print(xMin);
-  // arduboy.print("\n ");
-  // arduboy.print(xMax);
   xMin = max(MAPHEIGHT - 1 - xMin, 0);
   xMax = min(MAPHEIGHT - 1 - xMax, MAPHEIGHT - 1);
 
