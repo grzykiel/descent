@@ -3,9 +3,9 @@
 Arduboy2 arduboy;
 Sprites sprites;
 
-uint8_t gameState = STATE_SANDBOX; //STATE_GAME;
+uint8_t gameState = STATE_GAME;
 
-
+int16_t cameraOffset = 0;
 
 namespace Util {
 

@@ -31,7 +31,7 @@ extern Sprites sprites;
 
 extern uint8_t gameState;
 
-
+extern int16_t cameraOffset;
 
 typedef struct 
 {

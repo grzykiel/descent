@@ -39,20 +39,23 @@ void input() {
 void update() {
   Player::update();
   Level::update();
+  updateCamera();
+}
 
+void updateCamera() {
+    cameraOffset = Util::trim(player.x - SCREENMID, 0, MAPHEIGHT*BLOCKSIZE - SCREENTOP);
 }
 
 void draw() {
   // draw player
-  // Sprites::drawSelfMasked(player.x, player.y, player.sprite, player.frame);
-  Sprites::drawSelfMasked(SCREENMID, player.y, player.sprite, player.frame);
-
-
+  Sprites::drawSelfMasked(player.x - cameraOffset, player.y, player.sprite, player.frame);
 
   // draw level
   Level::drawLevel();
   arduboy.setCursor(8, 8);
   arduboy.print(player.x);
+  arduboy.print("\n ");
+  arduboy.print(cameraOffset);
 
 }
 

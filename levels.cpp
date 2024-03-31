@@ -25,7 +25,7 @@ uint8_t room[SCREENHEIGHT][SCREENWIDTH] = {
 };
 
 uint8_t scrollLevel[MAPHEIGHT][MAPWIDTH] = {
-  { 1, 1, 1, 1, 1, 1, 1, 1 },
+  { 1, 1, 1, 0, 0, 1, 1, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
@@ -74,17 +74,15 @@ uint8_t scrollLevel[MAPHEIGHT][MAPWIDTH] = {
   { 1, 1, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 1, 1, 0, 0, 1, 1, 1 },
-  { 1, 1, 1, 0, 0, 1, 1, 1 }
+  { 1, 1, 1, 1, 1, 1, 1, 1 }
 };
 
 namespace Level {
 
 void init() {
-  
 }
 
 void drawLevel() {
-
 
   // arduboy.print(player.x);
 
@@ -94,20 +92,24 @@ void drawLevel() {
   xMin = max(MAPHEIGHT - 1 - xMin, 0);
   xMax = min(MAPHEIGHT - 1 - xMax, MAPHEIGHT - 1);
 
-  for (int i = xMin; i <= xMax; i++) {
+  for (int i = 0; i < MAPHEIGHT; i++) {
     for (int j = 0; j < MAPWIDTH; j++) {
-      Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - player.x + SCREENMID, j * BLOCKSIZE, Tiles::block, scrollLevel[i][j]);
+      Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::block, scrollLevel[i][j]);
     }
   }
 }
 
 void update() {
   if (player.x <= REMAP_THRESHOLD) {
-    player.x = SCREENMID + 128; //TODO #define
-    copyMap(scrollLevel, 16, scrollLevel, 0);
-    copyMap(scrollLevel, 32, scrollLevel, 16);
-    copyMap(room, 0, scrollLevel, 32);
+    // shiftMap();
   }
+}
+
+void shiftMap() {
+  player.x = SCREENMID + 128;  //TODO #define
+  copyMap(scrollLevel, 16, scrollLevel, 0);
+  copyMap(scrollLevel, 32, scrollLevel, 16);
+  copyMap(room, 0, scrollLevel, 32);
 }
 
 

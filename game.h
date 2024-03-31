@@ -4,9 +4,7 @@
 #include "globals.h"
 
 #include "controls.h"
-// #include "player.h"
-// // #include "levels.h"
-// // #endif
+
 
 namespace Game
 {
@@ -14,6 +12,7 @@ namespace Game
   void input();
   void update();
   void draw();
+  void updateCamera();
 }
 
 #endif
