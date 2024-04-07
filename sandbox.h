@@ -5,7 +5,7 @@
 #include "player.h"
 #include "controls.h"
 
-#define SANDBOX_HEIGHT 20
+#define SANDBOX_HEIGHT 16
 
 namespace Sandbox
 {

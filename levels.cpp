@@ -5,7 +5,7 @@
 #include "bitmaps.h"
 // #include "globals.h"
 
-uint8_t room[SCREENHEIGHT][SCREENWIDTH] = {
+uint8_t nextRoom[SCREENHEIGHT][SCREENWIDTH] = {
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -109,7 +109,7 @@ void shiftMap() {
   player.x = SCREENMID + 128;  //TODO #define
   copyMap(scrollLevel, 16, scrollLevel, 0);
   copyMap(scrollLevel, 32, scrollLevel, 16);
-  copyMap(room, 0, scrollLevel, 32);
+  copyMap(nextRoom, 0, scrollLevel, 32);
 }
 
 
@@ -122,6 +122,18 @@ void copyMap(uint8_t fromMap[][MAPWIDTH], uint8_t fromIndex, uint8_t toMap[][MAP
   }
 }
 
-
+void autoTile(uint8_t room[][SCREENWIDTH]) {
+  for (int i = 0; i < SCREENHEIGHT; i++) {
+    for (int j = 0; j < SCREENWIDTH; j++) {
+      if (room[i][j]) {
+        int a = (i == 0) ? 1 : (room[i - 1][j] > 0) * 1;
+        int b = (j == SCREENWIDTH - 1) ? 2 : (room[i][j + 1] > 0) * 2;
+        int c = (i == SCREENHEIGHT - 1) ? 4 : (room[i + 1][j] > 0) * 4;
+        int d = (i == 0) ? 8 : (room[i][j - 1] > 0) * 8;
+        room[i][j] = a + b + c + d + 1;
+      }
+    }
+  }
+}
 
 }

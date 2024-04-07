@@ -1,22 +1,19 @@
 #include "sandbox.h"
 #include "bitmaps.h"
+#include "levels.h"
 
 uint8_t sandbox[SANDBOX_HEIGHT][SCREENWIDTH] = {
   { 1, 1, 1, 1, 1, 1, 1, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
+  { 1, 0, 0, 1, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
+  { 1, 0, 0, 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 1, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
+  { 1, 0, 0, 1, 1, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
@@ -41,6 +38,8 @@ void init() {
   player.dir = Direction::right;
   player.sprite = Player::runRightSprite;
   player.frame = 0;
+
+  Level::autoTile(sandbox);
 }
 
 void input() {
@@ -66,13 +65,9 @@ void draw() {
 
   for (int i=0; i<SANDBOX_HEIGHT; i++) {
     for (int j=0; j<SCREENWIDTH; j++) {
-      Sprites::drawSelfMasked((SANDBOX_HEIGHT - i - 1)*BLOCKSIZE - camera , j*BLOCKSIZE, Tiles::block, sandbox[i][j]);
+      Sprites::drawSelfMasked((SANDBOX_HEIGHT - i - 1)*BLOCKSIZE - camera , j*BLOCKSIZE, Tiles::wall, sandbox[i][j]);
     }
   }
 
-  arduboy.setCursor(8,8);
-  arduboy.print(player.x);
-  arduboy.print("\n ");
-  arduboy.print(camera);
 }
 }
