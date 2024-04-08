@@ -51,11 +51,12 @@ void draw() {
   Sprites::drawSelfMasked(player.x - cameraOffset, player.y, player.sprite, player.frame);
 
   // draw level
-  Level::drawLevel();
+  Level::draw();
   arduboy.setCursor(8, 8);
-  arduboy.print(player.x);
+  
+  /*arduboy.print(player.x);
   arduboy.print("\n ");
-  arduboy.print(cameraOffset);
+  arduboy.print(cameraOffset);*/
 
 }
 

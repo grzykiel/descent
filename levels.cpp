@@ -5,7 +5,8 @@
 #include "bitmaps.h"
 // #include "globals.h"
 
-uint8_t nextRoom[SCREENHEIGHT][SCREENWIDTH] = {
+uint8_t nextRoom[SCREENHEIGHT][SCREENWIDTH];
+/* = {
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -22,10 +23,10 @@ uint8_t nextRoom[SCREENHEIGHT][SCREENWIDTH] = {
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 1, 0, 0, 0, 1, 1, 1 }
-};
+};*/
 
-uint8_t scrollLevel[MAPHEIGHT][MAPWIDTH] = {
-  { 1, 1, 1, 0, 0, 1, 1, 1 },
+uint8_t levelMap[MAPHEIGHT][MAPWIDTH] = {
+  { 1, 2, 3, 0, 0, 1, 1, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
@@ -33,7 +34,7 @@ uint8_t scrollLevel[MAPHEIGHT][MAPWIDTH] = {
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
+  { 15, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
@@ -73,8 +74,8 @@ uint8_t scrollLevel[MAPHEIGHT][MAPWIDTH] = {
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 1, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 1, 1, 0, 0, 1, 1, 1 },
-  { 1, 1, 1, 1, 1, 1, 1, 1 }
+  { 1, 1, 0, 0, 0, 1, 1, 1 },
+  { 1, 1, 0, 0, 0, 1, 1, 1 }
 };
 
 namespace Level {
@@ -82,11 +83,12 @@ namespace Level {
 void init() {
 }
 
-void drawLevel() {
+void draw() {
 
   // arduboy.print(player.x);
+  arduboy.drawRect(-1, 0, 130, 64);
 
-  // scrollLevel
+  // levelMap
   int xMin = ceil(player.x / (1.0f * BLOCKSIZE)) + 8;
   int xMax = floor(player.x / (1.0f * BLOCKSIZE)) - 8;
   xMin = max(MAPHEIGHT - 1 - xMin, 0);
@@ -94,22 +96,29 @@ void drawLevel() {
 
   for (int i = 0; i < MAPHEIGHT; i++) {
     for (int j = 0; j < MAPWIDTH; j++) {
-      Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::block, scrollLevel[i][j]);
+      if (levelMap[i][j]) {
+        Sprites::drawOverwrite((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, levelMap[i][j]);
+      }
     }
   }
 }
 
 void update() {
   if (player.x <= REMAP_THRESHOLD) {
-    // shiftMap();
+    shiftMap();
   }
 }
 
+// TODO modify to generate
 void shiftMap() {
   player.x = SCREENMID + 128;  //TODO #define
-  copyMap(scrollLevel, 16, scrollLevel, 0);
-  copyMap(scrollLevel, 32, scrollLevel, 16);
-  copyMap(nextRoom, 0, scrollLevel, 32);
+  copyMap(levelMap, 16, levelMap, 0);
+  copyMap(levelMap, 32, levelMap, 16);
+  eraseRoom(nextRoom);
+  generateWalls(nextRoom, true);
+  generateWalls(nextRoom, false);
+  autoTile(nextRoom);
+  copyMap(nextRoom, 0, levelMap, 32);
 }
 
 
@@ -129,9 +138,50 @@ void autoTile(uint8_t room[][SCREENWIDTH]) {
         int a = (i == 0) ? 1 : (room[i - 1][j] > 0) * 1;
         int b = (j == SCREENWIDTH - 1) ? 2 : (room[i][j + 1] > 0) * 2;
         int c = (i == SCREENHEIGHT - 1) ? 4 : (room[i + 1][j] > 0) * 4;
-        int d = (i == 0) ? 8 : (room[i][j - 1] > 0) * 8;
+        int d = (j == 0) ? 8 : (room[i][j - 1] > 0) * 8;
         room[i][j] = a + b + c + d + 1;
       }
+    }
+  }
+}
+
+void generateWalls(uint8_t room[][SCREENWIDTH], bool left) {
+  int p = random(1, SCREENHEIGHT / 2);
+  int r = random(p, SCREENHEIGHT - 2);
+  int q = random(p, r);
+  int w = 0;
+
+  for (int i = p; i < q; i++) {
+    w = random(w, WALL_WIDTH_MAX);
+    for (int j = 0; j < w; j++) {
+      if (left) {
+        room[i][j] = 1;
+      } else {
+        room[i][SCREENWIDTH - 1 - j] = 1;
+      }
+    }
+  }
+
+  for (int i = q; i < r; i++) {
+    w = random(1, w + 1);
+    for (int j = 0; j < w; j++) {
+      if (left) {
+        room[i][j] = 1;
+      } else {
+        room[i][SCREENWIDTH - 1 - j] = 1;
+      }
+    }
+  }
+}
+
+
+
+
+
+void eraseRoom(uint8_t room[][SCREENWIDTH]) {
+  for (int i = 0; i < SCREENHEIGHT; i++) {
+    for (int j = 0; j < SCREENWIDTH; j++) {
+      room[i][j] = 0;
     }
   }
 }

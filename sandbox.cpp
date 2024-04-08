@@ -54,6 +54,14 @@ void input() {
   } else if (arduboy.pressed(down_btn)) {
     player.x -= 1;
   }
+
+  if (arduboy.justPressed(A_BUTTON)) {
+    Level::autoTile(sandbox);
+  }
+  if (arduboy.justPressed(B_BUTTON)) {
+    Level::eraseRoom(sandbox);
+    Level::generateWalls(sandbox, true);
+  }
 }
 
 void update() {

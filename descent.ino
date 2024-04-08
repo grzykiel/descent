@@ -12,6 +12,7 @@
 void setup() {
   arduboy.begin();
   arduboy.setFrameRate(FPS);
+  arduboy.initRandomSeed();
 
   switch (gameState) {
     case STATE_GAME:
