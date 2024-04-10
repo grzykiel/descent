@@ -70,9 +70,16 @@ void collisionCheck() {
     for (int j = yMin; j <= yMax; j++) {
       // Sprites::drawSelfMasked((SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, Tiles::block, room[i][j]);
       if (levelMap[i][j]) {
+        if (levelMap[i][j] == DASH) {
+          Rect blockRect = Rect((MAPHEIGHT-i-1)*BLOCKSIZE + 6, j*BLOCKSIZE, 2, BLOCKSIZE);
+          // arduboy.drawRect(blockRect.x, blockRect.y, 2, BLOCKSIZE, WHITE);
+          collisionCorrect(blockRect);
+        } else {
         Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
-        // arduboy.drawRect(blockRect.x, blockRect.y, BLOCKSIZE, BLOCKSIZE, WHITE);
-        collisionCorrect(blockRect);
+          // arduboy.drawRect(blockRect.x, blockRect.y, BLOCKSIZE, BLOCKSIZE, WHITE);
+
+          collisionCorrect(blockRect);
+        }
       }
     }
   }
@@ -86,7 +93,7 @@ void collisionCorrect(Rect collision) {
       playerNext.y = collision.y + collision.height;
       player.vy = 0;
     } else if (playerRect.y < collision.y) {
-      playerNext.y = collision.y - collision.height;
+      playerNext.y = collision.y - PLAYER_WIDTH;
       player.vy = 0;
     }
   }
@@ -94,9 +101,9 @@ void collisionCorrect(Rect collision) {
   playerRect = Rect(playerNext.x, player.y, BLOCKSIZE, BLOCKSIZE);
   if (arduboy.collide(playerRect, collision)) {
     if (collision.x < playerRect.x) {
-      playerNext.x = collision.x + collision.height;
+      playerNext.x = collision.x + collision.width;
     } else if (playerRect.x < collision.x) {
-      playerNext.x = collision.x - collision.height;
+      playerNext.x = collision.x - PLAYER_HEIGHT;
     }
   }
 }

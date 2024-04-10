@@ -21,10 +21,13 @@
 #define SCREENWIDTH   8
 #define SCREENHEIGHT  16
 
-
 #define BLOCKSIZE 8
 #define PLAYER_WIDTH  8
 #define PLAYER_HEIGHT 8
+
+// special tile indices
+#define DASH  17
+#define BLOCK 18
 
 extern Arduboy2 arduboy;
 extern Sprites sprites;

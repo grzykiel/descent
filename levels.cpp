@@ -97,7 +97,11 @@ void draw() {
   for (int i = 0; i < MAPHEIGHT; i++) {
     for (int j = 0; j < MAPWIDTH; j++) {
       if (levelMap[i][j]) {
-        Sprites::drawOverwrite((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, levelMap[i][j]);
+        if (levelMap[i][j] == DASH) {
+          Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j*BLOCKSIZE, Tiles::wall, DASH);
+        } else {
+          Sprites::drawOverwrite((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, levelMap[i][j]);
+        }
       }
     }
   }
@@ -118,6 +122,7 @@ void shiftMap() {
   generateWalls(nextRoom, true);
   generateWalls(nextRoom, false);
   autoTile(nextRoom);
+  generateDash(nextRoom);
   copyMap(nextRoom, 0, levelMap, 32);
 }
 
@@ -175,7 +180,55 @@ void generateWalls(uint8_t room[][SCREENWIDTH], bool left) {
 }
 
 
+  void generateDash(uint8_t room[][SCREENWIDTH]) {
+    uint8_t row = random(TOP_MARGIN, SCREENHEIGHT/2);
+    while (row < SCREENHEIGHT - BOTTOM_MARGIN) {
+      uint8_t cs = 0;
+      while (room[row][cs] && cs < SCREENWIDTH) {
+        cs++;
+      }
+      uint8_t ce = cs + 1;
+      while (!room[row][ce] && ce < SCREENWIDTH) {
+        ce++;
+      }
+      fillDashLine(room, row, cs, ce);
 
+      if (row + 2 >= SCREENHEIGHT - 2) break;
+      row = random(row + 2, SCREENHEIGHT - 2);
+    }
+  }
+
+  void fillDashLine(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t ce) {
+    int w = ce - cs;
+    if (w > 4) {
+      fillDashRandom(room, row, cs, ce);
+      deleteTwo(room, row, cs, ce);
+    } else if (w > MIN_GAP) {
+      for (int i=cs; i<ce; i++) {
+        if (!room[row+1][i]) room[row][i] = DASH;
+        deleteTwo(room, row, cs, ce);
+      }
+    }
+  }
+
+  void deleteTwo(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t ce) {
+    int col = random(cs, ce - 1);
+    room[row][col] = 0;
+    room[row][col+1] = 0;
+  }
+
+  void fillDashRandom(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t ce) {
+    int c = random(cs, ce);
+    while (c < ce) {
+      int w = random(1, WALL_WIDTH_MAX);
+      int fend = min(c+w, ce);
+      for (int i=c; i<fend; i++) {
+        if (!room[row+1][i] && !room[row-1][i]) room[row][i] = DASH;
+      }
+      if (fend + MIN_GAP >= ce) break;
+      c = random(fend+MIN_GAP, ce);
+    }
+  }
 
 
 void eraseRoom(uint8_t room[][SCREENWIDTH]) {
