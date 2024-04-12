@@ -27,13 +27,12 @@ namespace Level
   void eraseRoom(uint8_t room[][SCREENWIDTH]);
 
   void generateWalls(uint8_t room[][SCREENWIDTH], bool left);
-
+  
   void autoTile(uint8_t room[][SCREENWIDTH]);
-
-  void generateDash(uint8_t room[][SCREENWIDTH]);
-  void fillDashLine(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t ce);
-  void deleteTwo(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t ce);
-  void fillDashRandom(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t ce);
+  
+  
+  void generateDashes(uint8_t room[][SCREENWIDTH]);
+  void placeDashes(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t ce);
 
 
 }
