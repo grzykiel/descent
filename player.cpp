@@ -87,18 +87,18 @@ void collisionCheck() {
 
 void collisionCorrect(Rect collision) {
 
-  Rect playerRect = Rect(player.x, playerNext.y, BLOCKSIZE, BLOCKSIZE);
+  Rect playerRect = Rect(player.x, playerNext.y+1, BLOCKSIZE, PLAYER_WIDTH);
   if (arduboy.collide(playerRect, collision)) {
     if (collision.y < playerRect.y) {
-      playerNext.y = collision.y + collision.height;
+      playerNext.y = collision.y + collision.height-1;
       player.vy = 0;
     } else if (playerRect.y < collision.y) {
-      playerNext.y = collision.y - PLAYER_WIDTH;
+      playerNext.y = collision.y - PLAYER_WIDTH-1;
       player.vy = 0;
     }
   }
 
-  playerRect = Rect(playerNext.x, player.y, BLOCKSIZE, BLOCKSIZE);
+  playerRect = Rect(playerNext.x, player.y+1, BLOCKSIZE, PLAYER_WIDTH);
   if (arduboy.collide(playerRect, collision)) {
     if (collision.x < playerRect.x) {
       playerNext.x = collision.x + collision.width;

@@ -61,6 +61,7 @@ void input() {
   if (arduboy.justPressed(B_BUTTON)) {
     Level::eraseRoom(sandbox);
     Level::generateWalls(sandbox, true);
+    Level::generateWalls(sandbox, false);
   }
 }
 
@@ -69,7 +70,7 @@ void update() {
 }
 
 void draw() {
-  Sprites::drawSelfMasked(player.x - camera, player.y, player.sprite, player.frame);
+  // Sprites::drawSelfMasked(player.x - camera, player.y, player.sprite, player.frame);
 
   for (int i=0; i<SANDBOX_HEIGHT; i++) {
     for (int j=0; j<SCREENWIDTH; j++) {

@@ -22,7 +22,7 @@
 #define SCREENHEIGHT  16
 
 #define BLOCKSIZE 8
-#define PLAYER_WIDTH  8
+#define PLAYER_WIDTH  6
 #define PLAYER_HEIGHT 8
 
 // special tile indices
