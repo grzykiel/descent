@@ -85,8 +85,8 @@ void init() {
 
 void draw() {
 
-  // arduboy.print(player.x);
-  arduboy.drawRect(-1, 0, 130, 64);
+  //wall boundaries
+  arduboy.drawRect(SCREENBOTTOM-1, SCREENLEFT, SCREENTOP+2, SCREENRIGHT);
 
   // levelMap
   int xMin = ceil(player.x / (1.0f * BLOCKSIZE)) + 8;
@@ -97,8 +97,8 @@ void draw() {
   for (int i = 0; i < MAPHEIGHT; i++) {
     for (int j = 0; j < MAPWIDTH; j++) {
       if (levelMap[i][j]) {
-        if (levelMap[i][j] == DASH) {
-          Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j*BLOCKSIZE, Tiles::wall, DASH);
+        if (levelMap[i][j] == DASH | levelMap[i][j] == BLOCK) {
+          Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j*BLOCKSIZE, Tiles::wall, levelMap[i][j]);
         } else {
           Sprites::drawOverwrite((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, levelMap[i][j]);
         }
@@ -113,7 +113,6 @@ void update() {
   }
 }
 
-// TODO modify to generate
 void shiftMap() {
   player.x = SCREENMID + 128;  //TODO #define
   copyMap(levelMap, 16, levelMap, 0);
@@ -123,6 +122,7 @@ void shiftMap() {
   generateWalls(nextRoom, false);
   autoTile(nextRoom);
   generateDashes(nextRoom);
+  generateBlocks(nextRoom);
   copyMap(nextRoom, 0, levelMap, 32);
 }
 
@@ -151,8 +151,8 @@ void autoTile(uint8_t room[][SCREENWIDTH]) {
 }
 
 void generateWalls(uint8_t room[][SCREENWIDTH], bool left) {
-  int p = random(1, SCREENHEIGHT / 2);
-  int r = random(p, SCREENHEIGHT - 2);
+  int p = random(TOP_MARGIN, SCREENHEIGHT / 2);
+  int r = random(p, SCREENHEIGHT - BOTTOM_MARGIN);
   int q = random(p, r);
   int w = 0;
 
@@ -181,7 +181,7 @@ void generateWalls(uint8_t room[][SCREENWIDTH], bool left) {
 
 void generateDashes(uint8_t room[][SCREENWIDTH]) {
 	uint8_t i = random(1, SCREENHEIGHT/2);
-	while (i < SCREENHEIGHT - 2) {
+	while (i < SCREENHEIGHT - BOTTOM_MARGIN) {
 		uint8_t cs = 0;
 		while (room[i][cs] && cs < SCREENWIDTH) {
 			cs++;
@@ -194,8 +194,8 @@ void generateDashes(uint8_t room[][SCREENWIDTH]) {
 		
 		placeDashes(room, i, cs, ce);
 		
-		if (i+2 >= SCREENHEIGHT - 2) break;
-		i = random(i+2, SCREENHEIGHT - 2);
+		if (i+2 >= SCREENHEIGHT - BOTTOM_MARGIN) break;
+		i = random(i+2, SCREENHEIGHT - BOTTOM_MARGIN);
 	}
 }
 
@@ -205,14 +205,14 @@ void placeDashes(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t c
 	uint8_t c;
 	
 	if (gap >= 5) {
-		w = random(2, 4);
+		w = random(DASH_WIDTH_MIN, DASH_WIDTH_MAX);
 		if (w == 3) {
 			c = (random(0, 2) == 1) ? 0 : ce - w;
 		} else if (w == 2) {
 			c = random(cs, ce - w);
 		}
 	} else if (gap == 4) {
-		w = 2;
+		w = DASH_WIDTH_MIN;
 	} else {
 		return;
 	}
@@ -222,6 +222,25 @@ void placeDashes(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t c
 			room[row][i] = DASH;
 		}
 	}
+}
+
+void generateBlocks(uint8_t room[][SCREENWIDTH]) {
+	uint8_t rs = random(TOP_MARGIN, SCREENHEIGHT/2);
+	while (rs + 2 < SCREENHEIGHT - BOTTOM_MARGIN) {
+		uint8_t re = random(rs+1, SCREENHEIGHT - BOTTOM_MARGIN);
+		re = min(re, SCREENHEIGHT - BOTTOM_MARGIN);
+		uint8_t cs = random(0, SCREENWIDTH);
+		uint8_t ce = random(cs+1, SCREENWIDTH);
+		
+		for (int i=rs; i<re; i++) {
+			for (int j=cs; j<ce; j++) {
+				if (!room[i][j] && random(0, 4) > 1) room[i][j] = BLOCK;
+			}
+		}
+		
+		if (re + 1 >= SCREENHEIGHT - BOTTOM_MARGIN) break;
+		rs = random(re + 1, SCREENHEIGHT - BOTTOM_MARGIN);
+  }
 }
 
 

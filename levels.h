@@ -6,6 +6,8 @@
 #define MAPHEIGHT 48
 
 #define WALL_WIDTH_MAX 4
+#define DASH_WIDTH_MIN 2
+#define DASH_WIDTH_MAX 4
 #define MIN_GAP 2
 
 
@@ -30,10 +32,10 @@ namespace Level
   
   void autoTile(uint8_t room[][SCREENWIDTH]);
   
-  
   void generateDashes(uint8_t room[][SCREENWIDTH]);
   void placeDashes(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t ce);
 
+  void generateBlocks(uint8_t room[][SCREENWIDTH]);
 
 }
 
