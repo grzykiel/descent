@@ -15,8 +15,12 @@ namespace Sandbox
   void update();
   void draw();
 
-  void drawMuzzleFlash();
   void shoot();
+  void updateBullets();
+  void drawBullets();
+  void drawMuzzleFlash();
+
+  
 }
 
 extern uint8_t sandbox[SANDBOX_HEIGHT][SCREENWIDTH];

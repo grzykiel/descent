@@ -20,11 +20,11 @@ namespace Menu
   
   void update()
   {
-    arduboy.setCursor(16, 16);
+    // arduboy.setCursor(16, 16);
   }
   
   void draw()
   {
-    arduboy.print("menu");
+    // arduboy.print("menu");
   }
 }

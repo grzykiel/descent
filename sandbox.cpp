@@ -41,6 +41,10 @@ void init() {
 
   Player::initMuzzleFlash();
 
+  // init bullet
+  bullet.active = false;
+  bullet.sprite.sprite = ShootShoes::bullet;
+
   Level::autoTile(sandbox);
 }
 
@@ -71,11 +75,11 @@ void input() {
   if (arduboy.justPressed(A_BUTTON)) {
     shoot();
   }
-
 }
 
 void update() {
-  camera = Util::trim(player.x - SCREENMID, 0, SANDBOX_HEIGHT*BLOCKSIZE - SCREENTOP);
+  camera = Util::trim(player.x - SCREENMID, 0, SANDBOX_HEIGHT * BLOCKSIZE - SCREENTOP);
+  updateBullets();
 }
 
 void draw() {
@@ -83,39 +87,56 @@ void draw() {
   Sprites::drawSelfMasked(player.x - camera, player.y, player.sprite, player.frame);
 
   //draw map
-  for (int i=0; i<SANDBOX_HEIGHT; i++) {
-    for (int j=0; j<SCREENWIDTH; j++) {
+  for (int i = 0; i < SANDBOX_HEIGHT; i++) {
+    for (int j = 0; j < SCREENWIDTH; j++) {
       if (sandbox[i][j])
-      Sprites::drawSelfMasked((SANDBOX_HEIGHT - i - 1)*BLOCKSIZE - camera , j*BLOCKSIZE, Tiles::wall, sandbox[i][j]);
+        Sprites::drawSelfMasked((SANDBOX_HEIGHT - i - 1) * BLOCKSIZE - camera, j * BLOCKSIZE, Tiles::wall, sandbox[i][j]);
     }
   }
 
-  //draw muzzleFlash
   drawMuzzleFlash();
-
+  drawBullets();
 }
 
 void shoot() {
   muzzleFlash.active = true;
-  muzzleFlash.t = 0;
-  muzzleFlash.frame = 0;
-  muzzleFlash.y = player.y;
-  muzzleFlash.x = player.x - MF_OFFSET;
+  muzzleFlash.sprite.t = 0;
+  muzzleFlash.sprite.frame = 0;
+
+  bullet.active = true;
+  bullet.x = player.x;
+  bullet.y = player.y;
+  bullet.sprite.frame = 0;
+  bullet.t = 0;
+  bullet.v = BULLET_START_VEL;
 }
 
 void drawMuzzleFlash() {
-  // arduboy.print(muzzleFlash.active);
   if (muzzleFlash.active) {
-    // Sprites::drawSelfMasked(muzzleFlash.x - camera, muzzleFlash.y, muzzleFlash.sprite, muzzleFlash.frame);
-    Sprites::drawSelfMasked(player.x - camera - MF_OFFSET, player.y, muzzleFlash.sprite, muzzleFlash.frame);
-    muzzleFlash.t++;
-    if (muzzleFlash.t == muzzleFlash.transitions[muzzleFlash.frame]) {
-      muzzleFlash.frame++;
-      if (muzzleFlash.frame == muzzleFlash.last) {
+    Sprites::drawSelfMasked(player.x - camera - MF_OFFSET, player.y, muzzleFlash.sprite.sprite, muzzleFlash.sprite.frame);
+    muzzleFlash.sprite.t++;
+    if (muzzleFlash.sprite.t == muzzleFlash.sprite.transitions[muzzleFlash.sprite.frame]) {
+      muzzleFlash.sprite.frame++;
+      if (muzzleFlash.sprite.frame == muzzleFlash.sprite.last) {
         muzzleFlash.active = false;
       }
     }
-    
+  }
+}
+
+void updateBullets() {
+  if (bullet.active) {
+    bullet.x = int(1.0f*bullet.x-bullet.v);
+    bullet.v -= BULLET_ACCEL;
+    if (bullet.t >= 40 | bullet.v <=0) {
+      bullet.active = false;
+    }
+  }
+}
+
+void drawBullets() {
+  if (bullet.active) {
+    Sprites::drawSelfMasked(bullet.x - camera, bullet.y, bullet.sprite.sprite, bullet.sprite.frame);
   }
 }
 
