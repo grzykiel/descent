@@ -63,6 +63,16 @@ void draw() {
 
 }
 
+bool updateSprite(sprite_t *sprite) {
+  sprite->t++;
+  if (sprite->t == sprite->transitions[sprite->frame]) {
+    sprite->frame++;
+    if (sprite->frame == sprite->last) {
+      return false;
+    }
+  }
+  return true;
+}
 
 
 }

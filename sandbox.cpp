@@ -99,14 +99,19 @@ void draw() {
 }
 
 void shoot() {
+  //TODO: creat init functions. Move constants to global
   muzzleFlash.active = true;
   muzzleFlash.sprite.t = 0;
   muzzleFlash.sprite.frame = 0;
+  muzzleFlash.sprite.transitions = muzzleFlashTransitions;
 
   bullet.active = true;
   bullet.x = player.x;
   bullet.y = player.y;
   bullet.sprite.frame = 0;
+  bullet.sprite.transitions = bulletTransitions;
+  bullet.sprite.last = 8;
+  bullet.sprite.t = 0;
   bullet.t = 0;
   bullet.v = BULLET_START_VEL;
 }
@@ -114,13 +119,8 @@ void shoot() {
 void drawMuzzleFlash() {
   if (muzzleFlash.active) {
     Sprites::drawSelfMasked(player.x - camera - MF_OFFSET, player.y, muzzleFlash.sprite.sprite, muzzleFlash.sprite.frame);
-    muzzleFlash.sprite.t++;
-    if (muzzleFlash.sprite.t == muzzleFlash.sprite.transitions[muzzleFlash.sprite.frame]) {
-      muzzleFlash.sprite.frame++;
-      if (muzzleFlash.sprite.frame == muzzleFlash.sprite.last) {
-        muzzleFlash.active = false;
-      }
-    }
+    muzzleFlash.active = Game::updateSprite(&muzzleFlash.sprite);
+
   }
 }
 
@@ -128,9 +128,11 @@ void updateBullets() {
   if (bullet.active) {
     bullet.x = int(1.0f*bullet.x-bullet.v);
     bullet.v -= BULLET_ACCEL;
-    if (bullet.t >= 40 | bullet.v <=0) {
+    /*if (bullet.t >= 20 | bullet.v <=0) {
       bullet.active = false;
-    }
+    }*/
+    bullet.active = Game::updateSprite(&bullet.sprite);
+    // arduboy.print(bullet.sprite.frame);
   }
 }
 

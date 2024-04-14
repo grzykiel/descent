@@ -13,6 +13,8 @@ namespace Game
   void update();
   void draw();
   void updateCamera();
+
+  bool updateSprite(sprite_t *sprite);
 }
 
 #endif

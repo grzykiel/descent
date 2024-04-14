@@ -29,11 +29,7 @@ void init() {
 
 void initMuzzleFlash() {
   muzzleFlash.active = false;
-  // muzzleFlash.x = 0;
-  // muzzleFlash.y = 0;
   muzzleFlash.sprite.sprite = ShootShoes::muzzleFlash;
-  // muzzleFlash.frame = 0;
-  // muzzleFlash.t = 0;
   muzzleFlash.sprite.transitions[0] = 5;
   muzzleFlash.sprite.last = 1;
 }

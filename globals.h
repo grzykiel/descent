@@ -29,8 +29,6 @@
 #define DASH  17
 #define BLOCK 18
 
-#define MAX_TRANSITIONS 8
-
 #define MF_OFFSET 8
 
 extern Arduboy2 arduboy;
@@ -42,6 +40,9 @@ extern int16_t cameraOffset;
 
 const float BULLET_ACCEL = 0.16f;
 const float BULLET_START_VEL = 3.2f;
+
+const uint8_t muzzleFlashTransitions[1] = {5};
+const uint8_t bulletTransitions[8] = {1, 2, 3, 5, 8, 11, 15, 20};//{1, 5, 9, 12, 15, 17, 19, 20};
 
 // TODO remove if unused
 typedef struct 
@@ -64,7 +65,7 @@ typedef struct {
   uint8_t frame;
   uint8_t t;
   uint8_t last;
-  uint8_t transitions[MAX_TRANSITIONS];
+  uint8_t *transitions;
 } sprite_t;
 
 typedef struct {

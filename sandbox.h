@@ -4,6 +4,7 @@
 #include "globals.h"
 #include "player.h"
 #include "controls.h"
+#include "game.h"
 
 #define SANDBOX_HEIGHT 16
 
@@ -20,7 +21,6 @@ namespace Sandbox
   void drawBullets();
   void drawMuzzleFlash();
 
-  
 }
 
 extern uint8_t sandbox[SANDBOX_HEIGHT][SCREENWIDTH];
