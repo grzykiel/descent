@@ -8,6 +8,8 @@
 player_t player;
 player_t playerNext;
 
+sprite_t muzzleFlash;
+
 const int8_t walkSpeed = 1;
 const uint8_t walkAnimDelay = 6;
 
@@ -21,6 +23,17 @@ void init() {
   player.dir = Direction::right;
   player.sprite = Player::runRightSprite;
   player.frame = 0;
+}
+
+void initMuzzleFlash() {
+  muzzleFlash.active = false;
+  // muzzleFlash.x = 0;
+  // muzzleFlash.y = 0;
+  muzzleFlash.sprite = ShootShoes::muzzleFlash;
+  // muzzleFlash.frame = 0;
+  // muzzleFlash.t = 0;
+  muzzleFlash.transitions[0] = 5;
+  muzzleFlash.last = 1;
 }
 
 void update() {

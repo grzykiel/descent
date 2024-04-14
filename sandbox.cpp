@@ -39,7 +39,9 @@ void init() {
   player.sprite = Player::runRightSprite;
   player.frame = 0;
 
-  // Level::autoTile(sandbox);
+  Player::initMuzzleFlash();
+
+  Level::autoTile(sandbox);
 }
 
 void input() {
@@ -55,14 +57,21 @@ void input() {
     player.x -= 1;
   }
 
-  if (arduboy.justPressed(A_BUTTON)) {
+  //Autotile testing
+  /*if (arduboy.justPressed(A_BUTTON)) {
     Level::autoTile(sandbox);
   }
   if (arduboy.justPressed(B_BUTTON)) {
     Level::eraseRoom(sandbox);
     Level::generateWalls(sandbox, true);
     Level::generateWalls(sandbox, false);
+  }*/
+
+  //Shoot shoes
+  if (arduboy.justPressed(A_BUTTON)) {
+    shoot();
   }
+
 }
 
 void update() {
@@ -70,13 +79,44 @@ void update() {
 }
 
 void draw() {
-  // Sprites::drawSelfMasked(player.x - camera, player.y, player.sprite, player.frame);
+  //draw player
+  Sprites::drawSelfMasked(player.x - camera, player.y, player.sprite, player.frame);
 
+  //draw map
   for (int i=0; i<SANDBOX_HEIGHT; i++) {
     for (int j=0; j<SCREENWIDTH; j++) {
+      if (sandbox[i][j])
       Sprites::drawSelfMasked((SANDBOX_HEIGHT - i - 1)*BLOCKSIZE - camera , j*BLOCKSIZE, Tiles::wall, sandbox[i][j]);
     }
   }
 
+  //draw muzzleFlash
+  drawMuzzleFlash();
+
 }
+
+void shoot() {
+  muzzleFlash.active = true;
+  muzzleFlash.t = 0;
+  muzzleFlash.frame = 0;
+  muzzleFlash.y = player.y;
+  muzzleFlash.x = player.x - MF_OFFSET;
+}
+
+void drawMuzzleFlash() {
+  // arduboy.print(muzzleFlash.active);
+  if (muzzleFlash.active) {
+    // Sprites::drawSelfMasked(muzzleFlash.x - camera, muzzleFlash.y, muzzleFlash.sprite, muzzleFlash.frame);
+    Sprites::drawSelfMasked(player.x - camera - MF_OFFSET, player.y, muzzleFlash.sprite, muzzleFlash.frame);
+    muzzleFlash.t++;
+    if (muzzleFlash.t == muzzleFlash.transitions[muzzleFlash.frame]) {
+      muzzleFlash.frame++;
+      if (muzzleFlash.frame == muzzleFlash.last) {
+        muzzleFlash.active = false;
+      }
+    }
+    
+  }
+}
+
 }

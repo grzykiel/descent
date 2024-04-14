@@ -29,6 +29,10 @@
 #define DASH  17
 #define BLOCK 18
 
+#define MAX_TRANSITIONS 8
+
+#define MF_OFFSET 8
+
 extern Arduboy2 arduboy;
 extern Sprites sprites;
 
@@ -36,6 +40,7 @@ extern uint8_t gameState;
 
 extern int16_t cameraOffset;
 
+// TODO remove if unused
 typedef struct 
 {
   int8_t x;
@@ -49,6 +54,17 @@ enum class Direction : uint8_t
   left,
   right
 };
+
+typedef struct {
+  bool active;
+  int8_t x;
+  int16_t y;
+  const unsigned char *sprite;
+  uint8_t frame;
+  uint8_t t;
+  uint8_t last;
+  uint8_t transitions[MAX_TRANSITIONS];
+} sprite_t;
 
 
 namespace Util 

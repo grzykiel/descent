@@ -18,6 +18,8 @@ extern player_t playerNext;
 extern const int8_t walkSpeed;
 extern const uint8_t walkAnimDelay;
 
+extern sprite_t muzzleFlash;
+
 #endif
 
 
@@ -30,5 +32,7 @@ void collisionCheck();
 void collisionCorrect(Rect collision);
 
 void init();
+void initPlayer();
+void initMuzzleFlash();
 
 }
