@@ -54,12 +54,6 @@ void draw() {
 
   // draw level
   Level::draw();
-  // arduboy.setCursor(8, 8);
-  // arduboy.print(debugOffset);
-  
-  /*arduboy.print(player.x);
-  arduboy.print("\n ");
-  arduboy.print(cameraOffset);*/
 
 }
 

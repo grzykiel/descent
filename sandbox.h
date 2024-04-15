@@ -5,6 +5,7 @@
 #include "player.h"
 #include "controls.h"
 #include "game.h"
+#include "bullet.h"
 
 #define SANDBOX_HEIGHT 16
 
@@ -19,7 +20,6 @@ namespace Sandbox
   void shoot();
   void updateBullets();
   void drawBullets();
-  void drawMuzzleFlash();
 
 }
 

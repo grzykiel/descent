@@ -8,8 +8,6 @@
 player_t player;
 player_t playerNext;
 
-particle_t muzzleFlash;
-
 bullet_t bullet;
 
 const int8_t walkSpeed = 1;
@@ -27,12 +25,6 @@ void init() {
   player.frame = 0;
 }
 
-void initMuzzleFlash() {
-  muzzleFlash.active = false;
-  muzzleFlash.sprite.sprite = ShootShoes::muzzleFlash;
-  muzzleFlash.sprite.transitions[0] = 5;
-  muzzleFlash.sprite.last = 1;
-}
 
 void update() {
   playerNext.y = player.y + player.vy;

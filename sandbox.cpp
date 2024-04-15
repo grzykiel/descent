@@ -39,7 +39,7 @@ void init() {
   player.sprite = Player::runRightSprite;
   player.frame = 0;
 
-  Player::initMuzzleFlash();
+  Bullet::initMuzzleFlash();
 
   // init bullet
   bullet.active = false;
@@ -94,16 +94,13 @@ void draw() {
     }
   }
 
-  drawMuzzleFlash();
+  Bullet::draw();
   drawBullets();
 }
 
 void shoot() {
   //TODO: creat init functions. Move constants to global
-  muzzleFlash.active = true;
-  muzzleFlash.sprite.t = 0;
-  muzzleFlash.sprite.frame = 0;
-  muzzleFlash.sprite.transitions = muzzleFlashTransitions;
+  Bullet::shoot();
 
   bullet.active = true;
   bullet.x = player.x;
@@ -116,13 +113,6 @@ void shoot() {
   bullet.v = BULLET_START_VEL;
 }
 
-void drawMuzzleFlash() {
-  if (muzzleFlash.active) {
-    Sprites::drawSelfMasked(player.x - camera - MF_OFFSET, player.y, muzzleFlash.sprite.sprite, muzzleFlash.sprite.frame);
-    muzzleFlash.active = Game::updateSprite(&muzzleFlash.sprite);
-
-  }
-}
 
 void updateBullets() {
   if (bullet.active) {
