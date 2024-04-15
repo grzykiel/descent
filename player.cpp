@@ -58,16 +58,11 @@ void update() {
 }
 
 void collisionCheck() {
-  int yMin = max(floor(player.y / BLOCKSIZE) - 1, 0);
-  int yMax = min(ceil(player.y / BLOCKSIZE) + 1, MAPWIDTH - 1);
+  
+  window_t wd = Utils::getCollisionWindow(player.x, player.y);
 
-  int xMin = ceil(player.x / (1.0f * BLOCKSIZE)) + 1;
-  int xMax = floor(player.x / (1.0f * BLOCKSIZE)) - 1;
-  xMin = max(MAPHEIGHT - 1 - xMin, 0);
-  xMax = min(MAPHEIGHT - 1 - xMax, MAPHEIGHT - 1);
-
-  for (int i = xMin; i <= xMax; i++) {
-    for (int j = yMin; j <= yMax; j++) {
+  for (int i = wd.xMin; i <= wd.xMax; i++) {
+    for (int j = wd.yMin; j <= wd.yMax; j++) {
       if (levelMap[i][j]) {
         if (levelMap[i][j] == DASH) {
           Rect blockRect = Rect((MAPHEIGHT-i-1)*BLOCKSIZE + 6, j*BLOCKSIZE, 2, BLOCKSIZE);
@@ -80,6 +75,8 @@ void collisionCheck() {
     }
   }
 }
+
+
 
 void collisionCorrect(Rect collision) {
 

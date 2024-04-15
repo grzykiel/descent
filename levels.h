@@ -2,8 +2,7 @@
 #define LEVES_H
 #include "globals.h"
 
-#define MAPWIDTH 8
-#define MAPHEIGHT 48
+
 
 #define WALL_WIDTH_MAX 4
 #define DASH_WIDTH_MIN 2

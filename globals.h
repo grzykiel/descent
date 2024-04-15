@@ -15,6 +15,9 @@
 #define SCREENBOTTOM  0
 #define SCREENMID     64
 
+#define MAPWIDTH 8
+#define MAPHEIGHT 48
+
 #define REMAP_THRESHOLD 64
 
 //screen dimensions in blocks
@@ -76,9 +79,18 @@ typedef struct {
   sprite_t sprite;
 } bullet_t;
 
-namespace Util 
+typedef struct {
+  uint8_t xMin;
+  uint8_t xMax;
+  uint8_t yMin;
+  uint8_t yMax;
+} window_t;
+
+namespace Utils 
 {
   int trim(int p, int l, int h);
+  window_t getCollisionWindow(uint16_t x, uint8_t y);
 }
+
 
 #endif

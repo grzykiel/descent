@@ -76,7 +76,7 @@ void input() {
 }
 
 void update() {
-  camera = Util::trim(player.x - SCREENMID, 0, SANDBOX_HEIGHT * BLOCKSIZE - SCREENTOP);
+  camera = Utils::trim(player.x - SCREENMID, 0, SANDBOX_HEIGHT * BLOCKSIZE - SCREENTOP);
   Bullet::updateBullets();
 }
 

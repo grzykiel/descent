@@ -57,7 +57,6 @@ void updateBullets() {
   if (bullet.active) {
     bullet.x = int(1.0f * bullet.x - bullet.v);
     bullet.v -= BULLET_ACCEL;
-
     bullet.active = Game::updateSprite(&bullet.sprite);
   }
 }

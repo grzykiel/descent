@@ -1,6 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include "levels.h"
+#include "globals.h"
 
 typedef struct {
   int8_t y;
@@ -33,6 +34,7 @@ void collisionCorrect(Rect collision);
 
 void init();
 void initPlayer();
+
 
 
 }
