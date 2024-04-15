@@ -36,10 +36,7 @@ extern uint8_t gameState;
 
 extern int16_t cameraOffset;
 
-const float BULLET_ACCEL = 0.16f;
-const float BULLET_START_VEL = 3.2f;
 
-const uint8_t bulletTransitions[8] = {1, 2, 3, 5, 8, 11, 15, 20};//{1, 5, 9, 12, 15, 17, 19, 20};
 
 // TODO remove if unused
 typedef struct 
@@ -57,10 +54,10 @@ enum class Direction : uint8_t
 };
 
 typedef struct {
-  bool active;
+  bool active = false;
   const unsigned char *sprite;
-  uint8_t frame;
-  uint8_t t;
+  uint8_t frame = 0;
+  uint8_t t = 0;
   uint8_t last;
   uint8_t *transitions;
 } sprite_t;

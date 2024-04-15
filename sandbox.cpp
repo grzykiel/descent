@@ -39,11 +39,9 @@ void init() {
   player.sprite = Player::runRightSprite;
   player.frame = 0;
 
-  Bullet::initMuzzleFlash();
+  Bullet::init();
 
-  // init bullet
-  bullet.active = false;
-  bullet.sprite.sprite = ShootShoes::bullet;
+
 
   Level::autoTile(sandbox);
 }
@@ -79,7 +77,7 @@ void input() {
 
 void update() {
   camera = Util::trim(player.x - SCREENMID, 0, SANDBOX_HEIGHT * BLOCKSIZE - SCREENTOP);
-  updateBullets();
+  Bullet::updateBullets();
 }
 
 void draw() {
@@ -95,41 +93,15 @@ void draw() {
   }
 
   Bullet::draw();
-  drawBullets();
+  
 }
 
 void shoot() {
   //TODO: creat init functions. Move constants to global
   Bullet::shoot();
-
-  bullet.active = true;
-  bullet.x = player.x;
-  bullet.y = player.y;
-  bullet.sprite.frame = 0;
-  bullet.sprite.transitions = bulletTransitions;
-  bullet.sprite.last = 8;
-  bullet.sprite.t = 0;
-  bullet.t = 0;
-  bullet.v = BULLET_START_VEL;
 }
 
 
-void updateBullets() {
-  if (bullet.active) {
-    bullet.x = int(1.0f*bullet.x-bullet.v);
-    bullet.v -= BULLET_ACCEL;
-    /*if (bullet.t >= 20 | bullet.v <=0) {
-      bullet.active = false;
-    }*/
-    bullet.active = Game::updateSprite(&bullet.sprite);
-    // arduboy.print(bullet.sprite.frame);
-  }
-}
 
-void drawBullets() {
-  if (bullet.active) {
-    Sprites::drawSelfMasked(bullet.x - camera, bullet.y, bullet.sprite.sprite, bullet.sprite.frame);
-  }
-}
 
 }
