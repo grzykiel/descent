@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "globals.h"
+#include "bullet.h"
 
 #include "controls.h"
 

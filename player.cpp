@@ -23,6 +23,8 @@ void init() {
   player.dir = Direction::right;
   player.sprite = Player::runRightSprite;
   player.frame = 0;
+
+  Bullet::init();
 }
 
 

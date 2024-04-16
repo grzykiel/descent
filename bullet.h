@@ -1,3 +1,5 @@
+#ifndef BULLET_H
+#define BULLET_H
 #include "globals.h"
 #include "bitmaps.h"
 #include "player.h"
@@ -26,5 +28,8 @@ namespace Bullet {
 
   void initBullets();
   void updateBullets();
+  void collisionCheck();
   void drawBullets();
 }
+
+#endif

@@ -35,13 +35,18 @@ void input() {
     player.vx = 0;
   }
 
+  if (arduboy.pressed(A_BUTTON)) {
+    Bullet::shoot();
+  }
 
 }
 
 void update() {
   Player::update();
+  Bullet::update();
   Level::update();
   updateCamera();
+
 }
 
 void updateCamera() {
@@ -54,6 +59,8 @@ void draw() {
 
   // draw level
   Level::draw();
+
+  Bullet::draw();
 
 }
 

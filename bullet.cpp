@@ -54,10 +54,32 @@ void initBullets() {
 }
 
 void updateBullets() {
+  collisionCheck();
   if (bullet.active) {
     bullet.x = int(1.0f * bullet.x - bullet.v);
     bullet.v -= BULLET_ACCEL;
     bullet.active = Game::updateSprite(&bullet.sprite);
+  }
+}
+
+void collisionCheck() {
+  window_t wd = Utils::getCollisionWindow(bullet.x, bullet.y);
+
+  for (int i = wd.xMin; i <= wd.xMax; i++) {
+    for (int j = wd.yMin; j <= wd.yMax; j++) {
+      if (levelMap[i][j]) {
+        if (levelMap[i][j] != DASH) {
+          Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
+          Rect bulletRect = Rect(bullet.x, bullet.y + 2, 4, 4);
+          if (arduboy.collide(bulletRect, blockRect)) {
+            bullet.active = false;
+            if (levelMap[i][j] == BLOCK) {
+              levelMap[i][j] = 0;
+            }
+          }
+        } 
+      }
+    }
   }
 }
 
