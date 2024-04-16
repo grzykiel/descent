@@ -114,7 +114,9 @@ void update() {
 }
 
 void shiftMap() {
-  player.x = SCREENMID + 128;  //TODO #define
+  player.x += 128;  //TODO #define
+  bullet.x += 128;
+
   copyMap(levelMap, 16, levelMap, 0);
   copyMap(levelMap, 32, levelMap, 16);
   eraseRoom(nextRoom);
@@ -218,7 +220,8 @@ void placeDashes(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t c
 	}
 	
 	for (int i=c; i<(c+w); i++) {
-		if (!(room[row-1][i]) && !(room[row+1][i])) {
+		if (!room[row-1][i] && !room[row+1][i]
+    && !room[row+1][max(0, i-1)] && !room[row+1][min(MAPWIDTH, i+1)]) {
 			room[row][i] = DASH;
 		}
 	}
@@ -234,7 +237,7 @@ void generateBlocks(uint8_t room[][SCREENWIDTH]) {
 		
 		for (int i=rs; i<re; i++) {
 			for (int j=cs; j<ce; j++) {
-				if (!room[i][j] && random(0, 4) > 1) room[i][j] = BLOCK;
+				if (!room[i][j] && !room[i-1][j] && random(0, 4) > 1) room[i][j] = BLOCK;
 			}
 		}
 		
