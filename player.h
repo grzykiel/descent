@@ -19,7 +19,7 @@ extern player_t playerNext;
 extern const int8_t walkSpeed;
 extern const uint8_t walkAnimDelay;
 
-extern bullet_t bullet;
+
 
 #endif
 

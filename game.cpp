@@ -35,8 +35,12 @@ void input() {
     player.vx = 0;
   }
 
-  if (arduboy.pressed(A_BUTTON)) {
+  if (arduboy.justPressed(A_BUTTON)) {
     Bullet::shoot();
+  }
+
+  if (arduboy.justPressed(B_BUTTON)) {
+    Bullet::reload();
   }
 
 }

@@ -8,8 +8,6 @@
 player_t player;
 player_t playerNext;
 
-bullet_t bullet;
-
 const int8_t walkSpeed = 1;
 const uint8_t walkAnimDelay = 6;
 

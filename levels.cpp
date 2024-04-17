@@ -115,7 +115,11 @@ void update() {
 
 void shiftMap() {
   player.x += 128;  //TODO #define
-  bullet.x += 128;
+  for (int i=0; i<MAX_BULLETS; i++) {
+    if (bullet[i].active) {
+      bullet[i].x += 128;
+    }
+  }
 
   copyMap(levelMap, 16, levelMap, 0);
   copyMap(levelMap, 32, levelMap, 16);
