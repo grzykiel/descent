@@ -16,6 +16,7 @@ namespace Game
   void updateCamera();
 
   bool updateSprite(sprite_t *sprite);
+  bool updateAnimation(animation_t *animation);
 }
 
 #endif

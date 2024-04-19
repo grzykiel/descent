@@ -9,8 +9,11 @@ typedef struct {
   int8_t vy;
   int8_t vx;
   Direction dir;
+
+  // TODO remove if superseded by sprite_t
   const unsigned char *sprite;
-  uint8_t frame;
+  uint8_t frame; 
+
 } player_t;
 
 extern player_t player;

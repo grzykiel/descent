@@ -13,14 +13,14 @@
 
 #define MAX_BULLETS 5
 
-extern particle_t muzzleFlash;
+const uint8_t muzzleFlashTransitions[1] = {5};
+extern sprite_t muzzleFlashSprite;
+extern animation_t muzzleFlash;
 
-extern bullet_t bullet[5];
+extern bullet_t bullet[MAX_BULLETS];
 extern uint8_t bulletsUsed;
 extern uint8_t chamber;
 
-
-const uint8_t muzzleFlashTransitions[1] = {5};
 const uint8_t bulletTransitions[8] = {1, 2, 3, 5, 8, 11, 15, 20};
 
 const float BULLET_ACCEL = 0.16f;

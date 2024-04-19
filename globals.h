@@ -40,13 +40,11 @@ extern uint8_t gameState;
 extern int16_t cameraOffset;
 
 
-
-// TODO remove if unused
-typedef struct 
+/*typedef struct 
 {
-  int8_t x;
-  int16_t y;
-} vector;
+  int16_t x;
+  int8_t y;
+} vector;*/
 
 enum class Direction : uint8_t
 {
@@ -57,18 +55,30 @@ enum class Direction : uint8_t
 };
 
 typedef struct {
+  //TODO remove to animation_t
   bool active = false;
-  const unsigned char *sprite;
   uint8_t frame = 0;
-  uint8_t t = 0;
+  uint8_t t = 0;//
+
+  const unsigned char *sprite;
   uint8_t last;
   uint8_t *transitions;
+
+  uint8_t dx;
+  uint8_t dy;
+  uint8_t w;
+  uint8_t h;
 } sprite_t;
 
 typedef struct {
-  bool active;
-  sprite_t sprite;
-} particle_t;
+  bool active = false;
+  uint8_t frame = 0;
+  uint8_t t = 0;
+  uint16_t x;
+  uint8_t y;
+  sprite_t *sprite;
+} animation_t;
+
 
 typedef struct {
   bool active;

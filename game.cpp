@@ -79,5 +79,16 @@ bool updateSprite(sprite_t *sprite) {
   return true;
 }
 
+bool updateAnimation(animation_t *anim) {
+  anim->t++;
+  if (anim->t == anim->sprite->transitions[anim->frame]) {
+    anim->frame++;
+    if (anim->frame >= anim->sprite->last) {
+      return false;
+    }
+  }
+  return true;
+}
+
 
 }

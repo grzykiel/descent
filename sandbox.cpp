@@ -41,8 +41,6 @@ void init() {
 
   Bullet::init();
 
-
-
   Level::autoTile(sandbox);
 }
 

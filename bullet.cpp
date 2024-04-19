@@ -1,8 +1,8 @@
 #include "bullet.h"
 
-particle_t muzzleFlash;
+sprite_t muzzleFlashSprite;
+animation_t muzzleFlash;
 
-// bullet_t bullet;
 
 bullet_t bullet[5];
 uint8_t bulletsUsed = 0;
@@ -27,8 +27,8 @@ void draw() {
 void shoot() {
   if (bulletsUsed < MAX_BULLETS) {
     muzzleFlash.active = true;
-    muzzleFlash.sprite.t = 0;
-    muzzleFlash.sprite.frame = 0;
+    muzzleFlash.t = 0;
+    muzzleFlash.frame = 0;
 
     bullet[chamber].active = true;
     bullet[chamber].x = player.x;
@@ -48,16 +48,25 @@ void reload() {
 }
 
 void initMuzzleFlash() {
+
+  muzzleFlashSprite.sprite = ShootShoes::muzzleFlash;
+  muzzleFlashSprite.last = 1; //TODO length function
+  muzzleFlashSprite.transitions = muzzleFlashTransitions;
+  muzzleFlashSprite.dx = 8;
+  muzzleFlashSprite.dy = 0;
+  muzzleFlashSprite.w = 8;
+  muzzleFlashSprite.h = 8;
+
   muzzleFlash.active = false;
-  muzzleFlash.sprite.sprite = ShootShoes::muzzleFlash;
-  muzzleFlash.sprite.transitions = muzzleFlashTransitions;
-  muzzleFlash.sprite.last = 1;  //TODO #define
+  muzzleFlash.frame = 0;
+  muzzleFlash.t = 0;
+  muzzleFlash.sprite = &muzzleFlashSprite;
 }
 
 void drawMuzzleFlash() {
   if (muzzleFlash.active) {
-    Sprites::drawSelfMasked(player.x - cameraOffset - MF_OFFSET, player.y, muzzleFlash.sprite.sprite, muzzleFlash.sprite.frame);
-    muzzleFlash.active = Game::updateSprite(&muzzleFlash.sprite);
+    Sprites::drawSelfMasked(player.x - cameraOffset - muzzleFlash.sprite->dx, player.y, muzzleFlash.sprite->sprite, muzzleFlash.frame);
+    muzzleFlash.active = Game::updateAnimation(&muzzleFlash);
   }
 }
 
@@ -72,11 +81,7 @@ void initBullets() {
 
 void updateBullets() {
   collisionCheck();
-  /*if (bullet.active) {
-    bullet.x = int(1.0f * bullet.x - bullet.v);
-    bullet.v -= BULLET_ACCEL;
-    bullet.active = Game::updateSprite(&bullet.sprite);
-  }*/
+
   for (int i = 0; i < MAX_BULLETS; i++) {
     if (bullet[i].active) {
       bullet[i].x = int(1.0f * bullet[i].x - bullet[i].v);
@@ -118,7 +123,7 @@ void drawBullets() {
 }
 
 void drawAmmo() {
-  arduboy.setCursor(player.x+9 - cameraOffset, player.y);
+  arduboy.setCursor(player.x + 9 - cameraOffset, player.y);
   arduboy.print(MAX_BULLETS - bulletsUsed);
 }
 }

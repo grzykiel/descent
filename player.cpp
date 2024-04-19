@@ -22,7 +22,7 @@ void init() {
   player.sprite = Player::runRightSprite;
   player.frame = 0;
 
-  Bullet::init();
+  Bullet::init(); //TODO move to Game namespace
 }
 
 
