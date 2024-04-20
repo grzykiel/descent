@@ -27,10 +27,22 @@
 #define BLOCKSIZE 8
 #define PLAYER_WIDTH  6
 #define PLAYER_HEIGHT 8
+#define PLAYER_OFFSET 1 //sprite offset
 
 // special tile indices
 #define DASH  17
 #define BLOCK 18
+
+// Collision locations
+#define NONE        0
+#define RIGHT       1
+#define LEFT        2
+#define BOTTOM      4
+#define BOTTOMRIGHT 5
+#define BOTTOMLEFT  6
+#define TOP         8
+#define TOPRIGHT    9
+#define TOPLEFT     10
 
 extern Arduboy2 arduboy;
 extern Sprites sprites;
@@ -38,13 +50,6 @@ extern Sprites sprites;
 extern uint8_t gameState;
 
 extern int16_t cameraOffset;
-
-
-/*typedef struct 
-{
-  int16_t x;
-  int8_t y;
-} vector;*/
 
 enum class Direction : uint8_t
 {
@@ -55,11 +60,6 @@ enum class Direction : uint8_t
 };
 
 typedef struct {
-  //TODO remove to animation_t
-  bool active = false;
-  uint8_t frame = 0;
-  uint8_t t = 0;//
-
   const unsigned char *sprite;
   uint8_t last;
   uint8_t *transitions;

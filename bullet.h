@@ -43,6 +43,8 @@ namespace Bullet {
   void collisionCheck();
   void drawBullets();
 
+
+
   void drawAmmo();
 }
 

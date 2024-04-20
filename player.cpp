@@ -7,6 +7,17 @@
 
 player_t player;
 player_t playerNext;
+sprite_t playerRunSprite = {
+  Player::runRightSprite,
+  0,        //last frame
+  nullptr,  // frame transitions
+  0,        //dx
+  1,        //dy
+  6,        //w
+  8         //h
+};
+
+//sprite_t playerJumpSprite
 
 const int8_t walkSpeed = 1;
 const uint8_t walkAnimDelay = 6;
@@ -34,8 +45,8 @@ void update() {
   if (playerNext.y <= SCREENLEFT) {
     playerNext.y = SCREENLEFT;
     player.vy = 0;
-  } else if (playerNext.y > (SCREENRIGHT - PLAYER_WIDTH)) {
-    playerNext.y = SCREENRIGHT - PLAYER_WIDTH;
+  } else if (playerNext.y > (SCREENRIGHT - PLAYER_WIDTH - 1)) {
+    playerNext.y = SCREENRIGHT - PLAYER_WIDTH - 1;
     player.vy = 0;
   }
 
@@ -76,6 +87,30 @@ void collisionCheck() {
   }
 }
 
+uint8_t collisionCorrection(Rect collider) {
+  uint8_t loc = NONE;
+  
+  Rect playerRect = Rect(player.x, playerNext.y + PLAYER_OFFSET, PLAYER_HEIGHT, PLAYER_WIDTH);
+  if (arduboy.collide(playerRect, collider)) {
+    if (collider.y < playerRect.y) {
+      loc += LEFT;
+      playerNext.y = collider.y + collider.height - PLAYER_OFFSET;
+    } else if (playerRect.y < collider.y) {
+      loc += RIGHT;
+    }
+  }
+
+  playerRect = Rect(playerNext.x, player.y + PLAYER_OFFSET, PLAYER_HEIGHT, PLAYER_WIDTH);
+  if (arduboy.collide(playerRect, collider)) {
+    if (collider.x < playerRect.x) {
+      loc += BOTTOM;
+    } else if (playerRect.x < collider.x) {
+      loc += TOP;
+    }
+  }
+
+  return loc;
+}
 
 
 void collisionCorrect(Rect collision) {

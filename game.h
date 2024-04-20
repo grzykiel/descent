@@ -7,18 +7,16 @@
 #include "controls.h"
 
 
-namespace Game
-{
+namespace Game {
   void loop();
   void input();
   void update();
   void draw();
   void updateCamera();
 
-  bool updateSprite(sprite_t *sprite);
   bool updateAnimation(animation_t *animation);
+  bool collides(animation_t anim, Rect block);
+  
 }
 
 #endif
-   
-

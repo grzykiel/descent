@@ -1,9 +1,26 @@
 #include "bullet.h"
 
-sprite_t muzzleFlashSprite;
+sprite_t muzzleFlashSprite = {
+  ShootShoes::muzzleFlash,  //sprite
+  1,                        //last frame
+  muzzleFlashTransitions,   //frame transitions
+  8,                        //dx
+  0,                        //dy
+  8,                        //w
+  8,                        //h
+};
 animation_t muzzleFlash;
 
-sprite_t bulletSprite;
+sprite_t bulletSprite = 
+{
+  ShootShoes::bullet, //sprite
+  8,                  //last frame
+  bulletTransitions,  //frame transitions
+  0,                  //dx
+  2,                  //dy
+  4,                  //w
+  4,                  //h
+};
 bullet_t bullet[5];
 uint8_t bulletsUsed = 0;
 uint8_t chamber = 0;
@@ -30,15 +47,6 @@ void shoot() {
     muzzleFlash.t = 0;
     muzzleFlash.frame = 0;
 
-    /*bullet[chamber].active = true;
-    bullet[chamber].x = player.x;
-    bullet[chamber].y = player.y;
-    bullet[chamber].sprite.frame = 0;
-    bullet[chamber].sprite.t = 0;
-    bullet[chamber].t = 0;
-    bullet[chamber].v = BULLET_START_VEL;
-    chamber = (chamber + 1) % MAX_BULLETS;*/
-
     bullet[chamber].animation.active = true;
     bullet[chamber].animation.x = player.x;
     bullet[chamber].animation.y = player.y;
@@ -56,15 +64,6 @@ void reload() {
 }
 
 void initMuzzleFlash() {
-
-  muzzleFlashSprite.sprite = ShootShoes::muzzleFlash;
-  muzzleFlashSprite.last = 1; //TODO length function
-  muzzleFlashSprite.transitions = muzzleFlashTransitions;
-  muzzleFlashSprite.dx = 8;
-  muzzleFlashSprite.dy = 0;
-  muzzleFlashSprite.w = 8;
-  muzzleFlashSprite.h = 8;
-
   muzzleFlash.active = false;
   muzzleFlash.frame = 0;
   muzzleFlash.t = 0;
@@ -79,22 +78,7 @@ void drawMuzzleFlash() {
 }
 
 void initBullets() {
-  //init sprite
-  bulletSprite.sprite = ShootShoes::bullet;
-  bulletSprite.last = 8;
-  bulletSprite.transitions = bulletTransitions;
-  bulletSprite.dx = 0;
-  bulletSprite.dy = 2;
-  bulletSprite.w = 4;
-  bulletSprite.h = 4;
-
-
-
   for (int i = 0; i < MAX_BULLETS; i++) {
-    /*bullet[i].active = false;
-    bullet[i].sprite.sprite = ShootShoes::bullet;
-    bullet[i].sprite.transitions = bulletTransitions;
-    bullet[i].sprite.last = BULLET_FRAME_LAST;*/
     bullet[i].animation.sprite = &bulletSprite;
     bullet[i].animation.active = false;
     bullet[i].animation.frame = 0;
@@ -106,11 +90,6 @@ void updateBullets() {
   collisionCheck();
 
   for (int i = 0; i < MAX_BULLETS; i++) {
-    /*if (bullet[i].active) {
-      bullet[i].x = int(1.0f * bullet[i].x - bullet[i].v);
-      bullet[i].v -= BULLET_ACCEL;
-      bullet[i].active = Game::updateSprite(&bullet[i].sprite);
-    }*/
     if (bullet[i].animation.active) {
       bullet[i].animation.x = int(1.0f*bullet[i].animation.x - bullet[i].v);
       bullet[i].v -= BULLET_ACCEL;
@@ -119,7 +98,6 @@ void updateBullets() {
   }
 }
 
-//TODO generic collision check
 void collisionCheck() {
   for (int b = 0; b < MAX_BULLETS; b++) {
     window_t wd = Utils::getCollisionWindow(bullet[b].animation.x, bullet[b].animation.y);
@@ -129,8 +107,7 @@ void collisionCheck() {
         if (levelMap[i][j]) {
           if (levelMap[i][j] != DASH) {
             Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
-            Rect bulletRect = Rect(bullet[b].animation.x, bullet[b].animation.y + 2, 4, 4);
-            if (arduboy.collide(bulletRect, blockRect)) {
+            if (Game::collides(bullet[b].animation, blockRect)) {
               bullet[b].animation.active = false;
               if (levelMap[i][j] == BLOCK) {
                 levelMap[i][j] = 0;
@@ -145,9 +122,6 @@ void collisionCheck() {
 
 void drawBullets() {
   for (int i = 0; i < MAX_BULLETS; i++) {
-    /*if (bullet[i].active) {
-      Sprites::drawSelfMasked(bullet[i].x - cameraOffset, bullet[i].y, bullet[i].sprite.sprite, bullet[i].sprite.frame);
-    }*/
     if (bullet[i].animation.active) {
       Sprites::drawSelfMasked(bullet[i].animation.x - cameraOffset, bullet[i].animation.y, bullet[i].animation.sprite->sprite, bullet[i].animation.frame);
     }

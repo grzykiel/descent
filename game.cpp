@@ -68,17 +68,6 @@ void draw() {
 
 }
 
-bool updateSprite(sprite_t *sprite) {
-  sprite->t++;
-  if (sprite->t == sprite->transitions[sprite->frame]) {
-    sprite->frame++;
-    if (sprite->frame == sprite->last) {
-      return false;
-    }
-  }
-  return true;
-}
-
 bool updateAnimation(animation_t *anim) {
   anim->t++;
   if (anim->t == anim->sprite->transitions[anim->frame]) {
@@ -88,6 +77,11 @@ bool updateAnimation(animation_t *anim) {
     }
   }
   return true;
+}
+
+bool collides(animation_t anim, Rect block) {
+  Rect spriteRect = Rect(anim.x + anim.sprite->dx, anim.y + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
+  return (arduboy.collide(spriteRect, block));
 }
 
 
