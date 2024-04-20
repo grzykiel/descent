@@ -115,9 +115,10 @@ void update() {
 
 void shiftMap() {
   player.x += 128;  //TODO #define
+  
   for (int i=0; i<MAX_BULLETS; i++) {
-    if (bullet[i].active) {
-      bullet[i].x += 128;
+    if (bullet[i].animation.active) {
+      bullet[i].animation.x += 128;
     }
   }
 

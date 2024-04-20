@@ -79,16 +79,6 @@ typedef struct {
   sprite_t *sprite;
 } animation_t;
 
-
-typedef struct {
-  bool active;
-  uint8_t y;
-  uint16_t x;
-  float v = 3.2f;
-  uint8_t t;
-  sprite_t sprite;
-} bullet_t;
-
 typedef struct {
   uint8_t xMin;
   uint8_t xMax;
