@@ -64,29 +64,35 @@ void update() {
   }
 
   //collision adjust
-  uint8_t type = checkCollisions(player.animation, &nextPos);
-  
+  collision_t type = checkCollisions(player.animation, &nextPos);
+  if (type.v > NONE) {
+    if (type.v == BOTTOM) Bullet::reload();
+    nextVel.x = 0;
+  } 
 
+  if (type.h == LEFT | type.h == RIGHT) {
+    nextVel.y = 0;
+  }
   
-  switch (type) {
-    case (TOP):
-      nextVel.x = 0;
-      break;
-    case (BOTTOM):
-      nextVel.x = 0;
-      Bullet::reload();  //TODO only reload when first grounded
-      break;
-    case (LEFT):
-      nextVel.y = 0;
-      break;
-    case(RIGHT):
-      nextVel.y = 0;
-      break;
-    case (TOPLEFT | TOPRIGHT | BOTTOMLEFT | BOTTOMRIGHT):
-      nextVel.x = 0;
-      nextVel.y = 0;
-      break;
-  };
+  // switch (type) {
+  //   case (TOP):
+  //     nextVel.x = 0;
+  //     break;
+  //   case (BOTTOM):
+  //     nextVel.x = 0;
+  //     Bullet::reload();  //TODO only reload when first grounded
+  //     break;
+  //   case (LEFT):
+  //     nextVel.y = 0;
+  //     break;
+  //   case(RIGHT):
+  //     nextVel.y = 0;
+  //     break;
+  //   case (TOPLEFT | TOPRIGHT | BOTTOMLEFT | BOTTOMRIGHT):
+  //     nextVel.x = 0;
+  //     nextVel.y = 0;
+  //     break;
+  // };
 
 
 
@@ -109,8 +115,8 @@ void update() {
   }
 }
 
-uint8_t checkCollisions(animation_t anim, vector_t *next) {
-  uint8_t type = NONE;
+collision_t checkCollisions(animation_t anim, vector_t *next) {
+  collision_t type = {NONE, NONE};
 
   window_t wd = Utils::getCollisionWindow(player.animation.x, player.animation.y);
 
@@ -119,7 +125,9 @@ uint8_t checkCollisions(animation_t anim, vector_t *next) {
     for (int j = wd.yMin; j <= wd.yMax; j++) {
       if (levelMap[i][j]) {
         Rect block = levelMap[i][j] == DASH ? Rect((MAPHEIGHT - i - 1) * BLOCKSIZE + 6, j * BLOCKSIZE, 2, BLOCKSIZE) : Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
-        type += collisionCorrect(anim, next, block);
+        collision_t temp = collisionCorrect(anim, next, block);
+        type.v |= temp.v;
+        type.h |= temp.h;
       }
     }
   }
@@ -127,15 +135,15 @@ uint8_t checkCollisions(animation_t anim, vector_t *next) {
   return type;
 }
 
-uint8_t collisionCorrect(animation_t anim, vector_t *next, Rect collider) {
-  uint8_t type = NONE;
+collision_t collisionCorrect(animation_t anim, vector_t *next, Rect collider) {
+  collision_t type = {NONE, NONE};
   Rect rect = Rect(anim.x + anim.sprite->dx, next->y + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
   if (arduboy.collide(rect, collider)) {
     if (collider.y < rect.y) {
-      type += LEFT;
+      type.h = LEFT;
       next->y = collider.y + collider.height - anim.sprite->dy;
     } else if (rect.y < collider.y) {
-      type += RIGHT;
+      type.h = RIGHT;
       next->y = collider.y - anim.sprite->w - anim.sprite->dy;
     }
   }
@@ -143,10 +151,10 @@ uint8_t collisionCorrect(animation_t anim, vector_t *next, Rect collider) {
   rect = Rect(next->x + anim.sprite->dx, anim.y + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
   if (arduboy.collide(rect, collider)) {
     if (collider.x < rect.x) {
-      type += BOTTOM;
+      type.v = BOTTOM;
       next->x = collider.x + collider.width - anim.sprite->dx;
     } else if (rect.x < collider.x) {
-      type += TOP;
+      type.v = TOP;
       next->x = collider.x - anim.sprite->h - anim.sprite->dx;
     }
   }

@@ -56,6 +56,6 @@ namespace Player {
   void init();
   void initPlayer();
 
-  uint8_t checkCollisions(animation_t anim, vector_t *next);
-  uint8_t collisionCorrect(animation_t anim, vector_t *next, Rect collider); //TODO move to util
+  collision_t checkCollisions(animation_t anim, vector_t *next);
+  collision_t collisionCorrect(animation_t anim, vector_t *next, Rect collider); //TODO move to util
 }

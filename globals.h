@@ -37,12 +37,9 @@
 #define NONE        0
 #define RIGHT       1
 #define LEFT        2
-#define BOTTOM      4
-#define BOTTOMRIGHT 5
-#define BOTTOMLEFT  6
-#define TOP         8
-#define TOPRIGHT    9
-#define TOPLEFT     10
+#define BOTTOM      1
+#define TOP         2
+
 
 extern Arduboy2 arduboy;
 extern Sprites sprites;
@@ -58,6 +55,11 @@ enum class Direction : uint8_t
   left,
   right
 };
+
+typedef struct {
+  uint8_t v;
+  uint8_t h;
+} collision_t;
 
 typedef struct {
   int16_t x;
