@@ -13,10 +13,10 @@ void loop() {
 void input() {
   if (arduboy.justPressed(left_btn)) {
     player.dir = Direction::left;
-    player.sprite = Player::runLeftSprite;
+    player.animation.sprite->sprite = Player::runLeftSprite;
   } else if (arduboy.justPressed(right_btn)) {
     player.dir = Direction::right;
-    player.sprite = Player::runRightSprite;
+    player.animation.sprite->sprite = Player::runRightSprite;
   }
 
   if (arduboy.pressed(left_btn)) {

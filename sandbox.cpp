@@ -31,13 +31,13 @@ void loop() {
 }
 
 void init() {
-  player.y = 28;
+  /*player.y = 28;
   player.x = 0;
   player.vy = 0;
   player.vx = 0;
   player.dir = Direction::right;
   player.sprite = Player::runRightSprite;
-  player.frame = 0;
+  player.frame = 0;*/
 
   Bullet::init();
 
@@ -46,15 +46,15 @@ void init() {
 
 void input() {
   if (arduboy.pressed(left_btn)) {
-    player.y -= 1;
+    player.animation.y -= 1;
   } else if (arduboy.pressed(right_btn)) {
-    player.y += 1;
+    player.animation.y += 1;
   }
 
   if (arduboy.pressed(up_btn)) {
-    player.x += 1;
+    player.animation.x += 1;
   } else if (arduboy.pressed(down_btn)) {
-    player.x -= 1;
+    player.animation.x -= 1;
   }
 
   //Autotile testing
@@ -74,13 +74,13 @@ void input() {
 }
 
 void update() {
-  camera = Utils::trim(player.x - SCREENMID, 0, SANDBOX_HEIGHT * BLOCKSIZE - SCREENTOP);
+  camera = Utils::trim(player.animation.x - SCREENMID, 0, SANDBOX_HEIGHT * BLOCKSIZE - SCREENTOP);
   Bullet::updateBullets();
 }
 
 void draw() {
   //draw player
-  Sprites::drawSelfMasked(player.x - camera, player.y, player.sprite, player.frame);
+  Sprites::drawSelfMasked(player.animation.x - camera, player.animation.y, player.animation.sprite->sprite, player.animation.frame);
 
   //draw map
   for (int i = 0; i < SANDBOX_HEIGHT; i++) {

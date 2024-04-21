@@ -5,19 +5,12 @@
 
 
 typedef struct {
-  int8_t y = 28; //TODO remove
-  int16_t x = 192;
-
   int8_t vx;
   int8_t vy;
 
   Direction dir;
 
   animation_t animation;
-
-  // TODO remove if superseded by sprite_t
-  const unsigned char *sprite;
-  uint8_t frame; 
 
 } player_t;
 
@@ -60,19 +53,9 @@ namespace Player {
   void update();
   void draw();
 
-  uint8_t checkCollisions(animation_t anim, vector_t *next);
-  uint8_t collisionCorrect(animation_t anim, vector_t *next, Rect collider);
-
-  /*
-  void collisionCheck(); // TODO replace with checkCollisions();
-  
-
-  void collisionCorrect(Rect collision); //TODO replace with correctCollision
-  void correctCollision(animation_t anim, vector_t *next, Rect collider); //TODO move to game
-  */
-
-
-
   void init();
   void initPlayer();
+
+  uint8_t checkCollisions(animation_t anim, vector_t *next);
+  uint8_t collisionCorrect(animation_t anim, vector_t *next, Rect collider); //TODO move to util
 }
