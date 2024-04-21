@@ -50,10 +50,10 @@ uint8_t levelMap[MAPHEIGHT][MAPWIDTH] = {
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 1, 0, 0, 1 },
+  { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 1, 0, 0, 0, 0, 1, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0, 0, 0, 1 },
@@ -89,8 +89,8 @@ void draw() {
   arduboy.drawRect(SCREENBOTTOM-1, SCREENLEFT, SCREENTOP+2, SCREENRIGHT);
 
   // levelMap
-  int xMin = ceil(player.x / (1.0f * BLOCKSIZE)) + 8;
-  int xMax = floor(player.x / (1.0f * BLOCKSIZE)) - 8;
+  int xMin = ceil(player.animation.x / (1.0f * BLOCKSIZE)) + 8;
+  int xMax = floor(player.animation.x / (1.0f * BLOCKSIZE)) - 8;
   xMin = max(MAPHEIGHT - 1 - xMin, 0);
   xMax = min(MAPHEIGHT - 1 - xMax, MAPHEIGHT - 1);
 
@@ -108,13 +108,13 @@ void draw() {
 }
 
 void update() {
-  if (player.x <= REMAP_THRESHOLD) {
+  if (player.animation.x <= REMAP_THRESHOLD) {
     shiftMap();
   }
 }
 
 void shiftMap() {
-  player.x += 128;  //TODO #define
+  player.animation.x += 128;  //TODO #define
   
   for (int i=0; i<MAX_BULLETS; i++) {
     if (bullet[i].animation.active) {

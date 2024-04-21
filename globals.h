@@ -60,6 +60,11 @@ enum class Direction : uint8_t
 };
 
 typedef struct {
+  int16_t x;
+  int8_t y;
+} vector_t;
+
+typedef struct {
   const unsigned char *sprite;
   uint8_t last;
   uint8_t *transitions;

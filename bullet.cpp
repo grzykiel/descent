@@ -48,8 +48,8 @@ void shoot() {
     muzzleFlash.frame = 0;
 
     bullet[chamber].animation.active = true;
-    bullet[chamber].animation.x = player.x;
-    bullet[chamber].animation.y = player.y;
+    bullet[chamber].animation.x = player.animation.x;
+    bullet[chamber].animation.y = player.animation.y;
     bullet[chamber].animation.frame = 0;
     bullet[chamber].animation.t = 0;
     bullet[chamber].v = BULLET_START_VEL;
@@ -72,7 +72,7 @@ void initMuzzleFlash() {
 
 void drawMuzzleFlash() {
   if (muzzleFlash.active) {
-    Sprites::drawSelfMasked(player.x - cameraOffset - muzzleFlash.sprite->dx, player.y, muzzleFlash.sprite->sprite, muzzleFlash.frame);
+    Sprites::drawSelfMasked(player.animation.x - cameraOffset - muzzleFlash.sprite->dx, player.animation.y, muzzleFlash.sprite->sprite, muzzleFlash.frame);
     muzzleFlash.active = Game::updateAnimation(&muzzleFlash);
   }
 }
@@ -129,7 +129,7 @@ void drawBullets() {
 }
 
 void drawAmmo() {
-  arduboy.setCursor(player.x + 9 - cameraOffset, player.y);
+  arduboy.setCursor(player.animation.x + 9 - cameraOffset, player.animation.y);
   arduboy.print(MAX_BULLETS - bulletsUsed);
 }
 }

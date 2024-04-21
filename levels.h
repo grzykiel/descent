@@ -2,17 +2,13 @@
 #define LEVES_H
 #include "globals.h"
 
-
-
 #define WALL_WIDTH_MAX 4
 #define DASH_WIDTH_MIN 2
 #define DASH_WIDTH_MAX 4
 #define MIN_GAP 2
 
-
 #define TOP_MARGIN    1
 #define BOTTOM_MARGIN 2
-
 
 extern uint8_t nextRoom[SCREENHEIGHT][SCREENWIDTH];
 extern uint8_t levelMap[MAPHEIGHT][MAPWIDTH];

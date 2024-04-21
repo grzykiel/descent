@@ -54,12 +54,13 @@ void update() {
 }
 
 void updateCamera() {
-    cameraOffset = Utils::trim(player.x - SCREENMID, 0, MAPHEIGHT*BLOCKSIZE - SCREENTOP);
+    cameraOffset = Utils::trim(player.animation.x - SCREENMID, 0, MAPHEIGHT*BLOCKSIZE - SCREENTOP);
 }
 
 void draw() {
   // draw player
-  Sprites::drawSelfMasked(player.x - cameraOffset, player.y, player.sprite, player.frame);
+  // Sprites::drawSelfMasked(player.x - cameraOffset, player.y, player.sprite, player.frame);
+  Sprites::drawSelfMasked(player.animation.x - cameraOffset, player.animation.y, player.animation.sprite->sprite, player.animation.frame);
 
   // draw level
   Level::draw();
