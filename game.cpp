@@ -27,6 +27,7 @@ void input() {
     player.vy = 0;
   }
 
+if (movementMode == TOPDOWN) {
   if (arduboy.pressed(up_btn)) {
     player.vx = walkSpeed;
   } else if (arduboy.pressed(down_btn)) {
@@ -34,13 +35,14 @@ void input() {
   } else if (arduboy.notPressed(up_btn | down_btn)) {
     player.vx = 0;
   }
+}
 
   if (arduboy.justPressed(A_BUTTON)) {
     Bullet::shoot();
   }
 
   if (arduboy.justPressed(B_BUTTON)) {
-    Bullet::reload();
+    Bullet::reload(); //debug
   }
 
 }
@@ -59,7 +61,6 @@ void updateCamera() {
 
 void draw() {
   // draw player
-  // Sprites::drawSelfMasked(player.x - cameraOffset, player.y, player.sprite, player.frame);
   Sprites::drawSelfMasked(player.animation.x - cameraOffset, player.animation.y, player.animation.sprite->sprite, player.animation.frame);
 
   // draw level
@@ -69,21 +70,7 @@ void draw() {
 
 }
 
-bool updateAnimation(animation_t *anim) {
-  anim->t++;
-  if (anim->t == anim->sprite->transitions[anim->frame]) {
-    anim->frame++;
-    if (anim->frame >= anim->sprite->last) {
-      return false;
-    }
-  }
-  return true;
-}
 
-bool collides(animation_t anim, Rect block) {
-  Rect spriteRect = Rect(anim.x + anim.sprite->dx, anim.y + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
-  return (arduboy.collide(spriteRect, block));
-}
 
 
 }

@@ -5,8 +5,8 @@
 
 
 typedef struct {
-  int8_t vx;
-  int8_t vy;
+  float vx;
+  float vy;
 
   Direction dir;
 
@@ -34,8 +34,8 @@ typedef struct {
 
   Direction dir;
   
-  int8_t vx;
-  int8_t vy;
+  float vx;
+  float vy;
 
 } player_t */
 
@@ -57,5 +57,4 @@ namespace Player {
   void initPlayer();
 
   collision_t checkCollisions(animation_t anim, vector_t *next);
-  collision_t collisionCorrect(animation_t anim, vector_t *next, Rect collider); //TODO move to util
 }

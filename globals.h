@@ -9,6 +9,10 @@
 #define STATE_GAME    1
 #define STATE_SANDBOX 2
 
+//debug movement modes
+#define TOPDOWN   0
+#define PLATFORM  1
+
 #define SCREENLEFT    0
 #define SCREENRIGHT   64
 #define SCREENTOP     128
@@ -40,11 +44,15 @@
 #define BOTTOM      1
 #define TOP         2
 
+const float JUMP_GRAVITY = -0.053f;
+const float JUMP_VELOCITY = 1.6F;
 
 extern Arduboy2 arduboy;
 extern Sprites sprites;
 
 extern uint8_t gameState;
+
+extern uint8_t movementMode; //debug
 
 extern int16_t cameraOffset;
 
@@ -97,6 +105,11 @@ namespace Utils
 {
   int trim(int p, int l, int h);
   window_t getCollisionWindow(uint16_t x, uint8_t y);
+  bool collides(animation_t anim, Rect block);
+  collision_t collisionCorrect(animation_t anim, vector_t *next, Rect collider);
+
+  bool updateAnimation(animation_t *animation);
+
 }
 
 

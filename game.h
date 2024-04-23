@@ -13,10 +13,6 @@ namespace Game {
   void update();
   void draw();
   void updateCamera();
-
-  //TODO move to util
-  bool updateAnimation(animation_t *animation);
-  bool collides(animation_t anim, Rect block);
   
 }
 

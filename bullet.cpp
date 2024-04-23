@@ -73,7 +73,7 @@ void initMuzzleFlash() {
 void drawMuzzleFlash() {
   if (muzzleFlash.active) {
     Sprites::drawSelfMasked(player.animation.x - cameraOffset - muzzleFlash.sprite->dx, player.animation.y, muzzleFlash.sprite->sprite, muzzleFlash.frame);
-    muzzleFlash.active = Game::updateAnimation(&muzzleFlash);
+    muzzleFlash.active = Utils::updateAnimation(&muzzleFlash);
   }
 }
 
@@ -93,7 +93,7 @@ void updateBullets() {
     if (bullet[i].animation.active) {
       bullet[i].animation.x = int(1.0f*bullet[i].animation.x - bullet[i].v);
       bullet[i].v -= BULLET_ACCEL;
-      bullet[i].animation.active = Game::updateAnimation(&bullet[i].animation);
+      bullet[i].animation.active = Utils::updateAnimation(&bullet[i].animation);
     }
   }
 }
@@ -107,7 +107,7 @@ void collisionCheck() {
         if (levelMap[i][j]) {
           if (levelMap[i][j] != DASH) {
             Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
-            if (Game::collides(bullet[b].animation, blockRect)) {
+            if (Utils::collides(bullet[b].animation, blockRect)) {
               bullet[b].animation.active = false;
               if (levelMap[i][j] == BLOCK) {
                 levelMap[i][j] = 0;
