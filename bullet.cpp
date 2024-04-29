@@ -2,7 +2,7 @@
 
 sprite_t muzzleFlashSprite = {
   ShootShoes::muzzleFlash,  //sprite
-  1,                        //last frame
+  0,                        //last frame
   muzzleFlashTransitions,   //frame transitions
   8,                        //dx
   0,                        //dy
@@ -14,7 +14,7 @@ animation_t muzzleFlash;
 sprite_t bulletSprite = 
 {
   ShootShoes::bullet, //sprite
-  8,                  //last frame
+  7,                  //last frame
   bulletTransitions,  //frame transitions
   0,                  //dx
   2,                  //dy
@@ -43,6 +43,8 @@ void draw() {
 
 void shoot() {
   if (bulletsUsed < MAX_BULLETS) {
+    Player::thrust();
+
     muzzleFlash.active = true;
     muzzleFlash.t = 0;
     muzzleFlash.frame = 0;
@@ -129,7 +131,7 @@ void drawBullets() {
 }
 
 void drawAmmo() {
-  arduboy.setCursor(player.animation.x + 9 - cameraOffset, player.animation.y);
-  arduboy.print(MAX_BULLETS - bulletsUsed);
+  // arduboy.setCursor(player.animation.x + 9 - cameraOffset, player.animation.y);
+  // arduboy.print(MAX_BULLETS - bulletsUsed);
 }
 }

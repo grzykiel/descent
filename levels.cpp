@@ -226,6 +226,7 @@ void placeDashes(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t c
 	
 	for (int i=c; i<(c+w); i++) {
 		if (!room[row-1][i] && !room[row+1][i]
+    && !room[row-1][max(0, i-1)] && !room[row-1][min(MAPWIDTH, i+1)]
     && !room[row+1][max(0, i-1)] && !room[row+1][min(MAPWIDTH, i+1)]) {
 			room[row][i] = DASH;
 		}

@@ -14,8 +14,17 @@ sprite_t playerRunSprite = {
   6,        //w
   8         //h
 };
+
+sprite_t playerJumpSprite = {
+  Player::jumpRightSprite,
+  8,
+  nullptr,
+  0,
+  1,
+  6,
+  8
+};
 player_t player;      //TODO initialise
-player_t playerNext;  //TODO remove
 
 
 //sprite_t playerJumpSprite
@@ -38,23 +47,27 @@ void init() {
   player.vx = 0;
   player.dir = Direction::right;
 
-  Bullet::init();  //TODO move to Game namespace
+  Bullet::init();
 }
 
 
 void update() {
   vector_t nextPos;
-  float next_vx = player.vx;
+  float next_vx = max(player.vx, -8.0f);
   float next_vy = player.vy;
 
   // physics update
   if (movementMode == PLATFORM) {
     next_vx += JUMP_GRAVITY;
+    if (!player.grounded) {
+      if (player.animation.t == HALF_JUMP && arduboy.notPressed(A_BUTTON | B_BUTTON)) {
+        fall();
+      }
+      player.animation.t++;
+    }
   }
-  nextPos.x = player.animation.x + player.vx;
+  nextPos.x = round(player.animation.x + player.vx);
   nextPos.y = player.animation.y + player.vy;
-
-  //TODO gravity and kinematic movement
 
   //Boundary check
   if (nextPos.y <= SCREENLEFT - player.animation.sprite->dy) {
@@ -68,15 +81,26 @@ void update() {
   //adjust for collisions
   collision_t type = checkCollisions(player.animation, &nextPos);
   if (type.v > NONE) {
-    if (type.v == BOTTOM) Bullet::reload();
-    next_vx = 0;
-  } 
-  if (type.h == LEFT | type.h == RIGHT) {
-    next_vy = 0;
+    if (type.v == BOTTOM) {
+      if (!player.grounded) {
+        Bullet::reload();
+        Player::land();
+      }
+    }
+    next_vx = 0.0f;
   }
-  
+  if (type.h == LEFT | type.h == RIGHT) {
+    next_vy = 0.0f;
+  }
+
   player.vx = next_vx;
   player.vy = next_vy;
+
+  //check if falling
+  if (player.grounded && (nextPos.x < player.animation.x)) {
+    fall();
+  }
+  // if (nextPos.x < player.animation.x) player.grounded = false;
 
   player.animation.x = nextPos.x;
   player.animation.y = nextPos.y;
@@ -94,8 +118,12 @@ void update() {
   }
 }
 
+void draw() {
+  Sprites::drawSelfMasked(player.animation.x - cameraOffset, player.animation.y, player.animation.sprite->sprite, player.animation.frame);
+}
+
 collision_t checkCollisions(animation_t anim, vector_t *next) {
-  collision_t type = {NONE, NONE};
+  collision_t type = { NONE, NONE };
 
   window_t wd = Utils::getCollisionWindow(player.animation.x, player.animation.y);
 
@@ -106,8 +134,10 @@ collision_t checkCollisions(animation_t anim, vector_t *next) {
         Rect block = levelMap[i][j] == DASH ? Rect((MAPHEIGHT - i - 1) * BLOCKSIZE + 6, j * BLOCKSIZE, 2, BLOCKSIZE) : Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
         // Rect block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
         collision_t temp = Utils::collisionCorrect(anim, next, block);
-        type.v |= temp.v;
-        type.h |= temp.h;
+        // type.v |= temp.v;
+        // type.h |= temp.h;
+        if (temp.v) type.v = temp.v;
+        if (temp.h) type.h = temp.h;
       }
     }
   }
@@ -115,7 +145,47 @@ collision_t checkCollisions(animation_t anim, vector_t *next) {
   return type;
 }
 
+void jump() {
+  player.vx = JUMP_VELOCITY;
+  player.animation.t = 0;
+  player.grounded = false;
+  player.animation.sprite = &playerJumpSprite;
+  if (player.dir == Direction::left) {
+    player.animation.sprite->sprite = Player::jumpLeftSprite;
+  } else {
+    player.animation.sprite->sprite = Player::jumpRightSprite;
+  }
+  player.animation.frame = 6;
 
+}
 
+void thrust() {
+  player.vx = THRUST;
+}
+
+void fall() {
+  player.vx = 0;
+  player.animation.t = JUMP_TOP;
+  
+  player.grounded = false;
+  player.animation.sprite = &playerJumpSprite;
+  if (player.dir == Direction::left) {
+    player.animation.sprite->sprite = Player::jumpLeftSprite;
+  } else {
+    player.animation.sprite->sprite = Player::jumpRightSprite;
+  }
+  player.animation.frame = 6;
+}
+
+void land() {
+  player.grounded = true;
+  player.animation.sprite = &playerRunSprite;
+  if (player.dir == Direction::left) {
+    player.animation.sprite->sprite = Player::runLeftSprite;
+  } else {
+    player.animation.sprite->sprite = Player::runRightSprite;
+  }
+
+}
 
 }

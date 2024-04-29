@@ -12,6 +12,8 @@ typedef struct {
 
   animation_t animation;
 
+  bool grounded = false;
+
 } player_t;
 
 /* typedef struct {
@@ -55,6 +57,11 @@ namespace Player {
 
   void init();
   void initPlayer();
+
+  void jump();
+  void fall();
+  void thrust();
+  void land();
 
   collision_t checkCollisions(animation_t anim, vector_t *next);
 }

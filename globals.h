@@ -44,8 +44,13 @@
 #define BOTTOM      1
 #define TOP         2
 
-const float JUMP_GRAVITY = -0.053f;
-const float JUMP_VELOCITY = 1.6F;
+// Jump
+const float JUMP_GRAVITY = -0.056f;
+const float JUMP_VELOCITY = 1.7F;
+const float THRUST = 0.056f;
+#define HALF_JUMP   15
+#define JUMP_TOP    30
+#define JUMPFRAMES  50
 
 extern Arduboy2 arduboy;
 extern Sprites sprites;

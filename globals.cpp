@@ -75,8 +75,9 @@ collision_t collisionCorrect(animation_t anim, vector_t *next, Rect collider) {
 bool updateAnimation(animation_t *anim) {
   anim->t++;
   if (anim->t == anim->sprite->transitions[anim->frame]) {
-    anim->frame++;
-    if (anim->frame >= anim->sprite->last) {
+    if (anim->frame < anim->sprite->last) {
+      anim->frame++;
+    } else {
       return false;
     }
   }
