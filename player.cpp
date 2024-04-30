@@ -15,19 +15,17 @@ sprite_t playerRunSprite = {
   8         //h
 };
 
+uint8_t jumpTransitions[5] = { 1, 15, 30, 45, 60 };
 sprite_t playerJumpSprite = {
   Player::jumpRightSprite,
-  8,
-  nullptr,
+  4,
+  jumpTransitions,
   0,
   1,
   6,
   8
 };
-player_t player;      //TODO initialise
-
-
-//sprite_t playerJumpSprite
+player_t player;  //TODO initialise
 
 const int8_t walkSpeed = 1;
 const uint8_t walkAnimDelay = 6;
@@ -61,9 +59,12 @@ void update() {
     next_vx += JUMP_GRAVITY;
     if (!player.grounded) {
       if (player.animation.t == HALF_JUMP && arduboy.notPressed(A_BUTTON | B_BUTTON)) {
+        // arduboy.setCursor(player.animation.x - cameraOffset + 9, player.animation.y);
+        // arduboy.print("HALFJUMP");
+        next_vx = 0.0f;
         fall();
       }
-      player.animation.t++;
+      // player.animation.t++;
     }
   }
   nextPos.x = round(player.animation.x + player.vx);
@@ -106,15 +107,20 @@ void update() {
   player.animation.y = nextPos.y;
 
   // Animation update
-  if (player.vy != 0) {
-    if (arduboy.everyXFrames(walkAnimDelay)) {
-      player.animation.frame++;
-      if (player.animation.frame >= N_WALKFRAMES) {
-        player.animation.frame = 0;
+  if (player.grounded) {
+    player.animation.t++;
+    if (player.vy != 0) {
+      if (arduboy.everyXFrames(walkAnimDelay)) {
+        player.animation.frame++;
+        if (player.animation.frame >= N_WALKFRAMES) {
+          player.animation.frame = 0;
+        }
       }
+    } else {
+      player.animation.frame = 0;
     }
   } else {
-    player.animation.frame = 0;
+    Utils::updateAnimation(&player.animation);
   }
 }
 
@@ -155,8 +161,7 @@ void jump() {
   } else {
     player.animation.sprite->sprite = Player::jumpRightSprite;
   }
-  player.animation.frame = 6;
-
+  player.animation.frame = 0;
 }
 
 void thrust() {
@@ -166,7 +171,7 @@ void thrust() {
 void fall() {
   player.vx = 0;
   player.animation.t = JUMP_TOP;
-  
+
   player.grounded = false;
   player.animation.sprite = &playerJumpSprite;
   if (player.dir == Direction::left) {
@@ -174,7 +179,7 @@ void fall() {
   } else {
     player.animation.sprite->sprite = Player::jumpRightSprite;
   }
-  player.animation.frame = 6;
+  player.animation.frame = FALL_FRAME;
 }
 
 void land() {
@@ -185,7 +190,6 @@ void land() {
   } else {
     player.animation.sprite->sprite = Player::runRightSprite;
   }
-
 }
 
 }

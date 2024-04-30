@@ -49,8 +49,9 @@ const float JUMP_GRAVITY = -0.056f;
 const float JUMP_VELOCITY = 1.7F;
 const float THRUST = 0.056f;
 #define HALF_JUMP   15
-#define JUMP_TOP    30
+#define JUMP_TOP    25
 #define JUMPFRAMES  50
+#define FALL_FRAME  4
 
 extern Arduboy2 arduboy;
 extern Sprites sprites;

@@ -63,8 +63,8 @@ void updateCamera() {
 void draw() {
   // draw player
   Player::draw();
-  arduboy.setCursor(player.animation.x - cameraOffset + 9, player.animation.y);
-  arduboy.print(player.grounded);
+  // arduboy.setCursor(player.animation.x - cameraOffset + 9, player.animation.y);
+  // arduboy.print(player.animation.t);
 
   // draw level
   Level::draw();

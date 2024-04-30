@@ -45,8 +45,10 @@ extern player_t player;
 extern player_t playerNext;
 extern sprite_t playerSprite;
 
+
 extern const int8_t walkSpeed;
 extern const uint8_t walkAnimDelay;
+
 
 #endif
 
