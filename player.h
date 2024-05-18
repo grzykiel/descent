@@ -42,8 +42,10 @@ typedef struct {
 } player_t */
 
 extern player_t player;
-extern player_t playerNext;
-extern sprite_t playerSprite;
+
+//TODO remove
+// extern player_t playerNext; 
+// extern sprite_t playerSprite;
 
 
 extern const int8_t walkSpeed;
@@ -58,7 +60,7 @@ namespace Player {
   void draw();
 
   void init();
-  void initPlayer();
+  // void initPlayer();
 
   void jump();
   void fall();

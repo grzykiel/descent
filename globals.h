@@ -2,6 +2,7 @@
 #define GLOBALS_H
 
 #include <Arduboy2.h>
+#include <stdint.h>
 
 #define FPS 60
 
@@ -53,6 +54,10 @@ const float THRUST = 0.056f;
 #define JUMPFRAMES  50
 #define FALL_FRAME  4
 
+#define TERMINAL_VELOCITY -4
+
+#define PIXEL_SCALE 128
+
 extern Arduboy2 arduboy;
 extern Sprites sprites;
 
@@ -77,7 +82,7 @@ typedef struct {
 
 typedef struct {
   int16_t x;
-  int8_t y;
+  int16_t y;
 } vector_t;
 
 typedef struct {
@@ -96,7 +101,7 @@ typedef struct {
   uint8_t frame = 0;
   uint8_t t = 0;
   uint16_t x;
-  uint8_t y;
+  int16_t y;
   sprite_t *sprite;
 } animation_t;
 
@@ -110,12 +115,17 @@ typedef struct {
 namespace Utils 
 {
   int trim(int p, int l, int h);
+  int sign(int x);
   window_t getCollisionWindow(uint16_t x, uint8_t y);
   bool collides(animation_t anim, Rect block);
   collision_t collisionCorrect(animation_t anim, vector_t *next, Rect collider);
 
   bool updateAnimation(animation_t *animation);
 
+  void println(char *str);
+  void println(int pr_int);
+  void println(uint16_t pr_int);
+  void println(uint8_t pr_int);
 }
 
 

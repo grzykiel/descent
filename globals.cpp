@@ -85,4 +85,30 @@ bool updateAnimation(animation_t *anim) {
 }
 
 
+int sign(int x) {
+  return (x > 0) - (x < 0);
+}
+
+void println(char *str) {
+  arduboy.print(str);
+  arduboy.print("\n");
+}
+
+void println(int pr_int) {
+  arduboy.print(pr_int);
+  arduboy.print("\n");
+}
+
+void println(uint16_t pr_int) {
+  arduboy.print(pr_int);
+  arduboy.print("\n");
+}
+
+void println(uint8_t pr_int) {
+  arduboy.print(pr_int);
+  arduboy.print("\n");
+}
+
+
+
 }

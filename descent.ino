@@ -1,4 +1,6 @@
 #include <Arduboy2.h>
+#include <math.h>
+
 
 #include "globals.h"
 #include "bitmaps.h"
@@ -7,6 +9,7 @@
 #include "game.h"
 #include "sandbox.h"
 #include "player.h"
+#include "enemies.h"
 
 
 void setup() {
@@ -18,6 +21,7 @@ void setup() {
     case STATE_GAME:
       Player::init();
       Level::init();
+      Enemies::init();
       break;
     case STATE_SANDBOX:
       Sandbox::init();

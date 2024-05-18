@@ -37,7 +37,7 @@ void init() {
   player.animation.active = true;
   player.animation.frame = 0;
   player.animation.t = 0;
-  player.animation.x = SCREENMID + 128;  //TODO #define
+  player.animation.x = SCREENMID + 320;  //TODO #define
   player.animation.y = 28;               //TODO #define
 
   //TODO move to initialisation
@@ -51,7 +51,7 @@ void init() {
 
 void update() {
   vector_t nextPos;
-  float next_vx = max(player.vx, -8.0f);
+  float next_vx = max(player.vx, TERMINAL_VELOCITY);
   float next_vy = player.vy;
 
   // physics update
@@ -59,12 +59,9 @@ void update() {
     next_vx += JUMP_GRAVITY;
     if (!player.grounded) {
       if (player.animation.t == HALF_JUMP && arduboy.notPressed(A_BUTTON | B_BUTTON)) {
-        // arduboy.setCursor(player.animation.x - cameraOffset + 9, player.animation.y);
-        // arduboy.print("HALFJUMP");
         next_vx = 0.0f;
         fall();
       }
-      // player.animation.t++;
     }
   }
   nextPos.x = round(player.animation.x + player.vx);
@@ -96,6 +93,7 @@ void update() {
 
   player.vx = next_vx;
   player.vy = next_vy;
+  
 
   //check if falling
   if (player.grounded && (nextPos.x < player.animation.x)) {
@@ -105,6 +103,9 @@ void update() {
 
   player.animation.x = nextPos.x;
   player.animation.y = nextPos.y;
+
+  // arduboy.setCursor(player.animation.x - cameraOffset + 9, player.animation.y);
+  // arduboy.print(player.vx);
 
   // Animation update
   if (player.grounded) {
@@ -126,6 +127,8 @@ void update() {
 
 void draw() {
   Sprites::drawSelfMasked(player.animation.x - cameraOffset, player.animation.y, player.animation.sprite->sprite, player.animation.frame);
+  // arduboy.setCursor(player.animation.x - cameraOffset + 9, player.animation.y);
+  // arduboy.print(player.animation.x);
 }
 
 collision_t checkCollisions(animation_t anim, vector_t *next) {

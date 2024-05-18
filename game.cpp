@@ -1,6 +1,7 @@
 #include "game.h"
 #include "levels.h"
 #include "player.h"
+#include "enemies.h"
 #include "bitmaps.h"
 
 namespace Game {
@@ -52,6 +53,7 @@ void input() {
 void update() {
   Player::update();
   Bullet::update();
+  Enemies::update();
   Level::update();
   updateCamera();
 }
@@ -70,6 +72,8 @@ void draw() {
   Level::draw();
 
   Bullet::draw();
+
+  Enemies::draw();
 }
 
 

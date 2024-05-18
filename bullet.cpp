@@ -14,7 +14,7 @@ animation_t muzzleFlash;
 sprite_t bulletSprite = 
 {
   ShootShoes::bullet, //sprite
-  7,                  //last frame
+  6,                  //last frame
   bulletTransitions,  //frame transitions
   0,                  //dx
   2,                  //dy

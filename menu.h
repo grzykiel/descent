@@ -1,3 +1,10 @@
+#ifndef MENU_H
+#define MENU_H
+#include "globals.h"
+#include "player.h"
+#include "levels.h"
+#endif
+
 namespace Menu
 {
   void loop();
@@ -15,7 +22,12 @@ namespace Menu
   
   void input()
   {
-  
+    if (arduboy.justPressed(A_BUTTON)) {
+      Player::init();
+      Level::init();
+      gameState = STATE_GAME;
+
+    }
   }
   
   void update()

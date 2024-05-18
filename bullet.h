@@ -22,7 +22,7 @@ extern bullet_t bullet[MAX_BULLETS];
 extern uint8_t bulletsUsed;
 extern uint8_t chamber;
 
-const uint8_t bulletTransitions[8] = {1, 2, 3, 5, 8, 11, 15, 20};
+const uint8_t bulletTransitions[7] = {1, 2, 3, 5, 8, 11, 15}; //, 20};
 
 const float BULLET_ACCEL = 0.16f;
 const float BULLET_START_VEL = 3.2f;

@@ -26,56 +26,59 @@ uint8_t nextRoom[SCREENHEIGHT][SCREENWIDTH];
 };*/
 
 uint8_t levelMap[MAPHEIGHT][MAPWIDTH] = {
-  { 1, 2, 3, 0, 0, 1, 1, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 1, 1, 1, 1, 1, 1, 1, 1 },
 
-  { 1, 1, 0, 0, 0, 0, 1, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 1, 0, 0, 0, 0, 1, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 1, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 1, 0, 0, 0, 0, 1, 1 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
 
-  { 1, 1, 1, 0, 0, 1, 1, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 1, 1, 0, 1, 1 },
-  { 1, 0, 0, 0, 0, 0, 1, 1 },
-  { 1, 1, 1, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 1, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 1, 0, 0, 0, 1, 1, 1 },
-  { 1, 1, 0, 0, 0, 1, 1, 1 }
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 15, 9, 18, 18, 18, 18, 3, 15 },
+  { 10, 0, 0, 0, 0, 0, 0, 4 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+
+
+
 };
 
 namespace Level {
@@ -86,7 +89,7 @@ void init() {
 void draw() {
 
   //wall boundaries
-  arduboy.drawRect(SCREENBOTTOM-1, SCREENLEFT, SCREENTOP+2, SCREENRIGHT);
+  arduboy.drawRect(SCREENBOTTOM - 1, SCREENLEFT, SCREENTOP + 2, SCREENRIGHT);
 
   // levelMap
   int xMin = ceil(player.animation.x / (1.0f * BLOCKSIZE)) + 8;
@@ -98,7 +101,7 @@ void draw() {
     for (int j = 0; j < MAPWIDTH; j++) {
       if (levelMap[i][j]) {
         if (levelMap[i][j] == DASH | levelMap[i][j] == BLOCK) {
-          Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j*BLOCKSIZE, Tiles::wall, levelMap[i][j]);
+          Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, levelMap[i][j]);
         } else {
           Sprites::drawOverwrite((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, levelMap[i][j]);
         }
@@ -115,8 +118,8 @@ void update() {
 
 void shiftMap() {
   player.animation.x += 128;  //TODO #define
-  
-  for (int i=0; i<MAX_BULLETS; i++) {
+
+  for (int i = 0; i < MAX_BULLETS; i++) {
     if (bullet[i].animation.active) {
       bullet[i].animation.x += 128;
     }
@@ -187,68 +190,68 @@ void generateWalls(uint8_t room[][SCREENWIDTH], bool left) {
 }
 
 void generateDashes(uint8_t room[][SCREENWIDTH]) {
-	uint8_t i = random(1, SCREENHEIGHT/2);
-	while (i < SCREENHEIGHT - BOTTOM_MARGIN) {
-		uint8_t cs = 0;
-		while (room[i][cs] && cs < SCREENWIDTH) {
-			cs++;
-		}
-		
-		uint8_t ce = cs+1;
-		while (!room[i][ce] && ce < SCREENWIDTH) {
-			ce++;
-		}
-		
-		placeDashes(room, i, cs, ce);
-		
-		if (i+2 >= SCREENHEIGHT - BOTTOM_MARGIN) break;
-		i = random(i+2, SCREENHEIGHT - BOTTOM_MARGIN);
-	}
+  uint8_t i = random(1, SCREENHEIGHT / 2);
+  while (i < SCREENHEIGHT - BOTTOM_MARGIN) {
+    uint8_t cs = 0;
+    while (room[i][cs] && cs < SCREENWIDTH) {
+      cs++;
+    }
+
+    uint8_t ce = cs + 1;
+    while (!room[i][ce] && ce < SCREENWIDTH) {
+      ce++;
+    }
+
+    placeDashes(room, i, cs, ce);
+
+    if (i + 2 >= SCREENHEIGHT - BOTTOM_MARGIN) break;
+    i = random(i + 2, SCREENHEIGHT - BOTTOM_MARGIN);
+  }
 }
 
 void placeDashes(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t ce) {
-	uint8_t gap = ce - cs;
-	uint8_t w = 0;
-	uint8_t c;
-	
-	if (gap >= 5) {
-		w = random(DASH_WIDTH_MIN, DASH_WIDTH_MAX);
-		if (w == 3) {
-			c = (random(0, 2) == 1) ? 0 : ce - w;
-		} else if (w == 2) {
-			c = random(cs, ce - w);
-		}
-	} else if (gap == 4) {
-		w = DASH_WIDTH_MIN;
-	} else {
-		return;
-	}
-	
-	for (int i=c; i<(c+w); i++) {
-		if (!room[row-1][i] && !room[row+1][i]
-    && !room[row-1][max(0, i-1)] && !room[row-1][min(MAPWIDTH, i+1)]
-    && !room[row+1][max(0, i-1)] && !room[row+1][min(MAPWIDTH, i+1)]) {
-			room[row][i] = DASH;
-		}
-	}
+  uint8_t gap = ce - cs;
+  uint8_t w = 0;
+  uint8_t c;
+
+  if (gap >= 5) {
+    w = random(DASH_WIDTH_MIN, DASH_WIDTH_MAX);
+    if (w == 3) {
+      c = (random(0, 2) == 1) ? 0 : ce - w;
+    } else if (w == 2) {
+      c = random(cs, ce - w);
+    }
+  } else if (gap == 4) {
+    w = DASH_WIDTH_MIN;
+  } else {
+    return;
+  }
+
+  for (int i = c; i < (c + w); i++) {
+    if (!room[row - 1][i] && !room[row + 1][i]
+        && !room[row - 1][max(0, i - 1)] && !room[row - 1][min(MAPWIDTH, i + 1)]
+        && !room[row + 1][max(0, i - 1)] && !room[row + 1][min(MAPWIDTH, i + 1)]) {
+      room[row][i] = DASH;
+    }
+  }
 }
 
 void generateBlocks(uint8_t room[][SCREENWIDTH]) {
-	uint8_t rs = random(TOP_MARGIN, SCREENHEIGHT/2);
-	while (rs + 2 < SCREENHEIGHT - BOTTOM_MARGIN) {
-		uint8_t re = random(rs+1, SCREENHEIGHT - BOTTOM_MARGIN);
-		re = min(re, SCREENHEIGHT - BOTTOM_MARGIN);
-		uint8_t cs = random(0, SCREENWIDTH);
-		uint8_t ce = random(cs+1, SCREENWIDTH);
-		
-		for (int i=rs; i<re; i++) {
-			for (int j=cs; j<ce; j++) {
-				if (!room[i][j] && !room[i-1][j] && random(0, 4) > 1) room[i][j] = BLOCK;
-			}
-		}
-		
-		if (re + 1 >= SCREENHEIGHT - BOTTOM_MARGIN) break;
-		rs = random(re + 1, SCREENHEIGHT - BOTTOM_MARGIN);
+  uint8_t rs = random(TOP_MARGIN, SCREENHEIGHT / 2);
+  while (rs + 2 < SCREENHEIGHT - BOTTOM_MARGIN) {
+    uint8_t re = random(rs + 1, SCREENHEIGHT - BOTTOM_MARGIN);
+    re = min(re, SCREENHEIGHT - BOTTOM_MARGIN);
+    uint8_t cs = random(0, SCREENWIDTH);
+    uint8_t ce = random(cs + 1, SCREENWIDTH);
+
+    for (int i = rs; i < re; i++) {
+      for (int j = cs; j < ce; j++) {
+        if (!room[i][j] && !room[i - 1][j] && random(0, 4) > 1) room[i][j] = BLOCK;
+      }
+    }
+
+    if (re + 1 >= SCREENHEIGHT - BOTTOM_MARGIN) break;
+    rs = random(re + 1, SCREENHEIGHT - BOTTOM_MARGIN);
   }
 }
 
