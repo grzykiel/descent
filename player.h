@@ -5,7 +5,7 @@
 
 
 typedef struct {
-  float vx;
+  float vx; //TODO integer arithmetic
   float vy;
 
   Direction dir;

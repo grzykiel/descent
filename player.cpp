@@ -37,8 +37,8 @@ void init() {
   player.animation.active = true;
   player.animation.frame = 0;
   player.animation.t = 0;
-  player.animation.x = SCREENMID + 320;  //TODO #define
-  player.animation.y = 28;               //TODO #define
+  player.animation.pos.x = SCREENMID + 320;  //TODO #define
+  player.animation.pos.y = 28;               //TODO #define
 
   //TODO move to initialisation
   player.vy = 0;
@@ -50,7 +50,7 @@ void init() {
 
 
 void update() {
-  vector_t nextPos;
+  vector_t nextPos; // TODO replace with position_t
   float next_vx = max(player.vx, TERMINAL_VELOCITY);
   float next_vy = player.vy;
 
@@ -64,8 +64,8 @@ void update() {
       }
     }
   }
-  nextPos.x = round(player.animation.x + player.vx);
-  nextPos.y = player.animation.y + player.vy;
+  nextPos.x = round(player.animation.pos.x + player.vx);
+  nextPos.y = player.animation.pos.y + player.vy;
 
   //Boundary check
   if (nextPos.y <= SCREENLEFT - player.animation.sprite->dy) {
@@ -96,16 +96,13 @@ void update() {
   
 
   //check if falling
-  if (player.grounded && (nextPos.x < player.animation.x)) {
+  if (player.grounded && (nextPos.x < player.animation.pos.x)) {
     fall();
   }
-  // if (nextPos.x < player.animation.x) player.grounded = false;
+  // if (nextPos.x < player.animation.pos.x) player.grounded = false;
 
-  player.animation.x = nextPos.x;
-  player.animation.y = nextPos.y;
-
-  // arduboy.setCursor(player.animation.x - cameraOffset + 9, player.animation.y);
-  // arduboy.print(player.vx);
+  player.animation.pos.x = nextPos.x;
+  player.animation.pos.y = nextPos.y;
 
   // Animation update
   if (player.grounded) {
@@ -126,25 +123,20 @@ void update() {
 }
 
 void draw() {
-  Sprites::drawSelfMasked(player.animation.x - cameraOffset, player.animation.y, player.animation.sprite->sprite, player.animation.frame);
-  // arduboy.setCursor(player.animation.x - cameraOffset + 9, player.animation.y);
-  // arduboy.print(player.animation.x);
+  Sprites::drawSelfMasked(player.animation.pos.x - cameraOffset, player.animation.pos.y, player.animation.sprite->sprite, player.animation.frame);
 }
 
 collision_t checkCollisions(animation_t anim, vector_t *next) {
   collision_t type = { NONE, NONE };
 
-  window_t wd = Utils::getCollisionWindow(player.animation.x, player.animation.y);
+  window_t wd = Utils::getCollisionWindow(anim.pos.x, anim.pos.y);
 
   // tile collisions
   for (int i = wd.xMin; i <= wd.xMax; i++) {
     for (int j = wd.yMin; j <= wd.yMax; j++) {
       if (levelMap[i][j]) {
         Rect block = levelMap[i][j] == DASH ? Rect((MAPHEIGHT - i - 1) * BLOCKSIZE + 6, j * BLOCKSIZE, 2, BLOCKSIZE) : Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
-        // Rect block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
         collision_t temp = Utils::collisionCorrect(anim, next, block);
-        // type.v |= temp.v;
-        // type.h |= temp.h;
         if (temp.v) type.v = temp.v;
         if (temp.h) type.h = temp.h;
       }

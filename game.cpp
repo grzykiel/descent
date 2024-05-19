@@ -59,7 +59,7 @@ void update() {
 }
 
 void updateCamera() {
-  cameraOffset = Utils::trim(player.animation.x - SCREENMID, 0, MAPHEIGHT * BLOCKSIZE - SCREENTOP);
+  cameraOffset = Utils::trim(player.animation.pos.x - SCREENMID, 0, MAPHEIGHT * BLOCKSIZE - SCREENTOP);
 }
 
 void draw() {

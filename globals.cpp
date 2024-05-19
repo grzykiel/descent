@@ -32,18 +32,18 @@ window_t getCollisionWindow(uint16_t x, uint8_t y) {
 }
 
 bool collides(animation_t anim, Rect block) {
-  Rect spriteRect = Rect(anim.x + anim.sprite->dx, anim.y + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
+  Rect spriteRect = Rect(anim.pos.x + anim.sprite->dx, anim.pos.y + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
   return (arduboy.collide(spriteRect, block));
 }
 
 collision_t collisionCorrect(animation_t anim, vector_t *next, Rect collider) {
   collision_t type = {NONE, NONE};
 
-  /*uint8_t y = min(next->y, anim.y);
-  uint8_t w = abs(next->y - anim.y);
-  Rect rect = Rect(anim.x + anim.sprite->dx, y + anim.sprite->dy, anim.sprite->h, w +anim.sprite->w);*/
+  /*uint8_t y = min(next->y, anim.pos.y);
+  uint8_t w = abs(next->y - anim.pos.y);
+  Rect rect = Rect(anim.pos.x + anim.sprite->dx, y + anim.sprite->dy, anim.sprite->h, w +anim.sprite->w);*/
 
-  Rect rect = Rect(anim.x + anim.sprite->dx, next->y + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
+  Rect rect = Rect(anim.pos.x + anim.sprite->dx, next->y + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
   if (arduboy.collide(rect, collider)) {
     if (collider.y < rect.y) {
       type.h = LEFT;
@@ -54,16 +54,16 @@ collision_t collisionCorrect(animation_t anim, vector_t *next, Rect collider) {
     }
   }
 
-  /*uint8_t x = min(next->x, anim.x);
-  uint8_t h = abs(next->x - anim.x);
-  rect = Rect(x + anim.sprite->dx, anim.y + anim.sprite->dy, h + anim.sprite->h, anim.sprite->w);*/
+  /*uint8_t x = min(next->x, anim.pos.x);
+  uint8_t h = abs(next->x - anim.pos.x);
+  rect = Rect(x + anim.sprite->dx, anim.pos.y + anim.sprite->dy, h + anim.sprite->h, anim.sprite->w);*/
 
-  rect = Rect(next->x + anim.sprite->dx, anim.y + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
+  rect = Rect(next->x + anim.sprite->dx, anim.pos.y + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
   if (arduboy.collide(rect, collider)) {
-    if (collider.x < anim.x) {
+    if (collider.x < anim.pos.x) {
       type.v = BOTTOM;
       next->x = collider.x + collider.width - anim.sprite->dx;
-    } else if (anim.x < collider.x) {
+    } else if (anim.pos.x < collider.x) {
       type.v = TOP;
       next->x = collider.x - anim.sprite->h - anim.sprite->dx;
     }

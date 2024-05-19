@@ -58,6 +58,7 @@ const float THRUST = 0.056f;
 
 #define PIXEL_SCALE 128
 
+
 extern Arduboy2 arduboy;
 extern Sprites sprites;
 
@@ -86,6 +87,16 @@ typedef struct {
 } vector_t;
 
 typedef struct {
+  uint16_t x;
+  int16_t y;
+} position_t;
+
+typedef struct {
+  int8_t x;
+  int8_t y;
+} velocity_t;
+
+typedef struct {
   const unsigned char *sprite;
   uint8_t last;
   uint8_t *transitions;
@@ -100,8 +111,10 @@ typedef struct {
   bool active = false;
   uint8_t frame = 0;
   uint8_t t = 0;
-  uint16_t x;
-  int16_t y;
+  // uint16_t x;
+  // int16_t y; 
+  position_t pos;
+  velocity_t vel;
   sprite_t *sprite;
 } animation_t;
 
