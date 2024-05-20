@@ -21,11 +21,14 @@ void input() {
   }
 
   if (arduboy.pressed(left_btn)) {
-    player.vy = -walkSpeed;
+    // player.vy = -walkSpeed;
+    player.animation.vel.y = -walkSpeed*PIXEL_SCALE;
   } else if (arduboy.pressed(right_btn)) {
-    player.vy = walkSpeed;
+    // player.vy = walkSpeed;
+    player.animation.vel.y = walkSpeed*PIXEL_SCALE-1;
   } else if (arduboy.notPressed(left_btn | right_btn)) {
-    player.vy = 0;
+    // player.vy = 0;
+    player.animation.vel.y = 0;
   }
 
   if (movementMode == TOPDOWN) {

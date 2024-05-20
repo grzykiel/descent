@@ -5,10 +5,11 @@
 #define BLOB_MAX_VEL  8
 #define MAX_ENEMIES   1
 
+#define BLOB 0
+
 typedef struct {
-	int8_t vx;
-	int8_t vy;
-	
+  char type;
+  uint8_t hp;
 	animation_t animation;
 } enemy_t;
 
@@ -20,9 +21,9 @@ namespace Enemies {
   void update();
   void draw();
 
-  void updatePositions(); //TODO remove
-  vector_t updatePositions(enemy_t enemy);
-  void updateSprites();
+  void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel);
+  void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel);
+  void updateSprite(enemy_t enemy);
 
-  void checkCollisions();
+  
 }

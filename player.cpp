@@ -37,12 +37,11 @@ void init() {
   player.animation.active = true;
   player.animation.frame = 0;
   player.animation.t = 0;
-  player.animation.pos.x = SCREENMID + 320;  //TODO #define
-  player.animation.pos.y = 28;               //TODO #define
+  player.animation.pos.x = 320; //SCREENMID + 320;  //TODO #define
+  player.animation.pos.y = 28*PIXEL_SCALE;               //TODO #define
+  player.animation.vel.x = 0;
+  player.animation.vel.y = 0;
 
-  //TODO move to initialisation
-  player.vy = 0;
-  player.vx = 0;
   player.dir = Direction::right;
 
   Bullet::init();
@@ -50,9 +49,11 @@ void init() {
 
 
 void update() {
-  vector_t nextPos; // TODO replace with position_t
+  position_t nextPos = player.animation.pos;
+
   float next_vx = max(player.vx, TERMINAL_VELOCITY);
-  float next_vy = player.vy;
+  velocity_t nextVel = player.animation.vel;
+  
 
   // physics update
   if (movementMode == PLATFORM) {
@@ -65,15 +66,15 @@ void update() {
     }
   }
   nextPos.x = round(player.animation.pos.x + player.vx);
-  nextPos.y = player.animation.pos.y + player.vy;
+  nextPos.y += nextVel.y;
 
   //Boundary check
-  if (nextPos.y <= SCREENLEFT - player.animation.sprite->dy) {
+  if (nextPos.y/PIXEL_SCALE <= SCREENLEFT - player.animation.sprite->dy) {
     nextPos.y = SCREENLEFT;
-    next_vy = 0;
-  } else if (nextPos.y > (SCREENRIGHT - player.animation.sprite->w - player.animation.sprite->dy)) {
-    nextPos.y = SCREENRIGHT - player.animation.sprite->w - player.animation.sprite->dy;
-    next_vy = 0;
+    nextVel.y = 0;
+  } else if (nextPos.y/PIXEL_SCALE > (SCREENRIGHT - player.animation.sprite->w - player.animation.sprite->dy)) {
+    nextPos.y = (SCREENRIGHT - player.animation.sprite->w - player.animation.sprite->dy)*PIXEL_SCALE;
+    nextVel.y = 0;
   }
 
   //adjust for collisions
@@ -88,12 +89,11 @@ void update() {
     next_vx = 0.0f;
   }
   if (type.h == LEFT | type.h == RIGHT) {
-    next_vy = 0.0f;
+    nextVel.y = 0;
   }
 
   player.vx = next_vx;
-  player.vy = next_vy;
-  
+  player.animation.vel = nextVel;  
 
   //check if falling
   if (player.grounded && (nextPos.x < player.animation.pos.x)) {
@@ -107,7 +107,7 @@ void update() {
   // Animation update
   if (player.grounded) {
     player.animation.t++;
-    if (player.vy != 0) {
+    if (player.animation.vel.y != 0) {
       if (arduboy.everyXFrames(walkAnimDelay)) {
         player.animation.frame++;
         if (player.animation.frame >= N_WALKFRAMES) {
@@ -123,13 +123,14 @@ void update() {
 }
 
 void draw() {
-  Sprites::drawSelfMasked(player.animation.pos.x - cameraOffset, player.animation.pos.y, player.animation.sprite->sprite, player.animation.frame);
+  Sprites::drawSelfMasked(player.animation.pos.x - cameraOffset, player.animation.pos.y/PIXEL_SCALE, player.animation.sprite->sprite, player.animation.frame);
 }
 
-collision_t checkCollisions(animation_t anim, vector_t *next) {
+collision_t checkCollisions(animation_t anim, position_t *next) {
   collision_t type = { NONE, NONE };
 
-  window_t wd = Utils::getCollisionWindow(anim.pos.x, anim.pos.y);
+  window_t wd = Utils::getCollisionWindow(anim.pos);
+  // window_t wd = Utils::getCollisionWindow(anim.pos.x/PIXEL_SCALE, anim.pos.y/PIXEL_SCALE);
 
   // tile collisions
   for (int i = wd.xMin; i <= wd.xMax; i++) {

@@ -102,7 +102,7 @@ void updateBullets() {
 
 void collisionCheck() {
   for (int b = 0; b < MAX_BULLETS; b++) {
-    window_t wd = Utils::getCollisionWindow(bullet[b].animation.pos.x, bullet[b].animation.pos.y);
+    window_t wd = Utils::getCollisionWindow(bullet[b].animation.pos);
 
     for (int i = wd.xMin; i <= wd.xMax; i++) {
       for (int j = wd.yMin; j <= wd.yMax; j++) {

@@ -67,5 +67,5 @@ namespace Player {
   void thrust();
   void land();
 
-  collision_t checkCollisions(animation_t anim, vector_t *next);
+  collision_t checkCollisions(animation_t anim, position_t *next);
 }

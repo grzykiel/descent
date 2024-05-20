@@ -47,8 +47,11 @@
 
 // Jump
 const float JUMP_GRAVITY = -0.056f;
+// #define GRAVITY -7
 const float JUMP_VELOCITY = 1.7F;
+// #define JUMP_VELOCITY 246
 const float THRUST = 0.056f;
+// #define THRUST 7
 #define HALF_JUMP   15
 #define JUMP_TOP    25
 #define JUMPFRAMES  50
@@ -111,8 +114,7 @@ typedef struct {
   bool active = false;
   uint8_t frame = 0;
   uint8_t t = 0;
-  // uint16_t x;
-  // int16_t y; 
+
   position_t pos;
   velocity_t vel;
   sprite_t *sprite;
@@ -129,9 +131,10 @@ namespace Utils
 {
   int trim(int p, int l, int h);
   int sign(int x);
-  window_t getCollisionWindow(uint16_t x, uint8_t y);
+  window_t getCollisionWindow(position_t pos);
+  window_t getCollisionWindow(uint16_t x, int16_t y);
   bool collides(animation_t anim, Rect block);
-  collision_t collisionCorrect(animation_t anim, vector_t *next, Rect collider);
+  collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider);
 
   bool updateAnimation(animation_t *animation);
 
