@@ -33,11 +33,11 @@ void input() {
 
   if (movementMode == TOPDOWN) {
     if (arduboy.pressed(up_btn)) {
-      player.vx = walkSpeed;
+      player.animation.vel.x = walkSpeed*PIXEL_SCALE-1;
     } else if (arduboy.pressed(down_btn)) {
-      player.vx = -walkSpeed;
+      player.animation.vel.x = -walkSpeed*PIXEL_SCALE;
     } else if (arduboy.notPressed(up_btn | down_btn)) {
-      player.vx = 0;
+      player.animation.vel.x = 0;
     }
   }
 
@@ -62,7 +62,7 @@ void update() {
 }
 
 void updateCamera() {
-  cameraOffset = Utils::trim(player.animation.pos.x - SCREENMID, 0, MAPHEIGHT * BLOCKSIZE - SCREENTOP);
+  cameraOffset = Utils::trim(player.animation.pos.x/PIXEL_SCALE - SCREENMID, 0, MAPHEIGHT * BLOCKSIZE - SCREENTOP);
 }
 
 void draw() {

@@ -50,8 +50,8 @@ void shoot() {
     muzzleFlash.frame = 0;
 
     bullet[chamber].animation.active = true;
-    bullet[chamber].animation.pos.x = player.animation.pos.x;
-    bullet[chamber].animation.pos.y = player.animation.pos.y;
+    bullet[chamber].animation.pos.x = player.animation.pos.x/PIXEL_SCALE;
+    bullet[chamber].animation.pos.y = player.animation.pos.y/PIXEL_SCALE;
     bullet[chamber].animation.frame = 0;
     bullet[chamber].animation.t = 0;
     bullet[chamber].v = BULLET_START_VEL;
@@ -74,7 +74,7 @@ void initMuzzleFlash() {
 
 void drawMuzzleFlash() {
   if (muzzleFlash.active) {
-    Sprites::drawSelfMasked(player.animation.pos.x - cameraOffset - muzzleFlash.sprite->dx, player.animation.pos.y, muzzleFlash.sprite->sprite, muzzleFlash.frame);
+    Sprites::drawSelfMasked(player.animation.pos.x/PIXEL_SCALE - cameraOffset - muzzleFlash.sprite->dx, player.animation.pos.y/PIXEL_SCALE, muzzleFlash.sprite->sprite, muzzleFlash.frame);
     muzzleFlash.active = Utils::updateAnimation(&muzzleFlash);
   }
 }
@@ -102,7 +102,7 @@ void updateBullets() {
 
 void collisionCheck() {
   for (int b = 0; b < MAX_BULLETS; b++) {
-    window_t wd = Utils::getCollisionWindow(bullet[b].animation.pos);
+    window_t wd = Utils::getCollisionWindow(bullet[b].animation.pos.x, bullet[b].animation.pos.y);
 
     for (int i = wd.xMin; i <= wd.xMax; i++) {
       for (int j = wd.yMin; j <= wd.yMax; j++) {

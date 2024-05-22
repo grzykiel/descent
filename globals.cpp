@@ -18,14 +18,14 @@ int trim(int p, int l, int h) {
 }
 
 window_t getCollisionWindow(position_t pos) {
-  return getCollisionWindow(pos.x, pos.y);
+  return getCollisionWindow(pos.x/PIXEL_SCALE, pos.y/PIXEL_SCALE);
 }
 
 window_t getCollisionWindow(uint16_t x, int16_t y) {
   window_t wd;
   //TODO use trim()
-  wd.yMin = max(floor(y/PIXEL_SCALE / BLOCKSIZE) - 1, 0);
-  wd.yMax = min(ceil(y/PIXEL_SCALE / BLOCKSIZE) + 1, MAPWIDTH - 1);
+  wd.yMin = max(floor(y / BLOCKSIZE) - 1, 0);
+  wd.yMax = min(ceil(y / BLOCKSIZE) + 1, MAPWIDTH - 1);
 
   wd.xMin = ceil(x / (1.0f * BLOCKSIZE)) + 1;
   wd.xMax = floor(x / (1.0f * BLOCKSIZE)) - 1;
@@ -63,14 +63,14 @@ collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider) 
   uint8_t h = abs(next->x - anim.pos.x);
   rect = Rect(x + anim.sprite->dx, anim.pos.y + anim.sprite->dy, h + anim.sprite->h, anim.sprite->w);*/
 
-  rect = Rect(next->x + anim.sprite->dx, anim.pos.y/PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
+  rect = Rect(next->x/PIXEL_SCALE + anim.sprite->dx, anim.pos.y/PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
   if (arduboy.collide(rect, collider)) {
     if (collider.x < rect.x) {
       type.v = BOTTOM;
-      next->x = collider.x + collider.width - anim.sprite->dx;
+      next->x = (collider.x + collider.width - anim.sprite->dx)*PIXEL_SCALE;
     } else if (rect.x < collider.x) {
       type.v = TOP;
-      next->x = collider.x - anim.sprite->h - anim.sprite->dx;
+      next->x = (collider.x - anim.sprite->h - anim.sprite->dx)*PIXEL_SCALE;
     }
   }
 

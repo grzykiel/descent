@@ -30,14 +30,13 @@ player_t player;  //TODO initialise
 const int8_t walkSpeed = 1;
 const uint8_t walkAnimDelay = 6;
 
-
 namespace Player {
 void init() {
   player.animation.sprite = &playerRunSprite;
   player.animation.active = true;
   player.animation.frame = 0;
   player.animation.t = 0;
-  player.animation.pos.x = 320; //SCREENMID + 320;  //TODO #define
+  player.animation.pos.x = 320*PIXEL_SCALE; //SCREENMID + 320;  //TODO #define
   player.animation.pos.y = 28*PIXEL_SCALE;               //TODO #define
   player.animation.vel.x = 0;
   player.animation.vel.y = 0;
@@ -51,21 +50,20 @@ void init() {
 void update() {
   position_t nextPos = player.animation.pos;
 
-  float next_vx = max(player.vx, TERMINAL_VELOCITY);
-  velocity_t nextVel = player.animation.vel;
-  
+  velocity_t nextVel = player.animation.vel;  
 
   // physics update
   if (movementMode == PLATFORM) {
-    next_vx += JUMP_GRAVITY;
+    nextVel.x += GRAVITY;
     if (!player.grounded) {
       if (player.animation.t == HALF_JUMP && arduboy.notPressed(A_BUTTON | B_BUTTON)) {
-        next_vx = 0.0f;
+        player.animation.vel.x = 0;
         fall();
       }
     }
   }
-  nextPos.x = round(player.animation.pos.x + player.vx);
+
+  nextPos.x += nextVel.x;
   nextPos.y += nextVel.y;
 
   //Boundary check
@@ -86,13 +84,12 @@ void update() {
         Player::land();
       }
     }
-    next_vx = 0.0f;
+    nextVel.x = 0;
   }
   if (type.h == LEFT | type.h == RIGHT) {
     nextVel.y = 0;
   }
 
-  player.vx = next_vx;
   player.animation.vel = nextVel;  
 
   //check if falling
@@ -101,8 +98,7 @@ void update() {
   }
   // if (nextPos.x < player.animation.pos.x) player.grounded = false;
 
-  player.animation.pos.x = nextPos.x;
-  player.animation.pos.y = nextPos.y;
+  player.animation.pos = nextPos;
 
   // Animation update
   if (player.grounded) {
@@ -123,7 +119,7 @@ void update() {
 }
 
 void draw() {
-  Sprites::drawSelfMasked(player.animation.pos.x - cameraOffset, player.animation.pos.y/PIXEL_SCALE, player.animation.sprite->sprite, player.animation.frame);
+  Sprites::drawSelfMasked(player.animation.pos.x/PIXEL_SCALE - cameraOffset, player.animation.pos.y/PIXEL_SCALE, player.animation.sprite->sprite, player.animation.frame);
 }
 
 collision_t checkCollisions(animation_t anim, position_t *next) {
@@ -148,7 +144,8 @@ collision_t checkCollisions(animation_t anim, position_t *next) {
 }
 
 void jump() {
-  player.vx = JUMP_VELOCITY;
+  // player.vx = JUMP_VELOCITY;
+  player.animation.vel.x = JUMP_VELOCITY;
   player.animation.t = 0;
   player.grounded = false;
   player.animation.sprite = &playerJumpSprite;
@@ -161,11 +158,13 @@ void jump() {
 }
 
 void thrust() {
-  player.vx = THRUST;
+  // player.vx = THRUST;
+  player.animation.vel.x = THRUST;
 }
 
 void fall() {
-  player.vx = 0;
+  // player.vx = 0;
+  player.animation.vel.x = 0;
   player.animation.t = JUMP_TOP;
 
   player.grounded = false;

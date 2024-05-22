@@ -5,9 +5,6 @@
 
 
 typedef struct {
-  float vx; //TODO integer arithmetic
-  float vy;
-
   Direction dir;
 
   animation_t animation;

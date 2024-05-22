@@ -42,7 +42,7 @@ uint8_t levelMap[MAPHEIGHT][MAPWIDTH] = {
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   // { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 1, 1, 1, 1, 1, 0, 1, 1 },
+  { 0, 0, 1, 1, 1, 0, 1, 1 },
 
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -112,13 +112,13 @@ void draw() {
 }
 
 void update() {
-  if (player.animation.pos.x <= REMAP_THRESHOLD) {
-    // shiftMap();
+  if (player.animation.pos.x/PIXEL_SCALE <= REMAP_THRESHOLD) {
+    shiftMap();
   }
 }
 
 void shiftMap() {
-  player.animation.pos.x += 128;  //TODO #define
+  player.animation.pos.x += 128*PIXEL_SCALE;  //TODO #define
 
   for (int i = 0; i < MAX_BULLETS; i++) {
     if (bullet[i].animation.active) {

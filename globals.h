@@ -46,12 +46,12 @@
 #define TOP         2
 
 // Jump
-const float JUMP_GRAVITY = -0.056f;
-// #define GRAVITY -7
-const float JUMP_VELOCITY = 1.7F;
-// #define JUMP_VELOCITY 246
-const float THRUST = 0.056f;
-// #define THRUST 7
+// const float JUMP_GRAVITY = -0.056f;
+#define GRAVITY -7
+// const float JUMP_VELOCITY = 1.7F;
+#define JUMP_VELOCITY 246
+// const float THRUST = 0.056f;
+#define THRUST 7
 #define HALF_JUMP   15
 #define JUMP_TOP    25
 #define JUMPFRAMES  50
@@ -95,7 +95,7 @@ typedef struct {
 } position_t;
 
 typedef struct {
-  int8_t x;
+  int16_t x;
   int8_t y;
 } velocity_t;
 
