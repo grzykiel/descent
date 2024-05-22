@@ -36,7 +36,7 @@ window_t getCollisionWindow(uint16_t x, int16_t y) {
 }
 
 bool collides(animation_t anim, Rect block) {
-  Rect spriteRect = Rect(anim.pos.x + anim.sprite->dx, anim.pos.y + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
+  Rect spriteRect = Rect(anim.pos.x/PIXEL_SCALE + anim.sprite->dx, anim.pos.y/PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
   return (arduboy.collide(spriteRect, block));
 }
 
@@ -48,12 +48,11 @@ collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider) 
   Rect rect = Rect(anim.pos.x + anim.sprite->dx, y + anim.sprite->dy, anim.sprite->h, w +anim.sprite->w);*/
 
   Rect rect = Rect(anim.pos.x/PIXEL_SCALE + anim.sprite->dx, next->y/PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
-
   if (arduboy.collide(rect, collider)) {
-    if (collider.y < rect.y) {
+    if (collider.y < anim.pos.y/PIXEL_SCALE) {
       type.h = LEFT;
       next->y = (collider.y + collider.height - anim.sprite->dy)*PIXEL_SCALE;
-    } else if (rect.y < collider.y) {
+    } else if (anim.pos.y/PIXEL_SCALE < collider.y) {
       type.h = RIGHT;
       next->y = (collider.y - anim.sprite->w - anim.sprite->dy)*PIXEL_SCALE;
     }
@@ -65,10 +64,10 @@ collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider) 
 
   rect = Rect(next->x/PIXEL_SCALE + anim.sprite->dx, anim.pos.y/PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
   if (arduboy.collide(rect, collider)) {
-    if (collider.x < rect.x) {
+    if (collider.x < anim.pos.x/PIXEL_SCALE) {
       type.v = BOTTOM;
       next->x = (collider.x + collider.width - anim.sprite->dx)*PIXEL_SCALE;
-    } else if (rect.x < collider.x) {
+    } else if (anim.pos.x/PIXEL_SCALE < collider.x) {
       type.v = TOP;
       next->x = (collider.x - anim.sprite->h - anim.sprite->dx)*PIXEL_SCALE;
     }

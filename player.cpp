@@ -58,7 +58,7 @@ void update() {
     nextVel.x += GRAVITY;
     if (!player.grounded) {
       if (player.animation.t == HALF_JUMP && arduboy.notPressed(A_BUTTON | B_BUTTON)) {
-        player.animation.vel.x = 0;
+        nextVel.x = 0;
         fall();
       }
     }
@@ -94,7 +94,7 @@ void update() {
   player.animation.vel = nextVel;  
 
   //check if falling
-  if (player.grounded && (nextPos.x < player.animation.pos.x)) {
+  if (player.grounded && (nextPos.x/PIXEL_SCALE < player.animation.pos.x/PIXEL_SCALE)) {
     fall();
   }
   // if (nextPos.x < player.animation.pos.x) player.grounded = false;
@@ -145,7 +145,6 @@ collision_t checkCollisions(animation_t anim, position_t *next) {
 }
 
 void jump() {
-  // player.vx = JUMP_VELOCITY;
   player.animation.vel.x = JUMP_VELOCITY;
   player.animation.t = 0;
   player.grounded = false;
@@ -159,12 +158,10 @@ void jump() {
 }
 
 void thrust() {
-  // player.vx = THRUST;
   player.animation.vel.x = THRUST;
 }
 
 void fall() {
-  // player.vx = 0;
   player.animation.vel.x = 0;
   player.animation.t = JUMP_TOP;
 

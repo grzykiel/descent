@@ -7,10 +7,12 @@
 
 typedef struct {
   animation_t animation;
-  float v = 3.2f;
+  // float v = 3.2f;
 } bullet_t;
 
 #define MAX_BULLETS 5
+#define BULLET_ACCEL 20
+#define BULLET_START_VEL 410
 
 const uint8_t muzzleFlashTransitions[1] = {5};
 extern sprite_t muzzleFlashSprite;
@@ -23,9 +25,6 @@ extern uint8_t bulletsUsed;
 extern uint8_t chamber;
 
 const uint8_t bulletTransitions[7] = {1, 2, 3, 5, 8, 11, 15}; //, 20};
-
-const float BULLET_ACCEL = 0.16f;
-const float BULLET_START_VEL = 3.2f;
 
 namespace Bullet {
   void init();
