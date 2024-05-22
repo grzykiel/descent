@@ -50,7 +50,8 @@ void init() {
 void update() {
   position_t nextPos = player.animation.pos;
 
-  velocity_t nextVel = player.animation.vel;  
+  velocity_t nextVel = player.animation.vel; 
+  nextVel.x = max(nextVel.x, -8*PIXEL_SCALE);
 
   // physics update
   if (movementMode == PLATFORM) {

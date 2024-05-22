@@ -47,7 +47,7 @@ collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider) 
   uint8_t w = abs(next->y - anim.pos.y);
   Rect rect = Rect(anim.pos.x + anim.sprite->dx, y + anim.sprite->dy, anim.sprite->h, w +anim.sprite->w);*/
 
-  Rect rect = Rect(anim.pos.x + anim.sprite->dx, next->y/PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
+  Rect rect = Rect(anim.pos.x/PIXEL_SCALE + anim.sprite->dx, next->y/PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
 
   if (arduboy.collide(rect, collider)) {
     if (collider.y < rect.y) {
