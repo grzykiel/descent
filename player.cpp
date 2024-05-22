@@ -127,7 +127,6 @@ collision_t checkCollisions(animation_t anim, position_t *next) {
   collision_t type = { NONE, NONE };
 
   window_t wd = Utils::getCollisionWindow(anim.pos);
-  // window_t wd = Utils::getCollisionWindow(anim.pos.x/PIXEL_SCALE, anim.pos.y/PIXEL_SCALE);
 
   // tile collisions
   for (int i = wd.xMin; i <= wd.xMax; i++) {

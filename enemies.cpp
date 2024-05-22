@@ -45,14 +45,14 @@ void update() {
 
 void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
   // if enemy.type == BLOB
-  int dx = player.animation.pos.x - enemy.animation.pos.x/PIXEL_SCALE;
+  int dx = player.animation.pos.x/PIXEL_SCALE - enemy.animation.pos.x/PIXEL_SCALE;
   if (dx > 0) {
     nextVel->x = min(++enemy.animation.vel.x, BLOB_MAX_VEL);
   } else if (dx < 0) {
     nextVel->x = max(--enemy.animation.vel.x, -BLOB_MAX_VEL);
   }
 
-  int dy = player.animation.pos.y - enemy.animation.pos.y / PIXEL_SCALE;
+  int dy = player.animation.pos.y/PIXEL_SCALE - enemy.animation.pos.y / PIXEL_SCALE;
   if (dy > 0) {
     nextVel->y = min(++enemy.animation.vel.y, BLOB_MAX_VEL);
   } else if (dy < 0) {
@@ -67,18 +67,14 @@ void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
 //- fix pixel scaling
 //- no collision with DASH
 void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
-  position_t posPix;
-  posPix.x = nextPos->x/PIXEL_SCALE;
-  posPix.y = nextPos->y/PIXEL_SCALE;
-  window_t wd = Utils::getCollisionWindow(posPix);
+
+  window_t wd = Utils::getCollisionWindow(enemy.animation.pos);
   // tile collisions
   for (int i = wd.xMin; i <= wd.xMax; i++) {
     for (int j = wd.yMin; j <= wd.yMax; j++) {
       if (levelMap[i][j]) {
         Rect block = levelMap[i][j] == DASH ? Rect((MAPHEIGHT - i - 1) * BLOCKSIZE + 6, j * BLOCKSIZE, 2, BLOCKSIZE) : Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
-        collision_t temp = Utils::collisionCorrect(enemy.animation, &posPix, block);
-        nextPos->x = posPix.x*PIXEL_SCALE;
-        nextPos->y = posPix.y*PIXEL_SCALE;
+        collision_t temp = Utils::collisionCorrect(enemy.animation, nextPos, block);
         // set velocity according to collision
         if (temp.v) nextVel->x = 0;
         if (temp.h) nextVel->y = 0;
@@ -97,7 +93,7 @@ void updateSprite(enemy_t enemy) {
 
 void draw() {
   uint8_t i = 0;
-  // Sprites::drawSelfMasked((enemy[i].animation.pos.x / PIXEL_SCALE) - cameraOffset, enemy[i].animation.pos.y / PIXEL_SCALE, enemy[i].animation.sprite->sprite, enemy[i].animation.frame);
+  Sprites::drawSelfMasked((enemy[i].animation.pos.x / PIXEL_SCALE) - cameraOffset, enemy[i].animation.pos.y / PIXEL_SCALE, enemy[i].animation.sprite->sprite, enemy[i].animation.frame);
 }
 
 }
