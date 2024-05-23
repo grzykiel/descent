@@ -53,10 +53,11 @@ extern const uint8_t walkAnimDelay;
 
 
 namespace Player {
+  void init();
   void update();
   void draw();
 
-  void init();
+  void updateAnimation();
   // void initPlayer();
 
   void jump();
@@ -64,5 +65,6 @@ namespace Player {
   void thrust();
   void land();
 
-  collision_t checkCollisions(animation_t anim, position_t *next);
+  collision_t checkTileCollisions(animation_t anim, position_t *next);
+  void checkEnemyCollisions(animation_t anim, position_t *next);
 }

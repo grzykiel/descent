@@ -7,13 +7,14 @@
 
 #define BLOB 0
 
+
 typedef struct {
   char type;
   uint8_t hp;
 	animation_t animation;
 } enemy_t;
 
-extern enemy_t enemyBlob;
+extern enemy_t enemy[MAX_ENEMIES];
 
 namespace Enemies {
 
@@ -23,7 +24,7 @@ namespace Enemies {
 
   void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel);
   void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel);
-  void updateSprite(enemy_t enemy);
+  void updateSprite(enemy_t *enemy);
 
   
 }

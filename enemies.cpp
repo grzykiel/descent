@@ -6,13 +6,13 @@ sprite_t blobSprite = {
   Enemies::blob,
   1,                // last frame
   blobTransitions,  // frame transitions
-  0,                // dx
-  2,                // dy
-  5,                // w
-  7,                // h
+  1,                // dx
+  0,                // dy
+  7,                // w
+  5,                // h
 };
 
-enemy_t enemy[1];
+enemy_t enemy[MAX_ENEMIES];
 
 namespace Enemies {
 
@@ -36,7 +36,7 @@ void update() {
     updatePosition(enemy[i], &nextPos, &nextVel);
     checkCollisions(enemy[i], &nextPos, &nextVel);
 
-    updateSprite(enemy[i]); //TODO update
+    updateSprite(&enemy[i]);
     enemy[i].animation.pos = nextPos;
     enemy[i].animation.vel = nextVel;
   }
@@ -63,17 +63,15 @@ void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
   nextPos->y += nextVel->y;
 }
 
-//TODO
-//- fix pixel scaling
-//- no collision with DASH
+
 void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
 
   window_t wd = Utils::getCollisionWindow(enemy.animation.pos);
   // tile collisions
   for (int i = wd.xMin; i <= wd.xMax; i++) {
     for (int j = wd.yMin; j <= wd.yMax; j++) {
-      if (levelMap[i][j]) {
-        Rect block = levelMap[i][j] == DASH ? Rect((MAPHEIGHT - i - 1) * BLOCKSIZE + 6, j * BLOCKSIZE, 2, BLOCKSIZE) : Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
+      if (levelMap[i][j] && levelMap[i][j] != DASH) {
+        Rect block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE + 6, j * BLOCKSIZE, 2, BLOCKSIZE);
         collision_t temp = Utils::collisionCorrect(enemy.animation, nextPos, block);
         // set velocity according to collision
         if (temp.v) nextVel->x = 0;
@@ -83,10 +81,10 @@ void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
   }
 }
 
-void updateSprite(enemy_t enemy) {
-  if (!Utils::updateAnimation(&enemy.animation)) {
-    enemy.animation.t = 0;
-    enemy.animation.frame = 0;
+void updateSprite(enemy_t *enemy) {
+  if (!Utils::updateAnimation(&enemy->animation)) {
+    enemy->animation.t = 0;
+    enemy->animation.frame = 0;
   }
 }
 

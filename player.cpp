@@ -3,6 +3,7 @@
 #include "game.h"
 #include "levels.h"
 #include "bitmaps.h"
+#include "enemies.h"
 // #include "enums.h"
 
 sprite_t playerRunSprite = {
@@ -77,7 +78,7 @@ void update() {
   }
 
   //adjust for collisions
-  collision_t type = checkCollisions(player.animation, &nextPos);
+  collision_t type = checkTileCollisions(player.animation, &nextPos);
   if (type.v > NONE) {
     if (type.v == BOTTOM) {
       if (!player.grounded) {
@@ -91,6 +92,8 @@ void update() {
     nextVel.y = 0;
   }
 
+  checkEnemyCollisions(player.animation, &nextPos);
+
   player.animation.vel = nextVel;  
 
   //check if falling
@@ -101,7 +104,11 @@ void update() {
 
   player.animation.pos = nextPos;
 
-  // Animation update
+  updateAnimation();
+  
+}
+
+void updateAnimation() {
   if (player.grounded) {
     player.animation.t++;
     if (player.animation.vel.y != 0) {
@@ -123,14 +130,14 @@ void draw() {
   Sprites::drawSelfMasked(player.animation.pos.x/PIXEL_SCALE - cameraOffset, player.animation.pos.y/PIXEL_SCALE, player.animation.sprite->sprite, player.animation.frame);
 }
 
-collision_t checkCollisions(animation_t anim, position_t *next) {
+collision_t checkTileCollisions(animation_t anim, position_t *next) {
   collision_t type = { NONE, NONE };
 
   window_t wd = Utils::getCollisionWindow(anim.pos);
 
   // tile collisions
-  for (int i = wd.xMin; i <= wd.xMax; i++) {
-    for (int j = wd.yMin; j <= wd.yMax; j++) {
+  for (uint8_t i = wd.xMin; i <= wd.xMax; i++) {
+    for (uint8_t j = wd.yMin; j <= wd.yMax; j++) {
       if (levelMap[i][j]) {
         Rect block = levelMap[i][j] == DASH ? Rect((MAPHEIGHT - i - 1) * BLOCKSIZE + 6, j * BLOCKSIZE, 2, BLOCKSIZE) : Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
         collision_t temp = Utils::collisionCorrect(anim, next, block);
@@ -142,6 +149,14 @@ collision_t checkCollisions(animation_t anim, position_t *next) {
 
   return type;
 }
+
+void checkEnemyCollisions(animation_t anim, position_t *next) {
+  for (uint8_t i = 0; i<MAX_ENEMIES; i++) {
+    Rect enemyRect = Rect(enemy[i].animation.pos.x/PIXEL_SCALE + enemy[i].animation.sprite->dx, enemy[i].animation.pos.y/PIXEL_SCALE + enemy[i].animation.sprite->dy, enemy[i].animation.sprite->h, enemy[i].animation.sprite->w);
+    // arduboy.drawRect(enemy[i].animation.pos.x/PIXEL_SCALE + enemy[i].animation.sprite->dx - cameraOffset, enemy[i].animation.pos.y/PIXEL_SCALE + enemy[i].animation.sprite->dy, enemy[i].animation.sprite->h, enemy[i].animation.sprite->w);
+  }
+}
+
 
 void jump() {
   player.animation.vel.x = JUMP_VELOCITY;
