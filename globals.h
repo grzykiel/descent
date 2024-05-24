@@ -79,7 +79,8 @@ enum class Direction : uint8_t
 enum class PlayerState : uint8_t {
   grounded,
   jumping,
-  bouncing
+  bouncing,
+  falling
 };
 
 typedef struct {

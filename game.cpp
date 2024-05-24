@@ -14,10 +14,10 @@ void loop() {
 void input() {
   if (arduboy.justPressed(left_btn)) {
     player.dir = Direction::left;
-    player.animation.sprite->sprite = player.grounded ? Player::runLeftSprite : Player::jumpLeftSprite;
+    player.animation.sprite->sprite = (player.state == PlayerState::grounded) ? Player::runLeftSprite : Player::jumpLeftSprite;
   } else if (arduboy.justPressed(right_btn)) {
     player.dir = Direction::right;
-    player.animation.sprite->sprite = player.grounded ? Player::runRightSprite : Player::jumpRightSprite;
+    player.animation.sprite->sprite = (player.state == PlayerState::grounded) ? Player::runRightSprite : Player::jumpRightSprite;
   }
 
   if (arduboy.pressed(left_btn)) {
@@ -42,7 +42,7 @@ void input() {
   }
 
   if (arduboy.justPressed(A_BUTTON)) {
-    if (!player.grounded) {
+    if (player.state != PlayerState::grounded) {
       Bullet::shoot();
     } else {
       Player::jump();

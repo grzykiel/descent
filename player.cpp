@@ -57,7 +57,7 @@ void update() {
   // physics update
   if (movementMode == PLATFORM) {
     nextVel.x += GRAVITY;
-    if (!player.grounded) {
+    if (player.state == PlayerState::jumping) {
       if (player.animation.t == HALF_JUMP && arduboy.notPressed(A_BUTTON | B_BUTTON)) {
         nextVel.x = 0;
         fall();
@@ -81,7 +81,8 @@ void update() {
   collision_t type = checkTileCollisions(player.animation, &nextPos);
   if (type.v > NONE) {
     if (type.v == BOTTOM) {
-      if (!player.grounded) {
+      // if (!player.grounded) {
+      if (player.state != PlayerState::grounded) {
         Bullet::reload();
         Player::land();
       }
@@ -97,7 +98,7 @@ void update() {
   player.animation.vel = nextVel;
 
   //check if falling
-  if (player.grounded && (nextPos.x / PIXEL_SCALE < player.animation.pos.x / PIXEL_SCALE)) {
+  if ((player.state == PlayerState::grounded) && (nextPos.x / PIXEL_SCALE < player.animation.pos.x / PIXEL_SCALE)) {
     fall();
   }
   // if (nextPos.x < player.animation.pos.x) player.grounded = false;
@@ -110,7 +111,7 @@ void update() {
 }
 
 void updateAnimation() {
-  if (player.grounded) {
+  if (player.state == PlayerState::grounded) {
     player.animation.t++;
     if (player.animation.vel.y != 0) {
       if (arduboy.everyXFrames(walkAnimDelay)) {
@@ -158,7 +159,7 @@ void checkEnemyCollisions(animation_t anim, position_t *next) {
       // arduboy.drawRect(enemy[i].animation.pos.x/PIXEL_SCALE + enemy[i].animation.sprite->dx - cameraOffset, enemy[i].animation.pos.y/PIXEL_SCALE + enemy[i].animation.sprite->dy, enemy[i].animation.sprite->h, enemy[i].animation.sprite->w);
       collision_t type = Utils::collisionCorrect(anim, next, enemyRect);
       if (type.v == BOTTOM) {
-        jump();
+        bounce();
         enemy[i].animation.active = false;
       }
     }
@@ -169,8 +170,21 @@ void checkEnemyCollisions(animation_t anim, position_t *next) {
 void jump() {
   player.animation.vel.x = JUMP_VELOCITY;
   player.animation.t = 0;
-  player.grounded = false;
+  player.state = PlayerState::jumping;
   player.animation.sprite = &playerJumpSprite;
+  if (player.dir == Direction::left) {
+    player.animation.sprite->sprite = Player::jumpLeftSprite;
+  } else {
+    player.animation.sprite->sprite = Player::jumpRightSprite;
+  }
+  player.animation.frame = 0;
+}
+
+void bounce() {
+  player.animation.vel.x = JUMP_VELOCITY;
+  player.animation.t = 0;
+  player.state = PlayerState::bouncing;
+  player.animation.sprite=  &playerJumpSprite; //TODO replace with bounce sprite
   if (player.dir == Direction::left) {
     player.animation.sprite->sprite = Player::jumpLeftSprite;
   } else {
@@ -187,7 +201,8 @@ void fall() {
   player.animation.vel.x = 0;
   player.animation.t = JUMP_TOP;
 
-  player.grounded = false;
+  // player.grounded = false;
+  player.state = PlayerState::falling;
   player.animation.sprite = &playerJumpSprite;
   if (player.dir == Direction::left) {
     player.animation.sprite->sprite = Player::jumpLeftSprite;
@@ -198,7 +213,8 @@ void fall() {
 }
 
 void land() {
-  player.grounded = true;
+  // player.grounded = true;
+  player.state = PlayerState::grounded;
   player.animation.sprite = &playerRunSprite;
   if (player.dir == Direction::left) {
     player.animation.sprite->sprite = Player::runLeftSprite;

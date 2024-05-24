@@ -9,7 +9,8 @@ typedef struct {
 
   animation_t animation;
 
-  bool grounded = false;
+  // bool grounded = false;
+  PlayerState state = PlayerState::falling;
 
 } player_t;
 
@@ -40,11 +41,6 @@ typedef struct {
 
 extern player_t player;
 
-//TODO remove
-// extern player_t playerNext; 
-// extern sprite_t playerSprite;
-
-
 extern const int8_t walkSpeed;
 extern const uint8_t walkAnimDelay;
 
@@ -63,6 +59,7 @@ namespace Player {
   void jump();
   void fall();
   void thrust();
+  void bounce();
   void land();
 
   collision_t checkTileCollisions(animation_t anim, position_t *next);
