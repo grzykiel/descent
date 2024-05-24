@@ -37,8 +37,8 @@ void init() {
   player.animation.active = true;
   player.animation.frame = 0;
   player.animation.t = 0;
-  player.animation.pos.x = 320*PIXEL_SCALE; //SCREENMID + 320;  //TODO #define
-  player.animation.pos.y = 28*PIXEL_SCALE;               //TODO #define
+  player.animation.pos.x = 320 * PIXEL_SCALE;  //SCREENMID + 320;  //TODO #define
+  player.animation.pos.y = 28 * PIXEL_SCALE;   //TODO #define
   player.animation.vel.x = 0;
   player.animation.vel.y = 0;
 
@@ -51,8 +51,8 @@ void init() {
 void update() {
   position_t nextPos = player.animation.pos;
 
-  velocity_t nextVel = player.animation.vel; 
-  nextVel.x = max(nextVel.x, -8*PIXEL_SCALE);
+  velocity_t nextVel = player.animation.vel;
+  nextVel.x = max(nextVel.x, -8 * PIXEL_SCALE);
 
   // physics update
   if (movementMode == PLATFORM) {
@@ -69,11 +69,11 @@ void update() {
   nextPos.y += nextVel.y;
 
   //Boundary check
-  if (nextPos.y/PIXEL_SCALE <= SCREENLEFT - player.animation.sprite->dy) {
+  if (nextPos.y / PIXEL_SCALE <= SCREENLEFT - player.animation.sprite->dy) {
     nextPos.y = SCREENLEFT;
     nextVel.y = 0;
-  } else if (nextPos.y/PIXEL_SCALE > (SCREENRIGHT - player.animation.sprite->w - player.animation.sprite->dy)) {
-    nextPos.y = (SCREENRIGHT - player.animation.sprite->w - player.animation.sprite->dy)*PIXEL_SCALE;
+  } else if (nextPos.y / PIXEL_SCALE > (SCREENRIGHT - player.animation.sprite->w - player.animation.sprite->dy)) {
+    nextPos.y = (SCREENRIGHT - player.animation.sprite->w - player.animation.sprite->dy) * PIXEL_SCALE;
     nextVel.y = 0;
   }
 
@@ -92,20 +92,21 @@ void update() {
     nextVel.y = 0;
   }
 
-  checkEnemyCollisions(player.animation, &nextPos);
+  
 
-  player.animation.vel = nextVel;  
+  player.animation.vel = nextVel;
 
   //check if falling
-  if (player.grounded && (nextPos.x/PIXEL_SCALE < player.animation.pos.x/PIXEL_SCALE)) {
+  if (player.grounded && (nextPos.x / PIXEL_SCALE < player.animation.pos.x / PIXEL_SCALE)) {
     fall();
   }
   // if (nextPos.x < player.animation.pos.x) player.grounded = false;
 
+  checkEnemyCollisions(player.animation, &nextPos);
+
   player.animation.pos = nextPos;
 
   updateAnimation();
-  
 }
 
 void updateAnimation() {
@@ -127,7 +128,7 @@ void updateAnimation() {
 }
 
 void draw() {
-  Sprites::drawSelfMasked(player.animation.pos.x/PIXEL_SCALE - cameraOffset, player.animation.pos.y/PIXEL_SCALE, player.animation.sprite->sprite, player.animation.frame);
+  Sprites::drawSelfMasked(player.animation.pos.x / PIXEL_SCALE - cameraOffset, player.animation.pos.y / PIXEL_SCALE, player.animation.sprite->sprite, player.animation.frame);
 }
 
 collision_t checkTileCollisions(animation_t anim, position_t *next) {
@@ -151,9 +152,16 @@ collision_t checkTileCollisions(animation_t anim, position_t *next) {
 }
 
 void checkEnemyCollisions(animation_t anim, position_t *next) {
-  for (uint8_t i = 0; i<MAX_ENEMIES; i++) {
-    Rect enemyRect = Rect(enemy[i].animation.pos.x/PIXEL_SCALE + enemy[i].animation.sprite->dx, enemy[i].animation.pos.y/PIXEL_SCALE + enemy[i].animation.sprite->dy, enemy[i].animation.sprite->h, enemy[i].animation.sprite->w);
-    // arduboy.drawRect(enemy[i].animation.pos.x/PIXEL_SCALE + enemy[i].animation.sprite->dx - cameraOffset, enemy[i].animation.pos.y/PIXEL_SCALE + enemy[i].animation.sprite->dy, enemy[i].animation.sprite->h, enemy[i].animation.sprite->w);
+  for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
+    if (enemy[i].animation.active) {
+      Rect enemyRect = Rect(enemy[i].animation.pos.x / PIXEL_SCALE + enemy[i].animation.sprite->dx, enemy[i].animation.pos.y / PIXEL_SCALE + enemy[i].animation.sprite->dy, enemy[i].animation.sprite->h, enemy[i].animation.sprite->w);
+      // arduboy.drawRect(enemy[i].animation.pos.x/PIXEL_SCALE + enemy[i].animation.sprite->dx - cameraOffset, enemy[i].animation.pos.y/PIXEL_SCALE + enemy[i].animation.sprite->dy, enemy[i].animation.sprite->h, enemy[i].animation.sprite->w);
+      collision_t type = Utils::collisionCorrect(anim, next, enemyRect);
+      if (type.v == BOTTOM) {
+        jump();
+        enemy[i].animation.active = false;
+      }
+    }
   }
 }
 

@@ -50,6 +50,7 @@ void input() {
   }
 
   if (arduboy.justPressed(B_BUTTON)) {
+    enemy[0].animation.active = true;
   }
 }
 

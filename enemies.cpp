@@ -30,7 +30,7 @@ void init() {
 }
 
 void update() {
-  for (uint8_t i=0; i<MAX_ENEMIES; i++) {
+  for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
     position_t nextPos = enemy[i].animation.pos;
     velocity_t nextVel = enemy[i].animation.vel;
     updatePosition(enemy[i], &nextPos, &nextVel);
@@ -40,19 +40,18 @@ void update() {
     enemy[i].animation.pos = nextPos;
     enemy[i].animation.vel = nextVel;
   }
-
 }
 
 void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
   // if enemy.type == BLOB
-  int dx = player.animation.pos.x/PIXEL_SCALE - enemy.animation.pos.x/PIXEL_SCALE;
+  int dx = player.animation.pos.x / PIXEL_SCALE - enemy.animation.pos.x / PIXEL_SCALE;
   if (dx > 0) {
     nextVel->x = min(++enemy.animation.vel.x, BLOB_MAX_VEL);
   } else if (dx < 0) {
     nextVel->x = max(--enemy.animation.vel.x, -BLOB_MAX_VEL);
   }
 
-  int dy = player.animation.pos.y/PIXEL_SCALE - enemy.animation.pos.y / PIXEL_SCALE;
+  int dy = player.animation.pos.y / PIXEL_SCALE - enemy.animation.pos.y / PIXEL_SCALE;
   if (dy > 0) {
     nextVel->y = min(++enemy.animation.vel.y, BLOB_MAX_VEL);
   } else if (dy < 0) {
@@ -90,8 +89,11 @@ void updateSprite(enemy_t *enemy) {
 
 
 void draw() {
-  uint8_t i = 0;
-  Sprites::drawSelfMasked((enemy[i].animation.pos.x / PIXEL_SCALE) - cameraOffset, enemy[i].animation.pos.y / PIXEL_SCALE, enemy[i].animation.sprite->sprite, enemy[i].animation.frame);
+  for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
+    if (enemy[i].animation.active) {
+      Sprites::drawSelfMasked((enemy[i].animation.pos.x / PIXEL_SCALE) - cameraOffset, enemy[i].animation.pos.y / PIXEL_SCALE, enemy[i].animation.sprite->sprite, enemy[i].animation.frame);
+    }
+  }
 }
 
 }
