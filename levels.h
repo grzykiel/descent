@@ -1,6 +1,7 @@
 #ifndef LEVELS_H
-#define LEVES_H
+#define LEVELS_H
 #include "globals.h"
+#include "enemies.h"
 
 #define WALL_WIDTH_MAX 4
 #define DASH_WIDTH_MIN 2

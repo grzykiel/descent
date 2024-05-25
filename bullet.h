@@ -7,7 +7,6 @@
 
 typedef struct {
   animation_t animation;
-  // float v = 3.2f;
 } bullet_t;
 
 #define MAX_BULLETS 5

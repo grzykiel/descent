@@ -35,9 +35,17 @@ window_t getCollisionWindow(uint16_t x, int16_t y) {
   return wd;
 }
 
+
 bool collides(animation_t anim, Rect block) {
   Rect spriteRect = Rect(anim.pos.x/PIXEL_SCALE + anim.sprite->dx, anim.pos.y/PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
+  // arduboy.drawRect(anim.pos.x/PIXEL_SCALE + anim.sprite->dx - cameraOffset, anim.pos.y/PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
   return (arduboy.collide(spriteRect, block));
+}
+
+bool collides(animation_t anim1, animation_t anim2) {
+  Rect rect1 = Rect(anim1.pos.x/PIXEL_SCALE + anim1.sprite->dx, anim1.pos.y/PIXEL_SCALE + anim1.sprite->dy, anim1.sprite->h, anim1.sprite->w);
+  Rect rect2 = Rect(anim2.pos.x/PIXEL_SCALE + anim2.sprite->dx, anim2.pos.y/PIXEL_SCALE + anim2.sprite->dy, anim2.sprite->h, anim2.sprite->w);
+  return (arduboy.collide(rect1, rect2));
 }
 
 collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider) {

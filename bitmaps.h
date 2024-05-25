@@ -204,7 +204,4 @@ namespace ShootShoes {
   };
 }
 
-
-
-
 #endif

@@ -1,4 +1,6 @@
 #include "enemies.h"
+#include "bullet.h"
+
 
 uint8_t blobTransitions[2] = { 45, 90 };
 
@@ -18,6 +20,7 @@ namespace Enemies {
 
 void init() {
   uint8_t i = 0;
+  enemy[i].type = BLOB;
   enemy[i].animation.sprite = &blobSprite;
   enemy[i].animation.active = true;
   enemy[i].animation.frame = 0;
@@ -38,6 +41,7 @@ void update() {
 
     updateSprite(&enemy[i]);
     enemy[i].animation.pos = nextPos;
+    checkBulletCollisions(enemy[i], &nextVel);
     enemy[i].animation.vel = nextVel;
   }
 }
@@ -67,14 +71,26 @@ void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
 
   window_t wd = Utils::getCollisionWindow(enemy.animation.pos);
   // tile collisions
-  for (int i = wd.xMin; i <= wd.xMax; i++) {
-    for (int j = wd.yMin; j <= wd.yMax; j++) {
+  for (uint8_t i = wd.xMin; i <= wd.xMax; i++) {
+    for (uint8_t j = wd.yMin; j <= wd.yMax; j++) {
       if (levelMap[i][j] && levelMap[i][j] != DASH) {
         Rect block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE + 6, j * BLOCKSIZE, 2, BLOCKSIZE);
         collision_t temp = Utils::collisionCorrect(enemy.animation, nextPos, block);
         // set velocity according to collision
         if (temp.v) nextVel->x = 0;
         if (temp.h) nextVel->y = 0;
+      }
+    }
+  }
+}
+
+void checkBulletCollisions(enemy_t enemy, velocity_t *nextVel) {
+  for (uint8_t i = 0; i < MAX_BULLETS; i++) {
+    if (bullet[i].animation.active) {
+      if (Utils::collides(enemy.animation, bullet[i].animation)) {
+        if (enemy.type == BLOB) {
+          nextVel->x = BLOB_RECOIL_VEL;
+        }
       }
     }
   }

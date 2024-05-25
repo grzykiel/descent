@@ -1,9 +1,13 @@
+#ifndef ENEMIES_H
+#define ENEMIES_H 
 #include "globals.h"
 #include "bitmaps.h"
 #include "player.h"
 
-#define BLOB_MAX_VEL  8
 #define MAX_ENEMIES   1
+
+#define BLOB_MAX_VEL  8
+#define BLOB_RECOIL_VEL -96
 
 #define BLOB 0
 
@@ -24,7 +28,9 @@ namespace Enemies {
 
   void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel);
   void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel);
+  void checkBulletCollisions(enemy_t enemy, velocity_t *nextVel);
   void updateSprite(enemy_t *enemy);
 
-  
 }
+
+#endif

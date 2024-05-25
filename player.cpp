@@ -81,7 +81,6 @@ void update() {
   collision_t type = checkTileCollisions(player.animation, &nextPos);
   if (type.v > NONE) {
     if (type.v == BOTTOM) {
-      // if (!player.grounded) {
       if (player.state != PlayerState::grounded) {
         Bullet::reload();
         Player::land();
@@ -101,7 +100,6 @@ void update() {
   if ((player.state == PlayerState::grounded) && (nextPos.x / PIXEL_SCALE < player.animation.pos.x / PIXEL_SCALE)) {
     fall();
   }
-  // if (nextPos.x < player.animation.pos.x) player.grounded = false;
 
   checkEnemyCollisions(player.animation, &nextPos);
 
@@ -201,7 +199,6 @@ void fall() {
   player.animation.vel.x = 0;
   player.animation.t = JUMP_TOP;
 
-  // player.grounded = false;
   player.state = PlayerState::falling;
   player.animation.sprite = &playerJumpSprite;
   if (player.dir == Direction::left) {
@@ -213,7 +210,6 @@ void fall() {
 }
 
 void land() {
-  // player.grounded = true;
   player.state = PlayerState::grounded;
   player.animation.sprite = &playerRunSprite;
   if (player.dir == Direction::left) {

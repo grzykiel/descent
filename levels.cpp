@@ -1,5 +1,5 @@
-#include "levels.h"
 
+#include "levels.h"
 #include "game.h"
 #include "player.h"
 #include "bitmaps.h"
@@ -120,11 +120,18 @@ void update() {
 void shiftMap() {
   player.animation.pos.x += 128*PIXEL_SCALE;  //TODO #define
 
-  for (int i = 0; i < MAX_BULLETS; i++) {
+  for (uint8_t i = 0; i < MAX_BULLETS; i++) {
     if (bullet[i].animation.active) {
-      bullet[i].animation.pos.x += 128;
+      bullet[i].animation.pos.x += 128*PIXEL_SCALE;
     }
   }
+
+  // TODO fix
+  // for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
+  //   if (enemy[i].animation.active) {
+  //     enemy[i].animation.pos.x += 128*PIXEL_SCALE;
+  //   }
+  // }
 
   copyMap(levelMap, 16, levelMap, 0);
   copyMap(levelMap, 32, levelMap, 16);

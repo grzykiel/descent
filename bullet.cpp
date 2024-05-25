@@ -55,7 +55,6 @@ void shoot() {
     bullet[chamber].animation.vel.y = player.animation.vel.y;
     bullet[chamber].animation.frame = 0;
     bullet[chamber].animation.t = 0;
-    // bullet[chamber].v = BULLET_START_VEL;
     chamber = (chamber + 1) % MAX_BULLETS;
 
     bulletsUsed++;
@@ -90,17 +89,15 @@ void initBullets() {
 }
 
 void updateBullets() {
-  collisionCheck();
-
   for (int i = 0; i < MAX_BULLETS; i++) {
     if (bullet[i].animation.active) {
-      // bullet[i].animation.pos.x = int(1.0f*bullet[i].animation.pos.x - bullet[i].v);
       bullet[i].animation.pos.x -= bullet[i].animation.vel.x;
-      // bullet[i].v -= BULLET_ACCEL;
       bullet[i].animation.vel.x -= BULLET_ACCEL;
       bullet[i].animation.active = Utils::updateAnimation(&bullet[i].animation);
     }
   }
+
+  collisionCheck();
 }
 
 void collisionCheck() {
