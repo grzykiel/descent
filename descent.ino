@@ -20,8 +20,9 @@ void setup() {
   switch (gameState) {
     case STATE_GAME:
       Player::init();
-      Level::init();
       Enemies::init();
+      Level::init();
+
       break;
     case STATE_SANDBOX:
       Sandbox::init();

@@ -49,6 +49,7 @@
 #define GRAVITY -7
 #define JUMP_VELOCITY 246
 #define THRUST 7
+#define BOUNCE_VELOCITY 128
 #define HALF_JUMP   15
 #define JUMP_TOP    25
 #define JUMPFRAMES  50
@@ -57,7 +58,6 @@
 #define TERMINAL_VELOCITY -4
 
 #define PIXEL_SCALE 128
-
 
 extern Arduboy2 arduboy;
 extern Sprites sprites;
@@ -83,15 +83,12 @@ enum class PlayerState : uint8_t {
   falling
 };
 
+
+
 typedef struct {
   uint8_t v;
   uint8_t h;
 } collision_t;
-
-typedef struct {
-  int16_t x;
-  int16_t y;
-} vector_t;
 
 typedef struct {
   uint16_t x;

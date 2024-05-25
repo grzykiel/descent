@@ -1,6 +1,7 @@
 #ifndef LEVELS_H
 #define LEVELS_H
 #include "globals.h"
+#include "player.h"
 #include "enemies.h"
 
 #define WALL_WIDTH_MAX 4
@@ -32,6 +33,8 @@ namespace Level
   void placeDashes(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t ce);
 
   void generateBlocks(uint8_t room[][SCREENWIDTH]);
+
+  void generateEnemies(uint8_t room[][SCREENWIDTH]);
 
 }
 

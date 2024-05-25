@@ -1,9 +1,7 @@
 
 #include "levels.h"
 #include "game.h"
-#include "player.h"
 #include "bitmaps.h"
-// #include "globals.h"
 
 uint8_t nextRoom[SCREENHEIGHT][SCREENWIDTH];
 /* = {
@@ -32,17 +30,17 @@ uint8_t levelMap[MAPHEIGHT][MAPWIDTH] = {
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 1, 0, 0, 0, 0, 1, 0, 0 },
-  { 1, 0, 0, 0, 0, 1, 0, 0 },
-  { 1, 0, 0, 0, 0, 1, 0, 0 },
-  { 1, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
-  // { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 1, 1, 1, 0, 1, 1 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  // { 0, 0, 1, 1, 1, 0, 1, 1 },
 
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -112,26 +110,29 @@ void draw() {
 }
 
 void update() {
-  if (player.animation.pos.x/PIXEL_SCALE <= REMAP_THRESHOLD) {
+  if (player.animation.pos.x / PIXEL_SCALE <= REMAP_THRESHOLD) {
     shiftMap();
   }
 }
 
 void shiftMap() {
-  player.animation.pos.x += 128*PIXEL_SCALE;  //TODO #define
+  player.animation.pos.x += 128 * PIXEL_SCALE;  //TODO #define shift value
 
   for (uint8_t i = 0; i < MAX_BULLETS; i++) {
     if (bullet[i].animation.active) {
-      bullet[i].animation.pos.x += 128*PIXEL_SCALE;
+      bullet[i].animation.pos.x += 128 * PIXEL_SCALE;
     }
   }
 
-  // TODO fix
-  // for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
-  //   if (enemy[i].animation.active) {
-  //     enemy[i].animation.pos.x += 128*PIXEL_SCALE;
-  //   }
-  // }
+  for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
+    if (enemy[i].animation.active) {
+      if (enemy[i].animation.pos.x < 49152 - 128 * PIXEL_SCALE) {  //TODO #define threshold
+        enemy[i].animation.pos.x += 128 * PIXEL_SCALE;
+      } else {
+        enemy[i].animation.active = false;
+      }
+    }
+  }
 
   copyMap(levelMap, 16, levelMap, 0);
   copyMap(levelMap, 32, levelMap, 16);
@@ -141,6 +142,7 @@ void shiftMap() {
   autoTile(nextRoom);
   generateDashes(nextRoom);
   generateBlocks(nextRoom);
+  generateEnemies(nextRoom);
   copyMap(nextRoom, 0, levelMap, 32);
 }
 
@@ -270,6 +272,16 @@ void eraseRoom(uint8_t room[][SCREENWIDTH]) {
       room[i][j] = 0;
     }
   }
+}
+
+void generateEnemies(uint8_t room[][SCREENWIDTH]) {
+  uint8_t i = random(0, SCREENHEIGHT);
+  uint8_t j = random(0, SCREENWIDTH);
+  while (room[i][j]) {
+    i = random(0, SCREENHEIGHT);
+    j = random(0, SCREENWIDTH);
+  }
+  Enemies::spawn(EnemyType::blob, i * BLOCKSIZE, j * BLOCKSIZE);
 }
 
 }

@@ -3,7 +3,6 @@
 
 #include "globals.h"
 #include "bullet.h"
-
 #include "controls.h"
 
 

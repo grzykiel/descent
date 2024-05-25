@@ -1,7 +1,7 @@
 #include "player.h"
 
 #include "game.h"
-#include "levels.h"
+// #include "levels.h"
 #include "bitmaps.h"
 #include "enemies.h"
 // #include "enums.h"
@@ -33,11 +33,11 @@ const uint8_t walkAnimDelay = 6;
 
 namespace Player {
 void init() {
-  player.animation.sprite = &playerRunSprite;
+  player.animation.sprite = &playerJumpSprite;
   player.animation.active = true;
-  player.animation.frame = 0;
+  player.animation.frame = FALL_FRAME;
   player.animation.t = 0;
-  player.animation.pos.x = 320 * PIXEL_SCALE;  //SCREENMID + 320;  //TODO #define
+  player.animation.pos.x = 128*3 * PIXEL_SCALE+8;  //SCREENMID + 320;  //TODO #define
   player.animation.pos.y = 28 * PIXEL_SCALE;   //TODO #define
   player.animation.vel.x = 0;
   player.animation.vel.y = 0;
@@ -136,7 +136,7 @@ collision_t checkTileCollisions(animation_t anim, position_t *next) {
   window_t wd = Utils::getCollisionWindow(anim.pos);
 
   // tile collisions
-  for (uint8_t i = wd.xMin; i <= wd.xMax; i++) {
+  for (uint16_t i = wd.xMin; i <= wd.xMax; i++) {
     for (uint8_t j = wd.yMin; j <= wd.yMax; j++) {
       if (levelMap[i][j]) {
         Rect block = levelMap[i][j] == DASH ? Rect((MAPHEIGHT - i - 1) * BLOCKSIZE + 6, j * BLOCKSIZE, 2, BLOCKSIZE) : Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
@@ -158,6 +158,7 @@ void checkEnemyCollisions(animation_t anim, position_t *next) {
       collision_t type = Utils::collisionCorrect(anim, next, enemyRect);
       if (type.v == BOTTOM) {
         bounce();
+        // thrust();
         enemy[i].animation.active = false;
       }
     }
@@ -179,7 +180,7 @@ void jump() {
 }
 
 void bounce() {
-  player.animation.vel.x = JUMP_VELOCITY;
+  player.animation.vel.x = BOUNCE_VELOCITY;
   player.animation.t = 0;
   player.state = PlayerState::bouncing;
   player.animation.sprite=  &playerJumpSprite; //TODO replace with bounce sprite

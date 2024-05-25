@@ -22,10 +22,10 @@ void input() {
 
   if (arduboy.pressed(left_btn)) {
     // player.vy = -walkSpeed;
-    player.animation.vel.y = -walkSpeed*PIXEL_SCALE;
+    player.animation.vel.y = -walkSpeed * PIXEL_SCALE;
   } else if (arduboy.pressed(right_btn)) {
     // player.vy = walkSpeed;
-    player.animation.vel.y = walkSpeed*PIXEL_SCALE-1;
+    player.animation.vel.y = walkSpeed * PIXEL_SCALE - 1;
   } else if (arduboy.notPressed(left_btn | right_btn)) {
     // player.vy = 0;
     player.animation.vel.y = 0;
@@ -33,9 +33,9 @@ void input() {
 
   if (movementMode == TOPDOWN) {
     if (arduboy.pressed(up_btn)) {
-      player.animation.vel.x = walkSpeed*PIXEL_SCALE-1;
+      player.animation.vel.x = walkSpeed * PIXEL_SCALE - 1;
     } else if (arduboy.pressed(down_btn)) {
-      player.animation.vel.x = -walkSpeed*PIXEL_SCALE;
+      player.animation.vel.x = -walkSpeed * PIXEL_SCALE;
     } else if (arduboy.notPressed(up_btn | down_btn)) {
       player.animation.vel.x = 0;
     }
@@ -49,9 +49,16 @@ void input() {
     }
   }
 
+
+  //debug & tuning
   if (arduboy.justPressed(B_BUTTON)) {
-    enemy[0].animation.active = true;
+
   }
+
+  if (arduboy.justPressed(up_btn)) {
+  } else if (arduboy.justPressed(down_btn)) {
+  }
+
 }
 
 void update() {
@@ -63,7 +70,7 @@ void update() {
 }
 
 void updateCamera() {
-  cameraOffset = Utils::trim(player.animation.pos.x/PIXEL_SCALE - SCREENMID, 0, MAPHEIGHT * BLOCKSIZE - SCREENTOP);
+  cameraOffset = Utils::trim(player.animation.pos.x / PIXEL_SCALE - SCREENMID, 0, MAPHEIGHT * BLOCKSIZE - SCREENTOP);
 }
 
 void draw() {
@@ -79,8 +86,5 @@ void draw() {
 
   Enemies::draw();
 }
-
-
-
 
 }

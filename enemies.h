@@ -4,16 +4,19 @@
 #include "bitmaps.h"
 #include "player.h"
 
-#define MAX_ENEMIES   1
+#define MAX_ENEMIES   5
 
 #define BLOB_MAX_VEL  8
 #define BLOB_RECOIL_VEL -96
 
-#define BLOB 0
+#define BLOB_HP 3
 
+enum class EnemyType : uint8_t {
+  blob
+};
 
 typedef struct {
-  char type;
+  EnemyType type;
   uint8_t hp;
 	animation_t animation;
 } enemy_t;
@@ -28,8 +31,10 @@ namespace Enemies {
 
   void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel);
   void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel);
-  void checkBulletCollisions(enemy_t enemy, velocity_t *nextVel);
+  void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel);
   void updateSprite(enemy_t *enemy);
+
+  void spawn(EnemyType type, uint16_t x, uint8_t y);
 
 }
 
