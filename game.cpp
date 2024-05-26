@@ -48,7 +48,7 @@ void input() {
 
   //debug & tuning
   if (arduboy.justPressed(B_BUTTON)) {
-    mapNumbers = !mapNumbers;
+    Enemies::testWake();
   }
 
   if (arduboy.justPressed(up_btn)) {

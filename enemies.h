@@ -8,6 +8,7 @@
 
 #define BLOB_MAX_VEL  8
 #define BLOB_RECOIL_VEL -96
+#define BAT_VEL 16
 
 #define BLOB_HP 3
 #define BAT_HP  2
@@ -38,6 +39,8 @@ namespace Enemies {
   void updateSprite(enemy_t *enemy);
 
   void spawn(EnemyType type, uint16_t x, uint8_t y);
+  void wake(enemy_t *bat);
+  void testWake();
 
 }
 
