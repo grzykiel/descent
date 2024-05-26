@@ -101,7 +101,8 @@ typedef struct {
 } velocity_t;
 
 typedef struct {
-  const unsigned char *sprite;
+  const unsigned char *spriteR;
+  const unsigned char *spriteL;
   uint8_t last;
   uint8_t *transitions;
 
@@ -119,6 +120,7 @@ typedef struct {
   position_t pos;
   velocity_t vel;
   sprite_t *sprite;
+  Direction dir;
 } animation_t;
 
 typedef struct {

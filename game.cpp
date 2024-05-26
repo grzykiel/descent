@@ -13,11 +13,13 @@ void loop() {
 
 void input() {
   if (arduboy.justPressed(left_btn)) {
-    player.dir = Direction::left;
-    player.animation.sprite->sprite = (player.state == PlayerState::grounded) ? Player::runLeftSprite : Player::jumpLeftSprite;
+    Player::run(Direction::left);
+    // player.animation.dir = Direction::left;
+    // player.animation.sprite->sprite = (player.state == PlayerState::grounded) ? Player::runLeftSprite : Player::jumpLeftSprite;
   } else if (arduboy.justPressed(right_btn)) {
-    player.dir = Direction::right;
-    player.animation.sprite->sprite = (player.state == PlayerState::grounded) ? Player::runRightSprite : Player::jumpRightSprite;
+    // player.animation.dir = Direction::right;
+    // player.animation.sprite->sprite = (player.state == PlayerState::grounded) ? Player::runRightSprite : Player::jumpRightSprite;
+    Player::run(Direction::right);
   }
 
   if (arduboy.pressed(left_btn)) {

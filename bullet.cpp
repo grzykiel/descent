@@ -2,6 +2,7 @@
 
 sprite_t muzzleFlashSprite = {
   ShootShoes::muzzleFlash,  //sprite
+  nullptr,
   0,                        //last frame
   muzzleFlashTransitions,   //frame transitions
   8,                        //dx
@@ -13,6 +14,7 @@ animation_t muzzleFlash;
 
 sprite_t bulletSprite = {
   ShootShoes::bullet,  //sprite
+  nullptr,
   6,                   //last frame
   bulletTransitions,   //frame transitions
   0,                   //dx
@@ -74,7 +76,7 @@ void initMuzzleFlash() {
 
 void drawMuzzleFlash() {
   if (muzzleFlash.active) {
-    Sprites::drawSelfMasked(player.animation.pos.x / PIXEL_SCALE - cameraOffset - muzzleFlash.sprite->dx, player.animation.pos.y / PIXEL_SCALE, muzzleFlash.sprite->sprite, muzzleFlash.frame);
+    Sprites::drawSelfMasked(player.animation.pos.x / PIXEL_SCALE - cameraOffset - muzzleFlash.sprite->dx, player.animation.pos.y / PIXEL_SCALE, muzzleFlash.sprite->spriteR, muzzleFlash.frame);
     muzzleFlash.active = Utils::updateAnimation(&muzzleFlash);
   }
 }
@@ -128,7 +130,7 @@ void collisionCheck() {
 void drawBullets() {
   for (int i = 0; i < MAX_BULLETS; i++) {
     if (bullet[i].animation.active) {
-      Sprites::drawSelfMasked(bullet[i].animation.pos.x / PIXEL_SCALE - cameraOffset, bullet[i].animation.pos.y / PIXEL_SCALE, bullet[i].animation.sprite->sprite, bullet[i].animation.frame);
+      Sprites::drawSelfMasked(bullet[i].animation.pos.x / PIXEL_SCALE - cameraOffset, bullet[i].animation.pos.y / PIXEL_SCALE, bullet[i].animation.sprite->spriteR, bullet[i].animation.frame);
     }
   }
 }

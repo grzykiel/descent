@@ -8,6 +8,7 @@
 
 sprite_t playerRunSprite = {
   Player::runRightSprite,
+  Player::runLeftSprite,
   0,        //last frame
   nullptr,  //frame transitions
   0,        //dx
@@ -19,6 +20,7 @@ sprite_t playerRunSprite = {
 uint8_t jumpTransitions[5] = { 1, 15, 30, 45, 60 };
 sprite_t playerJumpSprite = {
   Player::jumpRightSprite,
+  Player::jumpLeftSprite,
   4,
   jumpTransitions,
   0,
@@ -37,12 +39,12 @@ void init() {
   player.animation.active = true;
   player.animation.frame = FALL_FRAME;
   player.animation.t = 0;
-  player.animation.pos.x = 128*3 * PIXEL_SCALE+8;  //SCREENMID + 320;  //TODO #define
-  player.animation.pos.y = 28 * PIXEL_SCALE;   //TODO #define
+  player.animation.pos.x = 128 * 3 * PIXEL_SCALE + 8;  //SCREENMID + 320;  //TODO #define
+  player.animation.pos.y = 28 * PIXEL_SCALE;           //TODO #define
   player.animation.vel.x = 0;
   player.animation.vel.y = 0;
 
-  player.dir = Direction::right;
+  player.animation.dir = Direction::right;
 
   Bullet::init();
 }
@@ -92,7 +94,7 @@ void update() {
     nextVel.y = 0;
   }
 
-  
+
 
   player.animation.vel = nextVel;
 
@@ -127,7 +129,11 @@ void updateAnimation() {
 }
 
 void draw() {
-  Sprites::drawSelfMasked(player.animation.pos.x / PIXEL_SCALE - cameraOffset, player.animation.pos.y / PIXEL_SCALE, player.animation.sprite->sprite, player.animation.frame);
+  if (player.animation.dir == Direction::left) {
+    Sprites::drawSelfMasked(player.animation.pos.x / PIXEL_SCALE - cameraOffset, player.animation.pos.y / PIXEL_SCALE, player.animation.sprite->spriteL, player.animation.frame);
+  } else {
+    Sprites::drawSelfMasked(player.animation.pos.x / PIXEL_SCALE - cameraOffset, player.animation.pos.y / PIXEL_SCALE, player.animation.sprite->spriteR, player.animation.frame);
+  }
 }
 
 collision_t checkTileCollisions(animation_t anim, position_t *next) {
@@ -165,17 +171,20 @@ void checkEnemyCollisions(animation_t anim, position_t *next) {
   }
 }
 
+void run(Direction dir) {
+  player.animation.dir = dir;
+}
 
 void jump() {
   player.animation.vel.x = JUMP_VELOCITY;
   player.animation.t = 0;
   player.state = PlayerState::jumping;
   player.animation.sprite = &playerJumpSprite;
-  if (player.dir == Direction::left) {
+  /*if (player.dir == Direction::left) {
     player.animation.sprite->sprite = Player::jumpLeftSprite;
   } else {
     player.animation.sprite->sprite = Player::jumpRightSprite;
-  }
+  }*/
   player.animation.frame = 0;
 }
 
@@ -183,12 +192,12 @@ void bounce() {
   player.animation.vel.x = BOUNCE_VELOCITY;
   player.animation.t = 0;
   player.state = PlayerState::bouncing;
-  player.animation.sprite=  &playerJumpSprite; //TODO replace with bounce sprite
-  if (player.dir == Direction::left) {
+  player.animation.sprite = &playerJumpSprite;  //TODO replace with bounce sprite
+  /*if (player.dir == Direction::left) {
     player.animation.sprite->sprite = Player::jumpLeftSprite;
   } else {
     player.animation.sprite->sprite = Player::jumpRightSprite;
-  }
+  }*/
   player.animation.frame = 0;
 }
 
@@ -202,22 +211,22 @@ void fall() {
 
   player.state = PlayerState::falling;
   player.animation.sprite = &playerJumpSprite;
-  if (player.dir == Direction::left) {
+  /*if (player.dir == Direction::left) {
     player.animation.sprite->sprite = Player::jumpLeftSprite;
   } else {
     player.animation.sprite->sprite = Player::jumpRightSprite;
-  }
+  }*/
   player.animation.frame = FALL_FRAME;
 }
 
 void land() {
   player.state = PlayerState::grounded;
   player.animation.sprite = &playerRunSprite;
-  if (player.dir == Direction::left) {
+  /*if (player.dir == Direction::left) {
     player.animation.sprite->sprite = Player::runLeftSprite;
   } else {
     player.animation.sprite->sprite = Player::runRightSprite;
-  }
+  }*/
 }
 
 }

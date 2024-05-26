@@ -5,7 +5,7 @@
 
 
 typedef struct {
-  Direction dir;
+  // Direction dir;
 
   animation_t animation;
 
@@ -56,6 +56,7 @@ namespace Player {
   void updateAnimation();
   // void initPlayer();
 
+  void run(Direction dir);
   void jump();
   void fall();
   void thrust();

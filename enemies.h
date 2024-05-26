@@ -10,9 +10,12 @@
 #define BLOB_RECOIL_VEL -96
 
 #define BLOB_HP 3
+#define BAT_HP  2
 
 enum class EnemyType : uint8_t {
-  blob
+  blob,
+  hangingBat,
+  bat,
 };
 
 typedef struct {
