@@ -3,7 +3,7 @@
 
 
 uint8_t blobTransitions[2] = { 45, 90 };
-uint8_t batTransitions[2] = { 30, 60 };
+uint8_t batTransitions[2] = { 15, 30 };
 
 sprite_t blobSprite = {
   Enemies::blob,
@@ -50,6 +50,15 @@ void init() {
 void update() {
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
     if (enemy[i].animation.active) {
+      if (enemy[i].type == EnemyType::hangingBat) {
+        if (abs(player.animation.pos.x - enemy[i].animation.pos.x) / PIXEL_SCALE < 4) {
+          wake(&enemy[i]);
+        }
+        uint8_t x = ((enemy[i].animation.pos.x / PIXEL_SCALE) / 8)+1;
+        uint8_t y = (enemy[i].animation.pos.y / PIXEL_SCALE) / 8;
+        if (!levelMap[MAPHEIGHT - x - 1][y]) wake(&enemy[i]);
+      }
+
       position_t nextPos = enemy[i].animation.pos;
       velocity_t nextVel = enemy[i].animation.vel;
       updatePosition(enemy[i], &nextPos, &nextVel);
@@ -187,11 +196,11 @@ void wake(enemy_t *bat) {
   bat->animation.sprite = &batSprite;
 }
 
-void testWake() {
-  for (int i=0; i<MAX_ENEMIES; i++) {
-    wake(&enemy[i]);
-  }
-}
+// void testWake() {
+//   for (int i = 0; i < MAX_ENEMIES; i++) {
+//     wake(&enemy[i]);
+//   }
+// }
 
 
 
