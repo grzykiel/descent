@@ -13,23 +13,17 @@ void loop() {
 
 void input() {
   if (arduboy.justPressed(left_btn)) {
-    Player::run(Direction::left);
-    // player.animation.dir = Direction::left;
-    // player.animation.sprite->sprite = (player.state == PlayerState::grounded) ? Player::runLeftSprite : Player::jumpLeftSprite;
+    Player::run(Direction::left);   
   } else if (arduboy.justPressed(right_btn)) {
-    // player.animation.dir = Direction::right;
-    // player.animation.sprite->sprite = (player.state == PlayerState::grounded) ? Player::runRightSprite : Player::jumpRightSprite;
+
     Player::run(Direction::right);
   }
 
   if (arduboy.pressed(left_btn)) {
-    // player.vy = -walkSpeed;
     player.animation.vel.y = -walkSpeed * PIXEL_SCALE;
   } else if (arduboy.pressed(right_btn)) {
-    // player.vy = walkSpeed;
     player.animation.vel.y = walkSpeed * PIXEL_SCALE - 1;
   } else if (arduboy.notPressed(left_btn | right_btn)) {
-    // player.vy = 0;
     player.animation.vel.y = 0;
   }
 
@@ -54,7 +48,7 @@ void input() {
 
   //debug & tuning
   if (arduboy.justPressed(B_BUTTON)) {
-
+    mapNumbers = !mapNumbers;
   }
 
   if (arduboy.justPressed(up_btn)) {

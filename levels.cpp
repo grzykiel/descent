@@ -91,19 +91,20 @@ void draw() {
   arduboy.drawRect(SCREENBOTTOM - 1, SCREENLEFT, SCREENTOP + 2, SCREENRIGHT);
 
   // levelMap
-  int xMin = ceil(player.animation.pos.x / (1.0f * BLOCKSIZE)) + 8;
-  int xMax = floor(player.animation.pos.x / (1.0f * BLOCKSIZE)) - 8;
+  int xMin = ceil(player.animation.pos.x / PIXEL_SCALE / (1.0f * BLOCKSIZE)) + 8;
+  int xMax = floor(player.animation.pos.x / PIXEL_SCALE / (1.0f * BLOCKSIZE)) - 8;
   xMin = max(MAPHEIGHT - 1 - xMin, 0);
-  xMax = min(MAPHEIGHT - 1 - xMax, MAPHEIGHT - 1);
+  xMax = min(MAPHEIGHT - xMax, MAPHEIGHT - 1);
 
-  for (int i = 0; i < MAPHEIGHT; i++) {
-    for (int j = 0; j < MAPWIDTH; j++) {
+  // for (int i = 0; i < MAPHEIGHT; i++) {
+  //   for (int j = 0; j < MAPWIDTH; j++) {
+  for (int i = xMin; i < xMax; i++) {
+    for (int j=0; j<MAPWIDTH; j++) {
       if (levelMap[i][j]) {
         if (levelMap[i][j] == DASH | levelMap[i][j] == BLOCK) {
           Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, levelMap[i][j]);
         } else {
           Sprites::drawOverwrite((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, levelMap[i][j]);
-          
         }
       }
     }
@@ -278,11 +279,24 @@ void eraseRoom(uint8_t room[][SCREENWIDTH]) {
 void generateEnemies(uint8_t room[][SCREENWIDTH]) {
   uint8_t i = random(0, SCREENHEIGHT);
   uint8_t j = random(0, SCREENWIDTH);
-  while (room[i][j]) {
+  // uint8_t i = 0;
+  // uint8_t j = 3;
+
+  // BLOB
+  /*while (room[i][j]) {
     i = random(0, SCREENHEIGHT);
     j = random(0, SCREENWIDTH);
   }
-  Enemies::spawn(EnemyType::blob, i * BLOCKSIZE, j * BLOCKSIZE);
+  Enemies::spawn(EnemyType::blob, i * BLOCKSIZE, j * BLOCKSIZE);*/
+
+  
+  // BAT
+  while (room[i][j] || !room[i-1][j] || room[i-1][j] == DASH) {
+    i = random(1, SCREENHEIGHT-1);
+    j = random(0, SCREENWIDTH);
+  }
+  Enemies::spawn(EnemyType::hangingBat, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+  
 }
 
 }
