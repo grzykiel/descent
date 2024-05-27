@@ -287,15 +287,26 @@ void generateEnemies(uint8_t room[][SCREENWIDTH]) {
     i = random(0, SCREENHEIGHT);
     j = random(0, SCREENWIDTH);
   }
-  Enemies::spawn(EnemyType::blob, i * BLOCKSIZE, j * BLOCKSIZE);*/
+  Enemies::spawn(EnemyType::blob, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);*/
 
   
   // BAT
+  /*
   while (room[i][j] || !room[i-1][j] || room[i-1][j] == DASH) {
     i = random(1, SCREENHEIGHT-1);
     j = random(0, SCREENWIDTH);
   }
   Enemies::spawn(EnemyType::hangingBat, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+  */
+
+  //WORM
+  // /*
+  while (room[i][j] || !room[i+1][j]) { 
+    i = random(0, SCREENHEIGHT);
+    j = random(0, SCREENWIDTH);
+  };
+  Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+  // */
   
 }
 

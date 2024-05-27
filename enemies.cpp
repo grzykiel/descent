@@ -4,6 +4,7 @@
 
 uint8_t blobTransitions[2] = { 45, 90 };
 uint8_t batTransitions[2] = { 15, 30 };
+uint8_t wormTransitions[2] = { 45, 90 };
 
 sprite_t blobSprite = {
   Enemies::blob,
@@ -38,6 +39,17 @@ sprite_t batSprite = {
   4
 };
 
+sprite_t wormSprite = {
+  Enemies::wormRight,
+  Enemies::wormLeft,
+  1,
+  wormTransitions,
+  0,
+  0,
+  4,
+  3
+};
+
 enemy_t enemy[MAX_ENEMIES];
 
 uint8_t currentEnemy = 0;
@@ -50,19 +62,51 @@ void init() {
 void update() {
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
     if (enemy[i].animation.active) {
+
       if (enemy[i].type == EnemyType::hangingBat) {
         if (abs(player.animation.pos.x - enemy[i].animation.pos.x) / PIXEL_SCALE < 4) {
           wake(&enemy[i]);
         }
-        uint8_t x = ((enemy[i].animation.pos.x / PIXEL_SCALE) / 8)+1;
+        uint8_t x = ((enemy[i].animation.pos.x / PIXEL_SCALE) / 8) + 1;
         uint8_t y = (enemy[i].animation.pos.y / PIXEL_SCALE) / 8;
         if (!levelMap[MAPHEIGHT - x - 1][y]) wake(&enemy[i]);
       }
 
       position_t nextPos = enemy[i].animation.pos;
       velocity_t nextVel = enemy[i].animation.vel;
+
+      //TODO move to updatePosition
+      if (enemy[i].type == EnemyType::worm) {
+        if (updateSprite(&enemy[i])) {
+          if (enemy[i].animation.dir == Direction::right) {
+            if (nextPos.y / PIXEL_SCALE > SCREENRIGHT - 6) {
+              enemy[i].animation.dir = Direction::left;
+            } else {
+              nextVel.y = PIXEL_SCALE - 1;
+            }
+          } else {
+            if (nextPos.y / PIXEL_SCALE < SCREENLEFT + 2) {
+              enemy[i].animation.dir = Direction::right;
+            } else {
+              nextVel.y -= PIXEL_SCALE;
+            }
+          }
+        } else {
+          nextVel.y = 0;
+        }
+      }
+
       updatePosition(enemy[i], &nextPos, &nextVel);
       checkCollisions(enemy[i], &nextPos, &nextVel);
+
+      if (enemy[i].type == EnemyType::worm) { 
+        if (nextVel.y == -1) {
+          enemy[i].animation.dir = Direction::left;
+          nextVel.y = 0;
+        } else if (nextVel.y == 1) {
+          enemy[i].animation.dir = Direction::right;
+        }
+      }
 
       if (enemy[i].type != EnemyType::blob) {
         if (nextVel.y > 0) {
@@ -72,8 +116,8 @@ void update() {
         }
       }
 
-      updateSprite(&enemy[i]);
       enemy[i].animation.pos = nextPos;
+
       checkBulletCollisions(&enemy[i], &nextVel);
       enemy[i].animation.vel = nextVel;
     }
@@ -110,7 +154,7 @@ void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
 
   for (uint16_t i = wd.xMin; i <= wd.xMax; i++) {
     for (uint8_t j = wd.yMin; j <= wd.yMax; j++) {
-      if (levelMap[i][j]) {
+      if (levelMap[i][j] || (enemy.type == EnemyType::worm && !levelMap[i+1][j])) {
         Rect block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
         if (levelMap[i][j] == DASH) {
           if (enemy.type == EnemyType::blob) {
@@ -123,6 +167,14 @@ void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
         // set velocity according to collision
         if (temp.v) nextVel->x = 0;
         if (temp.h) nextVel->y = 0;
+
+        if (enemy.type == EnemyType::worm) {
+          if (temp.h == LEFT) {
+            nextVel->y = 1;
+          } else if (temp.h == RIGHT) {
+            nextVel->y = -1;
+          }
+        }
       }
     }
   }
@@ -144,12 +196,14 @@ void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
   }
 }
 
-void updateSprite(enemy_t *enemy) {
+bool updateSprite(enemy_t *enemy) {
   if (enemy->type == EnemyType::hangingBat) return;
   if (!Utils::updateAnimation(&enemy->animation)) {
     enemy->animation.t = 0;
     enemy->animation.frame = 0;
+    return true;
   }
+  return false;
 }
 
 
@@ -170,13 +224,15 @@ void draw() {
 void spawn(EnemyType type, uint16_t x, uint8_t y) {
   if (type == EnemyType::blob) {
     enemy[currentEnemy].animation.sprite = &blobSprite;
-    enemy[currentEnemy].animation.dir = Direction::right;
     enemy[currentEnemy].hp = BLOB_HP;
   } else if (type == EnemyType::hangingBat) {
     enemy[currentEnemy].animation.sprite = &batHangingSprite;
-    enemy[currentEnemy].animation.dir = Direction::right;
     enemy[currentEnemy].hp = BAT_HP;
+  } else if (type == EnemyType::worm) {
+    enemy[currentEnemy].animation.sprite = &wormSprite;
+    enemy[currentEnemy].hp = WORM_HP;
   }
+  enemy[currentEnemy].animation.dir = Direction::right;
   enemy[currentEnemy].animation.active = true;
   enemy[currentEnemy].type = type;
   enemy[currentEnemy].animation.frame = 0;
@@ -195,12 +251,6 @@ void wake(enemy_t *bat) {
   bat->type = EnemyType::bat;
   bat->animation.sprite = &batSprite;
 }
-
-// void testWake() {
-//   for (int i = 0; i < MAX_ENEMIES; i++) {
-//     wake(&enemy[i]);
-//   }
-// }
 
 
 

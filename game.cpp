@@ -48,7 +48,6 @@ void input() {
 
   //debug & tuning
   if (arduboy.justPressed(B_BUTTON)) {
-    // Enemies::testWake();
   }
 
   if (arduboy.justPressed(up_btn)) {

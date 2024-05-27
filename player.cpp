@@ -164,7 +164,7 @@ void checkEnemyCollisions(animation_t anim, position_t *next) {
       collision_t type = Utils::collisionCorrect(anim, next, enemyRect);
       if (type.v == BOTTOM) {
         bounce();
-        // thrust();
+        Bullet::reload();
         enemy[i].animation.active = false;
       }
     }

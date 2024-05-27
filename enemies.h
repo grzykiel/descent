@@ -12,11 +12,13 @@
 
 #define BLOB_HP 3
 #define BAT_HP  2
+#define WORM_HP 1
 
 enum class EnemyType : uint8_t {
   blob,
   hangingBat,
   bat,
+  worm
 };
 
 typedef struct {
@@ -36,7 +38,7 @@ namespace Enemies {
   void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel);
   void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel);
   void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel);
-  void updateSprite(enemy_t *enemy);
+  bool updateSprite(enemy_t *enemy);
 
   void spawn(EnemyType type, uint16_t x, uint8_t y);
   void wake(enemy_t *bat);
