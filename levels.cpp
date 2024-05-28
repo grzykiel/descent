@@ -283,11 +283,13 @@ void generateEnemies(uint8_t room[][SCREENWIDTH]) {
   // uint8_t j = 3;
 
   // BLOB
-  /*while (room[i][j]) {
+  /*
+  while (room[i][j]) {
     i = random(0, SCREENHEIGHT);
     j = random(0, SCREENWIDTH);
   }
-  Enemies::spawn(EnemyType::blob, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);*/
+  Enemies::spawn(EnemyType::blob, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+  // */
 
   
   // BAT

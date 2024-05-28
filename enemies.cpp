@@ -94,6 +94,8 @@ void update() {
         } else {
           nextVel.y = 0;
         }
+      } else {
+        updateSprite(&enemy[i]);
       }
 
       updatePosition(enemy[i], &nextPos, &nextVel);
@@ -142,6 +144,8 @@ void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
   } else if (enemy.type == EnemyType::bat) {
     nextVel->x = Utils::sign(dx) * BAT_VEL;
     nextVel->y = Utils::sign(dy) * BAT_VEL;
+  } else if (enemy.type == EnemyType::worm) {
+    nextVel->x += GRAVITY;
   }
 
   nextPos->x += nextVel->x;
