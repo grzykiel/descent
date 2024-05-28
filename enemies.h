@@ -35,7 +35,7 @@ namespace Enemies {
   void update();
   void draw();
 
-  void updatePosition(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel);
+  void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel);
   void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel);
   void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel);
   bool updateSprite(enemy_t *enemy);

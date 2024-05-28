@@ -63,13 +63,21 @@ void update() {
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
     if (enemy[i].animation.active) {
 
-
+      if (enemy[i].type == EnemyType::hangingBat) {
+        if (abs(player.animation.pos.x - enemy[i].animation.pos.x) / PIXEL_SCALE < 4) {
+          wake(&enemy[i]);
+        }
+        uint8_t x = ((enemy[i].animation.pos.x / PIXEL_SCALE) / 8) + 1;
+        uint8_t y = (enemy[i].animation.pos.y / PIXEL_SCALE) / 8;
+        if (!levelMap[MAPHEIGHT - x - 1][y]) wake(&enemy[i]);
+      }
 
       position_t nextPos = enemy[i].animation.pos;
       velocity_t nextVel = enemy[i].animation.vel;
 
-      if (updateSprite(&enemy[i])) {
-        if (enemy[i].type == EnemyType::worm) {
+      //TODO move to updatePosition
+      if (enemy[i].type == EnemyType::worm) {
+        if (updateSprite(&enemy[i])) {
           if (enemy[i].animation.dir == Direction::right) {
             if (nextPos.y / PIXEL_SCALE > SCREENRIGHT - 6) {
               enemy[i].animation.dir = Direction::left;
@@ -88,10 +96,10 @@ void update() {
         }
       }
 
-      updatePosition(&enemy[i], &nextPos, &nextVel);
+      updatePosition(enemy[i], &nextPos, &nextVel);
       checkCollisions(enemy[i], &nextPos, &nextVel);
 
-      if (enemy[i].type == EnemyType::worm) {
+      if (enemy[i].type == EnemyType::worm) { 
         if (nextVel.y == -1) {
           enemy[i].animation.dir = Direction::left;
           nextVel.y = 0;
@@ -116,31 +124,24 @@ void update() {
   }
 }
 
-void updatePosition(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel) {
-  int dx = player.animation.pos.x / PIXEL_SCALE - nextPos->x / PIXEL_SCALE;
-  int dy = player.animation.pos.y / PIXEL_SCALE - nextPos->y / PIXEL_SCALE;
-  if (enemy->type == EnemyType::blob) {
+void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
+  int dx = player.animation.pos.x / PIXEL_SCALE - enemy.animation.pos.x / PIXEL_SCALE;
+  int dy = player.animation.pos.y / PIXEL_SCALE - enemy.animation.pos.y / PIXEL_SCALE;
+  if (enemy.type == EnemyType::blob) {
     if (dx > 0) {
-      nextVel->x = min(++enemy->animation.vel.x, BLOB_MAX_VEL);
+      nextVel->x = min(++enemy.animation.vel.x, BLOB_MAX_VEL);
     } else if (dx < 0) {
-      nextVel->x = max(--enemy->animation.vel.x, -BLOB_MAX_VEL);
+      nextVel->x = max(--enemy.animation.vel.x, -BLOB_MAX_VEL);
     }
 
     if (dy > 0) {
-      nextVel->y = min(++enemy->animation.vel.y, BLOB_MAX_VEL);
+      nextVel->y = min(++enemy.animation.vel.y, BLOB_MAX_VEL);
     } else if (dy < 0) {
-      nextVel->y = max(--enemy->animation.vel.y, -BLOB_MAX_VEL);
+      nextVel->y = max(--enemy.animation.vel.y, -BLOB_MAX_VEL);
     }
-  } else if (enemy->type == EnemyType::bat) {
+  } else if (enemy.type == EnemyType::bat) {
     nextVel->x = Utils::sign(dx) * BAT_VEL;
     nextVel->y = Utils::sign(dy) * BAT_VEL;
-  } else if (enemy->type == EnemyType::hangingBat) {
-    uint8_t x = ((enemy->animation.pos.x / PIXEL_SCALE) / 8) + 1;
-    uint8_t y = (enemy->animation.pos.y / PIXEL_SCALE) / 8;
-    if ((abs(player.animation.pos.x - enemy->animation.pos.x) / PIXEL_SCALE < 4)
-        || (!levelMap[MAPHEIGHT - x - 1][y])) {
-      wake(enemy);
-    }
   }
 
   nextPos->x += nextVel->x;
@@ -153,7 +154,7 @@ void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
 
   for (uint16_t i = wd.xMin; i <= wd.xMax; i++) {
     for (uint8_t j = wd.yMin; j <= wd.yMax; j++) {
-      if (levelMap[i][j] || (enemy.type == EnemyType::worm && !levelMap[i + 1][j])) {
+      if (levelMap[i][j] || (enemy.type == EnemyType::worm && !levelMap[i+1][j])) {
         Rect block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
         if (levelMap[i][j] == DASH) {
           if (enemy.type == EnemyType::blob) {
