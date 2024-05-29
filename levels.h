@@ -36,6 +36,8 @@ namespace Level
 
   void generateEnemies(uint8_t room[][SCREENWIDTH]);
 
+  void clearBlocks(); // for debug
+
 }
 
 #endif

@@ -5,7 +5,7 @@
 uint8_t blobTransitions[2] = { 45, 90 };
 uint8_t batTransitions[2] = { 15, 30 };
 uint8_t wormTransitions[2] = { 45, 90 };
-uint8_t tortoiseTransitions[2] = {30, 60}; //{60, 120};
+uint8_t tortoiseTransitions[2] = { 30, 60 };  //{60, 120};
 
 sprite_t blobSprite = {
   Enemies::blob,
@@ -95,13 +95,13 @@ void update() {
             if (nextPos.y / PIXEL_SCALE > SCREENRIGHT - 6) {
               enemy[i].animation.dir = Direction::left;
             } else {
-              nextVel.y = vel*PIXEL_SCALE;
+              nextVel.y = vel * PIXEL_SCALE;
             }
           } else {
             if (nextPos.y / PIXEL_SCALE < SCREENLEFT + 2) {
               enemy[i].animation.dir = Direction::right;
             } else {
-              nextVel.y -= vel*PIXEL_SCALE;
+              nextVel.y -= vel * PIXEL_SCALE;
             }
           }
         } else {
@@ -114,7 +114,7 @@ void update() {
       updatePosition(enemy[i], &nextPos, &nextVel);
       checkCollisions(enemy[i], &nextPos, &nextVel);
 
-      if (enemy[i].type == EnemyType::worm || enemy[i].type == EnemyType::tortoise) { 
+      if (enemy[i].type == EnemyType::worm || enemy[i].type == EnemyType::tortoise) {
         if (nextVel.y == -1) {
           enemy[i].animation.dir = Direction::left;
           nextVel.y = 0;
@@ -158,7 +158,7 @@ void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
     nextVel->x = Utils::sign(dx) * BAT_VEL;
     nextVel->y = Utils::sign(dy) * BAT_VEL;
   } else if (enemy.type == EnemyType::worm || enemy.type == EnemyType::tortoise) {
-    nextVel->x += GRAVITY;
+    nextVel->x = max(nextVel->x + GRAVITY, -4 * PIXEL_SCALE);
   }
 
   nextPos->x += nextVel->x;
@@ -171,7 +171,7 @@ void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
 
   for (uint16_t i = wd.xMin; i <= wd.xMax; i++) {
     for (uint8_t j = wd.yMin; j <= wd.yMax; j++) {
-      if (levelMap[i][j] || ((enemy.type == EnemyType::worm || enemy.type == EnemyType::tortoise) && !levelMap[i+1][j])) {
+      if (levelMap[i][j]) {  // || ((enemy.type == EnemyType::worm || enemy.type == EnemyType::tortoise) && !levelMap[i+1][j])) {
         Rect block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
         if (levelMap[i][j] == DASH) {
           if (enemy.type == EnemyType::blob) {
@@ -182,8 +182,35 @@ void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
         }
         collision_t temp = Utils::collisionCorrect(enemy.animation, nextPos, block);
         // set velocity according to collision
-        if (temp.v) nextVel->x = 0;
+        if (temp.v == BOTTOM) {
+          if (enemy.type == EnemyType::worm || enemy.type == EnemyType::tortoise) {
+            if (j > 0) {
+              if (!levelMap[i][j - 1] && !levelMap[i - 1][j - 1]) {
+                Rect edge = Rect((MAPHEIGHT - (i-1) - 1) * BLOCKSIZE, (j - 1) * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
+                // if (Utils::collides(enemy.animation, edge)) {
+                if (Utils::collisionCorrect(enemy.animation, nextPos, edge).h == LEFT) {
+                  nextVel->y = 1;
+                }
+              }
+            }
+            if (j < MAPWIDTH - 1) {
+              if (!levelMap[i][j + 1] && !levelMap[i - 1][j + 1]) {
+                Rect edge = Rect((MAPHEIGHT - (i-1) - 1) * BLOCKSIZE, (j + 1) * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
+                // if (Utils::collides(enemy.animation, edge)) {
+                if (Utils::collisionCorrect(enemy.animation, nextPos, edge).h == RIGHT) {
+                  nextVel->y = -1;
+                }
+              }
+            }
+          } else {
+            nextVel->x = 0;
+          }
+        } else if (temp.v == TOP) {
+          nextVel->x = 0;
+        }
+
         if (temp.h) nextVel->y = 0;
+
 
         if (enemy.type == EnemyType::worm || enemy.type == EnemyType::tortoise) {
           if (temp.h == LEFT) {

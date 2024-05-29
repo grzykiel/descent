@@ -99,7 +99,7 @@ void draw() {
   // for (int i = 0; i < MAPHEIGHT; i++) {
   //   for (int j = 0; j < MAPWIDTH; j++) {
   for (int i = xMin; i < xMax; i++) {
-    for (int j=0; j<MAPWIDTH; j++) {
+    for (int j = 0; j < MAPWIDTH; j++) {
       if (levelMap[i][j]) {
         if (levelMap[i][j] == DASH | levelMap[i][j] == BLOCK) {
           Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, levelMap[i][j]);
@@ -291,7 +291,7 @@ void generateEnemies(uint8_t room[][SCREENWIDTH]) {
   Enemies::spawn(EnemyType::blob, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
   // */
 
-  
+
   // BAT
   /*
   while (room[i][j] || !room[i-1][j] || room[i-1][j] == DASH) {
@@ -303,16 +303,23 @@ void generateEnemies(uint8_t room[][SCREENWIDTH]) {
 
   //WORM / TORTOISE
   // /*
-  while (room[i][j] || !room[i+1][j]) { 
+  while (room[i][j] || !room[i + 1][j]) {
     i = random(0, SCREENHEIGHT);
     j = random(0, SCREENWIDTH);
   };
-  // Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
-  Enemies::spawn(EnemyType::tortoise, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+  Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+  // Enemies::spawn(EnemyType::tortoise, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
   // */
+}
 
-
-  
+void clearBlocks() {
+  for (uint8_t i = 0; i < MAPHEIGHT; i++) {
+    for (uint8_t j = 0; j < MAPWIDTH; j++) {
+      if (levelMap[i][j] == BLOCK) {
+        levelMap[i][j] = 0;
+      }
+    }
+  }
 }
 
 }

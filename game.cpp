@@ -48,6 +48,7 @@ void input() {
 
   //debug & tuning
   if (arduboy.justPressed(B_BUTTON)) {
+    Level::clearBlocks();
   }
 
   if (arduboy.justPressed(up_btn)) {
