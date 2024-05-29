@@ -97,7 +97,7 @@ typedef struct {
 
 typedef struct {
   int16_t x;
-  int8_t y;
+  int16_t y;
 } velocity_t;
 
 typedef struct {

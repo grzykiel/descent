@@ -301,14 +301,17 @@ void generateEnemies(uint8_t room[][SCREENWIDTH]) {
   Enemies::spawn(EnemyType::hangingBat, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
   */
 
-  //WORM
+  //WORM / TORTOISE
   // /*
   while (room[i][j] || !room[i+1][j]) { 
     i = random(0, SCREENHEIGHT);
     j = random(0, SCREENWIDTH);
   };
-  Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+  // Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+  Enemies::spawn(EnemyType::tortoise, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
   // */
+
+
   
 }
 

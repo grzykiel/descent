@@ -5,6 +5,7 @@
 uint8_t blobTransitions[2] = { 45, 90 };
 uint8_t batTransitions[2] = { 15, 30 };
 uint8_t wormTransitions[2] = { 45, 90 };
+uint8_t tortoiseTransitions[2] = {30, 60}; //{60, 120};
 
 sprite_t blobSprite = {
   Enemies::blob,
@@ -50,6 +51,17 @@ sprite_t wormSprite = {
   3
 };
 
+sprite_t tortoiseSprite = {
+  Enemies::tortoiseRight,
+  Enemies::tortoiseLeft,
+  1,
+  tortoiseTransitions,
+  0,
+  1,
+  6,
+  3
+};
+
 enemy_t enemy[MAX_ENEMIES];
 
 uint8_t currentEnemy = 0;
@@ -76,19 +88,20 @@ void update() {
       velocity_t nextVel = enemy[i].animation.vel;
 
       //TODO move to updatePosition
-      if (enemy[i].type == EnemyType::worm) {
+      if (enemy[i].type == EnemyType::worm || enemy[i].type == EnemyType::tortoise) {
         if (updateSprite(&enemy[i])) {
+          uint8_t vel = enemy[i].type == EnemyType::worm ? 1 : 2;
           if (enemy[i].animation.dir == Direction::right) {
             if (nextPos.y / PIXEL_SCALE > SCREENRIGHT - 6) {
               enemy[i].animation.dir = Direction::left;
             } else {
-              nextVel.y = PIXEL_SCALE - 1;
+              nextVel.y = vel*PIXEL_SCALE;
             }
           } else {
             if (nextPos.y / PIXEL_SCALE < SCREENLEFT + 2) {
               enemy[i].animation.dir = Direction::right;
             } else {
-              nextVel.y -= PIXEL_SCALE;
+              nextVel.y -= vel*PIXEL_SCALE;
             }
           }
         } else {
@@ -101,7 +114,7 @@ void update() {
       updatePosition(enemy[i], &nextPos, &nextVel);
       checkCollisions(enemy[i], &nextPos, &nextVel);
 
-      if (enemy[i].type == EnemyType::worm) { 
+      if (enemy[i].type == EnemyType::worm || enemy[i].type == EnemyType::tortoise) { 
         if (nextVel.y == -1) {
           enemy[i].animation.dir = Direction::left;
           nextVel.y = 0;
@@ -144,7 +157,7 @@ void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
   } else if (enemy.type == EnemyType::bat) {
     nextVel->x = Utils::sign(dx) * BAT_VEL;
     nextVel->y = Utils::sign(dy) * BAT_VEL;
-  } else if (enemy.type == EnemyType::worm) {
+  } else if (enemy.type == EnemyType::worm || enemy.type == EnemyType::tortoise) {
     nextVel->x += GRAVITY;
   }
 
@@ -158,7 +171,7 @@ void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
 
   for (uint16_t i = wd.xMin; i <= wd.xMax; i++) {
     for (uint8_t j = wd.yMin; j <= wd.yMax; j++) {
-      if (levelMap[i][j] || (enemy.type == EnemyType::worm && !levelMap[i+1][j])) {
+      if (levelMap[i][j] || ((enemy.type == EnemyType::worm || enemy.type == EnemyType::tortoise) && !levelMap[i+1][j])) {
         Rect block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
         if (levelMap[i][j] == DASH) {
           if (enemy.type == EnemyType::blob) {
@@ -172,7 +185,7 @@ void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
         if (temp.v) nextVel->x = 0;
         if (temp.h) nextVel->y = 0;
 
-        if (enemy.type == EnemyType::worm) {
+        if (enemy.type == EnemyType::worm || enemy.type == EnemyType::tortoise) {
           if (temp.h == LEFT) {
             nextVel->y = 1;
           } else if (temp.h == RIGHT) {
@@ -189,6 +202,7 @@ void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
     if (bullet[i].animation.active) {
       if (Utils::collides(enemy->animation, bullet[i].animation)) {
         bullet[i].animation.active = false;
+        if (enemy->type == EnemyType::tortoise) return;
         enemy->hp--;
         if (enemy->hp < 1) {
           enemy->animation.active = false;
@@ -235,6 +249,9 @@ void spawn(EnemyType type, uint16_t x, uint8_t y) {
   } else if (type == EnemyType::worm) {
     enemy[currentEnemy].animation.sprite = &wormSprite;
     enemy[currentEnemy].hp = WORM_HP;
+  } else if (type == EnemyType::tortoise) {
+    enemy[currentEnemy].animation.sprite = &tortoiseSprite;
+    enemy[currentEnemy].hp = TORTOISE_HP;
   }
   enemy[currentEnemy].animation.dir = Direction::right;
   enemy[currentEnemy].animation.active = true;

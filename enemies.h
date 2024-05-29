@@ -13,12 +13,14 @@
 #define BLOB_HP 3
 #define BAT_HP  2
 #define WORM_HP 1
+#define TORTOISE_HP 1
 
 enum class EnemyType : uint8_t {
   blob,
   hangingBat,
   bat,
-  worm
+  worm,
+  tortoise
 };
 
 typedef struct {
