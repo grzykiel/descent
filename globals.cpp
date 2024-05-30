@@ -3,7 +3,7 @@
 Arduboy2 arduboy;
 Sprites sprites;
 
-// uint8_t gameState = STATE_SANDBOX; 
+// uint8_t gameState = STATE_SANDBOX;
 uint8_t gameState = STATE_GAME;
 
 // uint8_t movementMode = TOPDOWN;
@@ -18,7 +18,7 @@ int trim(int p, int l, int h) {
 }
 
 window_t getCollisionWindow(position_t pos) {
-  return getCollisionWindow(pos.x/PIXEL_SCALE, pos.y/PIXEL_SCALE);
+  return getCollisionWindow(pos.x / PIXEL_SCALE, pos.y / PIXEL_SCALE);
 }
 
 window_t getCollisionWindow(uint16_t x, int16_t y) {
@@ -37,33 +37,35 @@ window_t getCollisionWindow(uint16_t x, int16_t y) {
 
 
 bool collides(animation_t anim, Rect block) {
-  Rect spriteRect = Rect(anim.pos.x/PIXEL_SCALE + anim.sprite->dx, anim.pos.y/PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
+  Rect spriteRect = Rect(anim.pos.x / PIXEL_SCALE + anim.sprite->dx, anim.pos.y / PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
   // arduboy.drawRect(anim.pos.x/PIXEL_SCALE + anim.sprite->dx - cameraOffset, anim.pos.y/PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
   return (arduboy.collide(spriteRect, block));
 }
 
 bool collides(animation_t anim1, animation_t anim2) {
-  Rect rect1 = Rect(anim1.pos.x/PIXEL_SCALE + anim1.sprite->dx, anim1.pos.y/PIXEL_SCALE + anim1.sprite->dy, anim1.sprite->h, anim1.sprite->w);
-  Rect rect2 = Rect(anim2.pos.x/PIXEL_SCALE + anim2.sprite->dx, anim2.pos.y/PIXEL_SCALE + anim2.sprite->dy, anim2.sprite->h, anim2.sprite->w);
+  Rect rect1 = Rect(anim1.pos.x / PIXEL_SCALE + anim1.sprite->dx, anim1.pos.y / PIXEL_SCALE + anim1.sprite->dy, anim1.sprite->h, anim1.sprite->w);
+  Rect rect2 = Rect(anim2.pos.x / PIXEL_SCALE + anim2.sprite->dx, anim2.pos.y / PIXEL_SCALE + anim2.sprite->dy, anim2.sprite->h, anim2.sprite->w);
   return (arduboy.collide(rect1, rect2));
 }
 
 collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider) {
-  collision_t type = {NONE, NONE};
+  collision_t type = { NONE, NONE };
+
+  // arduboy.drawRect(collider.x - cameraOffset, collider.y, collider.width, collider.height);
 
   /*uint8_t y = min(next->y, anim.pos.y);
   uint8_t w = abs(next->y - anim.pos.y);
   Rect rect = Rect(anim.pos.x + anim.sprite->dx, y + anim.sprite->dy, anim.sprite->h, w +anim.sprite->w);*/
 
-  Rect rect = Rect(anim.pos.x/PIXEL_SCALE + anim.sprite->dx, next->y/PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
-  // arduboy.drawRect(anim.pos.x/PIXEL_SCALE + anim.sprite->dx - cameraOffset, next->y/PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
+  Rect rect = Rect(anim.pos.x / PIXEL_SCALE + anim.sprite->dx, next->y / PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
+  // arduboy.drawRect(rect.x - cameraOffset, rect.y, rect.width, rect.height);
   if (arduboy.collide(rect, collider)) {
-    if (collider.y < anim.pos.y/PIXEL_SCALE) {
+    if (collider.y < anim.pos.y / PIXEL_SCALE) {
       type.h = LEFT;
-      next->y = (collider.y + collider.height - anim.sprite->dy)*PIXEL_SCALE;
-    } else if (anim.pos.y/PIXEL_SCALE < collider.y) {
+      next->y = (collider.y + collider.height - anim.sprite->dy) * PIXEL_SCALE;
+    } else if (anim.pos.y / PIXEL_SCALE < collider.y) {
       type.h = RIGHT;
-      next->y = (collider.y - anim.sprite->w - anim.sprite->dy)*PIXEL_SCALE;
+      next->y = (collider.y - anim.sprite->w - anim.sprite->dy) * PIXEL_SCALE;
     }
   }
 
@@ -71,14 +73,15 @@ collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider) 
   uint8_t h = abs(next->x - anim.pos.x);
   rect = Rect(x + anim.sprite->dx, anim.pos.y + anim.sprite->dy, h + anim.sprite->h, anim.sprite->w);*/
 
-  rect = Rect(next->x/PIXEL_SCALE + anim.sprite->dx, anim.pos.y/PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
+  rect = Rect(next->x / PIXEL_SCALE + anim.sprite->dx, anim.pos.y / PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
+  // arduboy.drawRect(rect.x - cameraOffset, rect.y, rect.width, rect.height);
   if (arduboy.collide(rect, collider)) {
-    if (collider.x < anim.pos.x/PIXEL_SCALE) {
+    if (collider.x < anim.pos.x / PIXEL_SCALE + anim.sprite->dx) {
       type.v = BOTTOM;
-      next->x = (collider.x + collider.width - anim.sprite->dx)*PIXEL_SCALE;
-    } else if (anim.pos.x/PIXEL_SCALE < collider.x) {
+      next->x = (collider.x + collider.width - anim.sprite->dx) * PIXEL_SCALE;
+    } else if (anim.pos.x / PIXEL_SCALE < collider.x) {
       type.v = TOP;
-      next->x = (collider.x - anim.sprite->h - anim.sprite->dx)*PIXEL_SCALE;
+      next->x = (collider.x - anim.sprite->h - anim.sprite->dx) * PIXEL_SCALE;
     }
   }
 
