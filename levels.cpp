@@ -3,6 +3,7 @@
 #include "game.h"
 #include "bitmaps.h"
 
+
 uint8_t nextRoom[SCREENHEIGHT][SCREENWIDTH];
 /* = {
   { 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -277,39 +278,35 @@ void eraseRoom(uint8_t room[][SCREENWIDTH]) {
 }
 
 void generateEnemies(uint8_t room[][SCREENWIDTH]) {
-  uint8_t i = random(0, SCREENHEIGHT);
+  uint8_t i = random(1, SCREENHEIGHT - 1);
   uint8_t j = random(0, SCREENWIDTH);
-  // uint8_t i = 0;
-  // uint8_t j = 3;
 
-  // BLOB
-  /*
-  while (room[i][j]) {
-    i = random(0, SCREENHEIGHT);
-    j = random(0, SCREENWIDTH);
+  if (random(0, 2) > 0) {
+    // BLOB
+    while (room[i][j]) {
+      i = random(0, SCREENHEIGHT);
+      j = random(0, SCREENWIDTH);
+    }
+    Enemies::spawn(EnemyType::blob, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+  } else {
+    // BAT
+    while (room[i][j] || !room[i - 1][j] || room[i - 1][j] == DASH) {
+      i = random(1, SCREENHEIGHT - 1);
+      j = random(0, SCREENWIDTH);
+    }
+    Enemies::spawn(EnemyType::hangingBat, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
   }
-  Enemies::spawn(EnemyType::blob, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
-  */
-
-
-  // BAT
-  // /*
-  while (room[i][j] || !room[i-1][j] || room[i-1][j] == DASH) {
-    i = random(1, SCREENHEIGHT-1);
-    j = random(0, SCREENWIDTH);
-  }
-  Enemies::spawn(EnemyType::hangingBat, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
-  // */
 
   //WORM / TORTOISE
-  // /*
   while (room[i][j] || !room[i + 1][j]) {
     i = random(0, SCREENHEIGHT);
     j = random(0, SCREENWIDTH);
   };
-  Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
-  // Enemies::spawn(EnemyType::tortoise, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
-  // */
+  if (random(0, 2) > 0) {
+    Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+  } else {
+    Enemies::spawn(EnemyType::tortoise, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+  }
 }
 
 

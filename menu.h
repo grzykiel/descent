@@ -24,6 +24,7 @@ namespace Menu
   {
     if (arduboy.justPressed(A_BUTTON)) {
       Player::init();
+      Enemies::init();
       Level::init();
       gameState = STATE_GAME;
 

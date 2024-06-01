@@ -19,6 +19,7 @@ void setup() {
 
   switch (gameState) {
     case STATE_GAME:
+      //TODO move to Game::init();
       Player::init();
       Enemies::init();
       Level::init();

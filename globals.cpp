@@ -4,7 +4,8 @@ Arduboy2 arduboy;
 Sprites sprites;
 
 // uint8_t gameState = STATE_SANDBOX;
-uint8_t gameState = STATE_GAME;
+// uint8_t gameState = STATE_GAME;
+uint8_t gameState = STATE_MENU;
 
 // uint8_t movementMode = TOPDOWN;
 uint8_t movementMode = PLATFORM;

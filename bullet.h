@@ -6,7 +6,7 @@
 #include "game.h"
 
 typedef struct {
-  animation_t animation;
+  animation_t animation; //TODO refactor to remove wrapper struct
 } bullet_t;
 
 #define MAX_BULLETS 5

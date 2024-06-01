@@ -4,8 +4,8 @@
 
 uint8_t blobTransitions[2] = { 45, 90 };
 uint8_t batTransitions[2] = { 15, 30 };
-uint8_t wormTransitions[2] = {15, 30}; //{ 45, 90 };
-uint8_t tortoiseTransitions[2] = {60, 120};
+uint8_t wormTransitions[2] = { 15, 30 };  //{ 45, 90 };
+uint8_t tortoiseTransitions[2] = { 60, 120 };
 
 sprite_t blobSprite = {
   Enemies::blob,
@@ -73,69 +73,68 @@ void init() {
 
 void update() {
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
-    if (enemy[i].animation.active) {
+    if (!enemy[i].animation.active) continue;
 
-      if (enemy[i].type == EnemyType::hangingBat) {
-        if (abs(player.animation.pos.x - enemy[i].animation.pos.x) / PIXEL_SCALE < 4) {
-          wake(&enemy[i]);
-        }
-        uint8_t x = ((enemy[i].animation.pos.x / PIXEL_SCALE) / 8) + 1;
-        uint8_t y = (enemy[i].animation.pos.y / PIXEL_SCALE) / 8;
-        if (!levelMap[MAPHEIGHT - x - 1][y]) wake(&enemy[i]);
+    if (enemy[i].type == EnemyType::hangingBat) {
+      if (abs(player.animation.pos.x - enemy[i].animation.pos.x) / PIXEL_SCALE < 4) {
+        wake(&enemy[i]);
       }
+      uint8_t x = ((enemy[i].animation.pos.x / PIXEL_SCALE) / 8) + 1;
+      uint8_t y = (enemy[i].animation.pos.y / PIXEL_SCALE) / 8;
+      if (!levelMap[MAPHEIGHT - x - 1][y]) wake(&enemy[i]);
+    }
 
-      position_t nextPos = enemy[i].animation.pos;
-      velocity_t nextVel = enemy[i].animation.vel;
+    position_t nextPos = enemy[i].animation.pos;
+    velocity_t nextVel = enemy[i].animation.vel;
 
-      //TODO move to updatePosition
-      if (enemy[i].type == EnemyType::worm || enemy[i].type == EnemyType::tortoise) {
-        if (updateSprite(&enemy[i])) {
-          uint8_t vel = enemy[i].type == EnemyType::worm ? 1 : 2;
-          if (enemy[i].animation.dir == Direction::right) {
-            if (nextPos.y / PIXEL_SCALE > SCREENRIGHT - enemy[i].animation.sprite->dy - enemy[i].animation.sprite->w - 2) {
-              enemy[i].animation.dir = Direction::left;
-            } else {
-              nextVel.y = vel * PIXEL_SCALE;
-            }
+    //TODO move to updatePosition
+    if (enemy[i].type == EnemyType::worm || enemy[i].type == EnemyType::tortoise) {
+      if (updateSprite(&enemy[i])) {
+        uint8_t vel = enemy[i].type == EnemyType::worm ? 1 : 2;
+        if (enemy[i].animation.dir == Direction::right) {
+          if (nextPos.y / PIXEL_SCALE > SCREENRIGHT - enemy[i].animation.sprite->dy - enemy[i].animation.sprite->w - 2) {
+            enemy[i].animation.dir = Direction::left;
           } else {
-            if (nextPos.y / PIXEL_SCALE < SCREENLEFT + 2) {  //} - enemy[i].animation.sprite->dy) {
-              enemy[i].animation.dir = Direction::right;
-            } else {
-              nextVel.y -= vel * PIXEL_SCALE;
-            }
+            nextVel.y = vel * PIXEL_SCALE;
           }
         } else {
-          nextVel.y = 0;
+          if (nextPos.y / PIXEL_SCALE < SCREENLEFT + 2) {  //} - enemy[i].animation.sprite->dy) {
+            enemy[i].animation.dir = Direction::right;
+          } else {
+            nextVel.y -= vel * PIXEL_SCALE;
+          }
         }
       } else {
-        updateSprite(&enemy[i]);
+        nextVel.y = 0;
       }
-
-      updatePosition(enemy[i], &nextPos, &nextVel);
-      checkCollisions(enemy[i], &nextPos, &nextVel);
-
-      if (enemy[i].type == EnemyType::worm || enemy[i].type == EnemyType::tortoise) {
-        if (nextVel.y == -1) {
-          enemy[i].animation.dir = Direction::left;
-          nextVel.y = 0;
-        } else if (nextVel.y == 1) {
-          enemy[i].animation.dir = Direction::right;
-        }
-      }
-
-      if (enemy[i].type != EnemyType::blob) {
-        if (nextVel.y > 0) {
-          enemy[i].animation.dir = Direction::right;
-        } else if (nextVel.y < 0) {
-          enemy[i].animation.dir = Direction::left;
-        }
-      }
-
-      enemy[i].animation.pos = nextPos;
-
-      checkBulletCollisions(&enemy[i], &nextVel);
-      enemy[i].animation.vel = nextVel;
+    } else {
+      updateSprite(&enemy[i]);
     }
+
+    updatePosition(enemy[i], &nextPos, &nextVel);
+    checkCollisions(enemy[i], &nextPos, &nextVel);
+
+    if (enemy[i].type == EnemyType::worm || enemy[i].type == EnemyType::tortoise) {
+      if (nextVel.y == -1) {
+        enemy[i].animation.dir = Direction::left;
+        nextVel.y = 0;
+      } else if (nextVel.y == 1) {
+        enemy[i].animation.dir = Direction::right;
+      }
+    }
+
+    if (enemy[i].type != EnemyType::blob) {
+      if (nextVel.y > 0) {
+        enemy[i].animation.dir = Direction::right;
+      } else if (nextVel.y < 0) {
+        enemy[i].animation.dir = Direction::left;
+      }
+    }
+
+    enemy[i].animation.pos = nextPos;
+
+    checkBulletCollisions(&enemy[i], &nextVel);
+    enemy[i].animation.vel = nextVel;
   }
 }
 
@@ -172,7 +171,7 @@ void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
 
   for (uint16_t i = wd.xMin; i <= wd.xMax; i++) {
     for (uint8_t j = wd.yMin; j <= wd.yMax; j++) {
-      if (levelMap[i][j]) { 
+      if (levelMap[i][j]) {
         Rect block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
         if (levelMap[i][j] == DASH) {
           if (enemy.type == EnemyType::blob) {
@@ -186,7 +185,7 @@ void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
         if (temp.v == BOTTOM) {
           if (enemy.type == EnemyType::worm || enemy.type == EnemyType::tortoise) {
             if (j > 0) {
-              if (!levelMap[i][j - 1]) {  
+              if (!levelMap[i][j - 1]) {
                 Rect edge = Rect((MAPHEIGHT - (i - 1) - 1) * BLOCKSIZE, (j - 1) * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
                 if (Utils::collisionCorrect(enemy.animation, nextPos, edge).h == LEFT) {
                   nextVel->y = 1;
@@ -194,7 +193,7 @@ void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
               }
             }
             if (j < MAPWIDTH - 1) {
-              if (!levelMap[i][j + 1]) { 
+              if (!levelMap[i][j + 1]) {
                 Rect edge = Rect((MAPHEIGHT - (i - 1) - 1) * BLOCKSIZE, (j + 1) * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
                 if (Utils::collisionCorrect(enemy.animation, nextPos, edge).h == RIGHT) {
                   nextVel->y = -1;

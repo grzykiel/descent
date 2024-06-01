@@ -140,6 +140,8 @@ void checkTileCollisions(position_t *nextPos, velocity_t *nextVel) {
               Bullet::reload();
               Player::land();
             }
+          } else if (type.v == TOP && levelMap[i][j] == BLOCK) {
+            levelMap[i][j] = 0;
           }
           nextVel->x = 0;
         }
