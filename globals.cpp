@@ -96,11 +96,27 @@ bool updateAnimation(animation_t *anim) {
   return true;
 }
 
+bool flickering(animation_t *anim) {
+  if (anim->iframe == 0) return false;
+  if (anim->iframe > 0) {
+    anim->iframe--;
+  } else if (anim->iframe < 0) {
+    anim->iframe++;
+  }
+
+  if (abs(anim->iframe) & FLICKER_DURATION) {
+    anim->iframe *= -1;
+  }
+
+  return (anim->iframe < 0);
+}
 
 int sign(int x) {
   return (x > 0) - (x < 0);
 }
 
+// For debug
+// TODO remove
 void println(char *str) {
   arduboy.print(str);
   arduboy.print("\n");

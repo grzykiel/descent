@@ -62,6 +62,9 @@
 #define KICKBACK_H   384
 #define KICKBACK_V    64
 
+#define PLAYER_IFRAMES   60
+#define FLICKER_DURATION  10
+
 #define PIXEL_SCALE 128
 
 extern Arduboy2 arduboy;
@@ -121,6 +124,7 @@ typedef struct {
   bool active = false;
   uint8_t frame = 0;
   uint8_t t = 0;
+  int8_t iframe = 0;
 
   position_t pos;
   velocity_t vel;
@@ -147,6 +151,7 @@ namespace Utils
   collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider);
 
   bool updateAnimation(animation_t *animation);
+  bool flickering(animation_t *animation);
 
   void println(char *str);
   void println(int pr_int);

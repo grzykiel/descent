@@ -64,6 +64,8 @@ namespace Player {
   void land();
   void stop();
 
+  void flicker();
+
   void checkTileCollisions(position_t *nextPos, velocity_t *nextVel);
   void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel);
 }

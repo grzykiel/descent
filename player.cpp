@@ -39,6 +39,7 @@ void init() {
   player.animation.active = true;
   player.animation.frame = FALL_FRAME;
   player.animation.t = 0;
+  player.animation.iframe = 0;
   player.animation.pos.x = 128 * 3 * PIXEL_SCALE + 8;  //SCREENMID + 320;  //TODO #define
   player.animation.pos.y = 28 * PIXEL_SCALE;           //TODO #define
   player.animation.vel.x = 0;
@@ -116,6 +117,7 @@ void updateAnimation() {
 
 
 void draw() {
+  if (Utils::flickering(&player.animation)) return;
   if (player.animation.dir == Direction::left) {
     Sprites::drawSelfMasked(player.animation.pos.x / PIXEL_SCALE - cameraOffset, player.animation.pos.y / PIXEL_SCALE, player.animation.sprite->spriteL, player.animation.frame);
   } else {
@@ -150,11 +152,13 @@ void checkTileCollisions(position_t *nextPos, velocity_t *nextVel) {
 }
 
 void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
+  if (player.animation.iframe != 0) return;
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
     if (enemy[i].animation.active) {
       Rect enemyRect = Rect(enemy[i].animation.pos.x / PIXEL_SCALE + enemy[i].animation.sprite->dx, enemy[i].animation.pos.y / PIXEL_SCALE + enemy[i].animation.sprite->dy, enemy[i].animation.sprite->h, enemy[i].animation.sprite->w);
       // arduboy.drawRect(enemy[i].animation.pos.x/PIXEL_SCALE + enemy[i].animation.sprite->dx - cameraOffset, enemy[i].animation.pos.y/PIXEL_SCALE + enemy[i].animation.sprite->dy, enemy[i].animation.sprite->h, enemy[i].animation.sprite->w);
       collision_t type = Utils::collisionCorrect(player.animation, nextPos, enemyRect, true, true);
+
       if (type.v == BOTTOM) {
         bounce();
         nextVel->x = BOUNCE_VELOCITY;
@@ -162,12 +166,17 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
         enemy[i].animation.active = false;
       } else if (type.v == TOP) {
         nextVel->x = -KICKBACK_V;
+        flicker();
       }
 
-      if (type.h == LEFT) {
-        nextVel->y = KICKBACK_H;
-      } else if (type.h == RIGHT) {
-        nextVel->y = -KICKBACK_H;
+
+      if (type.h > NONE) {
+        if (type.h == LEFT) {
+          nextVel->y = KICKBACK_H;
+        } else if (type.h == RIGHT) {
+          nextVel->y = -KICKBACK_H;
+        }
+        flicker();
       }
     }
   }
@@ -243,6 +252,10 @@ void land() {
   } else {
     player.animation.sprite->sprite = Player::runRightSprite;
   }*/
+}
+
+void flicker() {
+  player.animation.iframe = PLAYER_IFRAMES;
 }
 
 }

@@ -312,6 +312,9 @@ void generateEnemies(uint8_t room[][SCREENWIDTH]) {
   // */
 }
 
+
+//For debug
+//TODO: remove
 void clearBlocks() {
   for (uint8_t i = 0; i < MAPHEIGHT; i++) {
     for (uint8_t j = 0; j < MAPWIDTH; j++) {

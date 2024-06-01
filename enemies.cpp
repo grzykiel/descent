@@ -5,7 +5,7 @@
 uint8_t blobTransitions[2] = { 45, 90 };
 uint8_t batTransitions[2] = { 15, 30 };
 uint8_t wormTransitions[2] = {15, 30}; //{ 45, 90 };
-uint8_t tortoiseTransitions[2] = { 30, 60 };  //{60, 120};
+uint8_t tortoiseTransitions[2] = {60, 120};
 
 sprite_t blobSprite = {
   Enemies::blob,

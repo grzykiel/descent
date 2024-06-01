@@ -12,20 +12,11 @@ void loop() {
 }
 
 void input() {
-  // if (arduboy.justPressed(left_btn)) {
-  //   Player::run(Direction::left);   
-  // } else if (arduboy.justPressed(right_btn)) {
-  //   Player::run(Direction::right);
-  // }
-
   if (arduboy.pressed(left_btn)) {
-    // player.animation.vel.y = -walkSpeed * PIXEL_SCALE;
     Player::run(Direction::left);
   } else if (arduboy.pressed(right_btn)) {
-    // player.animation.vel.y = walkSpeed * PIXEL_SCALE - 1;
     Player::run(Direction::right);
   } else if (arduboy.notPressed(left_btn | right_btn)) {
-    // player.animation.vel.y = 0;
     Player::stop();
   }
 
@@ -50,7 +41,8 @@ void input() {
 
   //debug & tuning
   if (arduboy.justPressed(B_BUTTON)) {
-    Level::clearBlocks();
+    // Level::clearBlocks();
+    Player::flicker();
   }
 
   if (arduboy.justPressed(up_btn)) {
