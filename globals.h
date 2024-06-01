@@ -54,8 +54,13 @@
 #define JUMP_TOP    25
 #define JUMPFRAMES  50
 #define FALL_FRAME  4
-
 #define TERMINAL_VELOCITY -4
+
+#define RUN_ACCEL     64
+#define RUN_VELOCITY 128
+
+#define KICKBACK_H   384
+#define KICKBACK_V    64
 
 #define PIXEL_SCALE 128
 

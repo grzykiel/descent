@@ -30,7 +30,7 @@ sprite_t playerJumpSprite = {
 };
 player_t player;  //TODO initialise
 
-const int8_t walkSpeed = 1;
+// const int8_t walkSpeed = 1;
 const uint8_t walkAnimDelay = 6;
 
 namespace Player {
@@ -55,7 +55,6 @@ void update() {
 
   velocity_t nextVel = player.animation.vel;
 
-
   // physics update
   if (movementMode == PLATFORM) {
     nextVel.x += GRAVITY;
@@ -66,7 +65,7 @@ void update() {
       }
     }
   }
-  nextVel.x = max(nextVel.x, -8 * PIXEL_SCALE);  // TODO #define
+  nextVel.x = max(nextVel.x, -8 * PIXEL_SCALE);  // TODO re#define terminal velocity
 
   nextPos.x += nextVel.x;
   nextPos.y += nextVel.y;
@@ -84,7 +83,6 @@ void update() {
     nextVel.y = 0;
   }
 
-  Utils::println(nextVel.x);
   player.animation.vel = nextVel;
 
   //check if falling
@@ -114,6 +112,8 @@ void updateAnimation() {
     Utils::updateAnimation(&player.animation);
   }
 }
+
+
 
 void draw() {
   if (player.animation.dir == Direction::left) {
@@ -161,13 +161,13 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
         Bullet::reload();
         enemy[i].animation.active = false;
       } else if (type.v == TOP) {
-        nextVel->x = -64;
+        nextVel->x = -KICKBACK_V;
       }
 
       if (type.h == LEFT) {
-        nextVel->y = 128;
+        nextVel->y = KICKBACK_H;
       } else if (type.h == RIGHT) {
-        nextVel->y = -128;
+        nextVel->y = -KICKBACK_H;
       }
     }
   }
@@ -175,6 +175,20 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
 
 void run(Direction dir) {
   player.animation.dir = dir;
+  if (dir == Direction::right) {
+    player.animation.vel.y = min(player.animation.vel.y + RUN_ACCEL, RUN_VELOCITY);
+  } else if (dir == Direction::left) {
+    player.animation.vel.y = max(player.animation.vel.y - RUN_ACCEL, -RUN_VELOCITY);
+  }
+}
+
+void stop() {
+  // arduboy.println("STOP");
+  if (player.animation.vel.y < 0) {
+    player.animation.vel.y = min(player.animation.vel.y + RUN_ACCEL, 0);
+  } else if (player.animation.vel.y > 0) {
+    player.animation.vel.y = max(player.animation.vel.y - RUN_ACCEL, 0);
+  }
 }
 
 void jump() {

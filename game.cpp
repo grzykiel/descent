@@ -12,29 +12,31 @@ void loop() {
 }
 
 void input() {
-  if (arduboy.justPressed(left_btn)) {
-    Player::run(Direction::left);   
-  } else if (arduboy.justPressed(right_btn)) {
-
-    Player::run(Direction::right);
-  }
+  // if (arduboy.justPressed(left_btn)) {
+  //   Player::run(Direction::left);   
+  // } else if (arduboy.justPressed(right_btn)) {
+  //   Player::run(Direction::right);
+  // }
 
   if (arduboy.pressed(left_btn)) {
-    player.animation.vel.y = -walkSpeed * PIXEL_SCALE;
+    // player.animation.vel.y = -walkSpeed * PIXEL_SCALE;
+    Player::run(Direction::left);
   } else if (arduboy.pressed(right_btn)) {
-    player.animation.vel.y = walkSpeed * PIXEL_SCALE - 1;
+    // player.animation.vel.y = walkSpeed * PIXEL_SCALE - 1;
+    Player::run(Direction::right);
   } else if (arduboy.notPressed(left_btn | right_btn)) {
-    player.animation.vel.y = 0;
+    // player.animation.vel.y = 0;
+    Player::stop();
   }
 
   if (movementMode == TOPDOWN) {
-    if (arduboy.pressed(up_btn)) {
-      player.animation.vel.x = walkSpeed * PIXEL_SCALE - 1;
-    } else if (arduboy.pressed(down_btn)) {
-      player.animation.vel.x = -walkSpeed * PIXEL_SCALE;
-    } else if (arduboy.notPressed(up_btn | down_btn)) {
-      player.animation.vel.x = 0;
-    }
+    // if (arduboy.pressed(up_btn)) {
+    //   player.animation.vel.x = walkSpeed * PIXEL_SCALE - 1;
+    // } else if (arduboy.pressed(down_btn)) {
+    //   player.animation.vel.x = -walkSpeed * PIXEL_SCALE;
+    // } else if (arduboy.notPressed(up_btn | down_btn)) {
+    //   player.animation.vel.x = 0;
+    // }
   }
 
   if (arduboy.justPressed(A_BUTTON)) {
