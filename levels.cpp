@@ -307,7 +307,7 @@ void generateEnemies(uint8_t room[][SCREENWIDTH]) {
     i = random(0, SCREENHEIGHT);
     j = random(0, SCREENWIDTH);
   };
-  // Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+  Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
   // Enemies::spawn(EnemyType::tortoise, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
   // */
 }

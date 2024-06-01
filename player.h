@@ -63,6 +63,6 @@ namespace Player {
   void bounce();
   void land();
 
-  collision_t checkTileCollisions(animation_t anim, position_t *next);
-  void checkEnemyCollisions(animation_t anim, position_t *next);
+  void checkTileCollisions(position_t *nextPos, velocity_t *nextVel);
+  void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel);
 }

@@ -184,7 +184,6 @@ void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
         collision_t temp = Utils::collisionCorrect(enemy.animation, nextPos, block);
         // set velocity according to collision
         if (temp.v == BOTTOM) {
-          Utils::println("BOTTOM");
           if (enemy.type == EnemyType::worm || enemy.type == EnemyType::tortoise) {
             if (j > 0) {
               if (!levelMap[i][j - 1]) {  

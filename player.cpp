@@ -54,7 +54,7 @@ void update() {
   position_t nextPos = player.animation.pos;
 
   velocity_t nextVel = player.animation.vel;
-  nextVel.x = max(nextVel.x, -8 * PIXEL_SCALE);
+
 
   // physics update
   if (movementMode == PLATFORM) {
@@ -66,9 +66,14 @@ void update() {
       }
     }
   }
+  nextVel.x = max(nextVel.x, -8 * PIXEL_SCALE);  // TODO #define
 
   nextPos.x += nextVel.x;
   nextPos.y += nextVel.y;
+
+  //adjust for collisions
+  checkEnemyCollisions(&nextPos, &nextVel);
+  checkTileCollisions(&nextPos, &nextVel);
 
   //Boundary check
   if (nextPos.y / PIXEL_SCALE <= SCREENLEFT - player.animation.sprite->dy) {
@@ -79,31 +84,13 @@ void update() {
     nextVel.y = 0;
   }
 
-  //adjust for collisions
-  collision_t type = checkTileCollisions(player.animation, &nextPos);
-  if (type.v > NONE) {
-    if (type.v == BOTTOM) {
-      if (player.state != PlayerState::grounded) {
-        Bullet::reload();
-        Player::land();
-      }
-    }
-    nextVel.x = 0;
-  }
-  if (type.h == LEFT | type.h == RIGHT) {
-    nextVel.y = 0;
-  }
-
-
-
+  Utils::println(nextVel.x);
   player.animation.vel = nextVel;
 
   //check if falling
   if ((player.state == PlayerState::grounded) && (nextPos.x / PIXEL_SCALE < player.animation.pos.x / PIXEL_SCALE)) {
     fall();
   }
-
-  checkEnemyCollisions(player.animation, &nextPos);
 
   player.animation.pos = nextPos;
 
@@ -136,36 +123,51 @@ void draw() {
   }
 }
 
-collision_t checkTileCollisions(animation_t anim, position_t *next) {
-  collision_t type = { NONE, NONE };
+void checkTileCollisions(position_t *nextPos, velocity_t *nextVel) {
 
-  window_t wd = Utils::getCollisionWindow(anim.pos);
+  window_t wd = Utils::getCollisionWindow(player.animation.pos);
 
-  // tile collisions
   for (uint16_t i = wd.xMin; i <= wd.xMax; i++) {
     for (uint8_t j = wd.yMin; j <= wd.yMax; j++) {
       if (levelMap[i][j]) {
         Rect block = levelMap[i][j] == DASH ? Rect((MAPHEIGHT - i - 1) * BLOCKSIZE + 6, j * BLOCKSIZE, 2, BLOCKSIZE) : Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
-        collision_t temp = Utils::collisionCorrect(anim, next, block);
-        if (temp.v) type.v = temp.v;
-        if (temp.h) type.h = temp.h;
+        collision_t type = Utils::collisionCorrect(player.animation, nextPos, block);
+        if (type.v > NONE) {
+          if (type.v == BOTTOM) {
+            if (player.state != PlayerState::grounded) {
+              Bullet::reload();
+              Player::land();
+            }
+          }
+          nextVel->x = 0;
+        }
+        if (type.h == LEFT | type.h == RIGHT) {
+          nextVel->y = 0;
+        }
       }
     }
   }
-
-  return type;
 }
 
-void checkEnemyCollisions(animation_t anim, position_t *next) {
+void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
     if (enemy[i].animation.active) {
       Rect enemyRect = Rect(enemy[i].animation.pos.x / PIXEL_SCALE + enemy[i].animation.sprite->dx, enemy[i].animation.pos.y / PIXEL_SCALE + enemy[i].animation.sprite->dy, enemy[i].animation.sprite->h, enemy[i].animation.sprite->w);
       // arduboy.drawRect(enemy[i].animation.pos.x/PIXEL_SCALE + enemy[i].animation.sprite->dx - cameraOffset, enemy[i].animation.pos.y/PIXEL_SCALE + enemy[i].animation.sprite->dy, enemy[i].animation.sprite->h, enemy[i].animation.sprite->w);
-      collision_t type = Utils::collisionCorrect(anim, next, enemyRect);
+      collision_t type = Utils::collisionCorrect(player.animation, nextPos, enemyRect, true, true);
       if (type.v == BOTTOM) {
         bounce();
+        nextVel->x = BOUNCE_VELOCITY;
         Bullet::reload();
         enemy[i].animation.active = false;
+      } else if (type.v == TOP) {
+        nextVel->x = -64;
+      }
+
+      if (type.h == LEFT) {
+        nextVel->y = 128;
+      } else if (type.h == RIGHT) {
+        nextVel->y = -128;
       }
     }
   }
@@ -189,7 +191,7 @@ void jump() {
 }
 
 void bounce() {
-  player.animation.vel.x = BOUNCE_VELOCITY;
+  // player.animation.vel.x = BOUNCE_VELOCITY;
   player.animation.t = 0;
   player.state = PlayerState::bouncing;
   player.animation.sprite = &playerJumpSprite;  //TODO replace with bounce sprite
