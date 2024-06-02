@@ -4,6 +4,12 @@
 #include "globals.h"
 #include "bullet.h"
 #include "controls.h"
+#include "hud.h"
+
+#include "levels.h"
+#include "player.h"
+#include "enemies.h"
+#include "bitmaps.h"
 
 
 namespace Game {

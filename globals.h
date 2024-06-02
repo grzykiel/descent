@@ -62,8 +62,8 @@
 #define KICKBACK_H   384
 #define KICKBACK_V    64
 
-#define PLAYER_IFRAMES   60
-#define FLICKER_DURATION  10
+#define PLAYER_IFRAMES   90
+#define FLICKER_DURATION  5
 
 #define PIXEL_SCALE 128
 
@@ -152,6 +152,7 @@ namespace Utils
 
   bool updateAnimation(animation_t *animation);
   bool flickering(animation_t *animation);
+  bool flickering(int8_t *f);
 
   void println(char *str);
   void println(int pr_int);

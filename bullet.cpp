@@ -3,27 +3,31 @@
 sprite_t muzzleFlashSprite = {
   ShootShoes::muzzleFlash,  //sprite
   nullptr,
-  0,                        //last frame
-  muzzleFlashTransitions,   //frame transitions
-  8,                        //dx
-  0,                        //dy
-  8,                        //w
-  8,                        //h
+  0,                       //last frame
+  muzzleFlashTransitions,  //frame transitions
+  8,                       //dx
+  0,                       //dy
+  8,                       //w
+  8,                       //h
 };
 animation_t muzzleFlash;
 
 sprite_t bulletSprite = {
   ShootShoes::bullet,  //sprite
   nullptr,
-  6,                   //last frame
-  bulletTransitions,   //frame transitions
-  0,                   //dx
-  2,                   //dy
-  4,                   //w
-  4,                   //h
+  6,                  //last frame
+  bulletTransitions,  //frame transitions
+  0,                  //dx
+  2,                  //dy
+  4,                  //w
+  4,                  //h
 };
+
 bullet_t bullet[5];
-uint8_t bulletsUsed = 0;
+// uint8_t bulletsUsed = 0;
+// TODO include in initBullets()
+uint8_t bulletCapacity = MAX_BULLETS;
+uint8_t bulletsRemaining = bulletCapacity;
 uint8_t chamber = 0;
 
 namespace Bullet {
@@ -43,7 +47,7 @@ void draw() {
 }
 
 void shoot() {
-  if (bulletsUsed < MAX_BULLETS) {
+  if (bulletsRemaining > 0) {
     Player::thrust();
 
     muzzleFlash.active = true;
@@ -59,12 +63,12 @@ void shoot() {
     bullet[chamber].animation.t = 0;
     chamber = (chamber + 1) % MAX_BULLETS;
 
-    bulletsUsed++;
+    bulletsRemaining--;
   }
 }
 
 void reload() {
-  bulletsUsed = 0;
+  bulletsRemaining = bulletCapacity;
 }
 
 void initMuzzleFlash() {
@@ -104,20 +108,20 @@ void updateBullets() {
 
 void collisionCheck() {
   for (int b = 0; b < MAX_BULLETS; b++) {
-    if (bullet[b].animation.active) {
-      // window_t wd = Utils::getCollisionWindow(bullet[b].animation.pos.x/PIXEL_SCALE, bullet[b].animation.pos.y/PIXEL_SCALE);
-      window_t wd = Utils::getCollisionWindow(bullet[b].animation.pos);
+    if (!bullet[b].animation.active) continue;
 
-      for (int i = wd.xMin; i <= wd.xMax; i++) {
-        for (int j = wd.yMin; j <= wd.yMax; j++) {
-          if (levelMap[i][j]) {
-            if (levelMap[i][j] != DASH) {
-              Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
-              if (Utils::collides(bullet[b].animation, blockRect)) {
-                bullet[b].animation.active = false;
-                if (levelMap[i][j] == BLOCK) {
-                  levelMap[i][j] = 0;
-                }
+    // window_t wd = Utils::getCollisionWindow(bullet[b].animation.pos.x/PIXEL_SCALE, bullet[b].animation.pos.y/PIXEL_SCALE);
+    window_t wd = Utils::getCollisionWindow(bullet[b].animation.pos);
+
+    for (int i = wd.xMin; i <= wd.xMax; i++) {
+      for (int j = wd.yMin; j <= wd.yMax; j++) {
+        if (levelMap[i][j]) {
+          if (levelMap[i][j] != DASH) {
+            Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
+            if (Utils::collides(bullet[b].animation, blockRect)) {
+              bullet[b].animation.active = false;
+              if (levelMap[i][j] == BLOCK) {
+                levelMap[i][j] = 0;
               }
             }
           }
@@ -135,8 +139,9 @@ void drawBullets() {
   }
 }
 
+// DEBUG
 void drawAmmo() {
   // arduboy.setCursor(player.animation.pos.x + 9 - cameraOffset, player.animation.pos.y);
-  // arduboy.print(MAX_BULLETS - bulletsUsed);
+  // arduboy.print(bulletsRemaining);
 }
 }

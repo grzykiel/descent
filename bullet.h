@@ -20,7 +20,8 @@ extern animation_t muzzleFlash;
 extern sprite_t bulletSprite;
 extern animation_t bulletAnim;
 extern bullet_t bullet[MAX_BULLETS];
-extern uint8_t bulletsUsed;
+extern uint8_t capacity;
+extern uint8_t bulletsRemaining;
 extern uint8_t chamber;
 
 const uint8_t bulletTransitions[7] = {1, 2, 3, 5, 8, 11, 15}; //, 20};

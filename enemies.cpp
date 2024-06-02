@@ -1,5 +1,5 @@
 #include "enemies.h"
-#include "bullet.h"
+// #include "bullet.h"
 
 
 uint8_t blobTransitions[2] = { 45, 90 };

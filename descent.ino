@@ -10,6 +10,7 @@
 #include "sandbox.h"
 #include "player.h"
 #include "enemies.h"
+#include "hud.h"
 
 
 void setup() {

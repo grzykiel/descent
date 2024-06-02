@@ -128,14 +128,18 @@ void shiftMap() {
   }
 
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
-    if (enemy[i].animation.active) {
-      if (enemy[i].animation.pos.x < 49152 - 128 * PIXEL_SCALE) {  //TODO #define threshold
-        enemy[i].animation.pos.x += 128 * PIXEL_SCALE;
-      } else {
-        enemy[i].animation.active = false;
-      }
+    if (!enemy[i].animation.active) continue;
+    if (enemy[i].animation.pos.x < 49152 - 128 * PIXEL_SCALE) {  //TODO #define threshold
+      enemy[i].animation.pos.x += 128 * PIXEL_SCALE;
+    } else {
+      enemy[i].animation.active = false;
     }
   }
+
+  if (damageCounter.t > 0) {
+    damageCounter.pos.x += 128 * PIXEL_SCALE;
+  }
+
 
   copyMap(levelMap, 16, levelMap, 0);
   copyMap(levelMap, 32, levelMap, 16);

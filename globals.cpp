@@ -98,18 +98,22 @@ bool updateAnimation(animation_t *anim) {
 }
 
 bool flickering(animation_t *anim) {
-  if (anim->iframe == 0) return false;
-  if (anim->iframe > 0) {
-    anim->iframe--;
-  } else if (anim->iframe < 0) {
-    anim->iframe++;
+  return flickering(&anim->iframe);
+}
+
+bool flickering(int8_t *f) {
+  if (*f == 0) return false;
+  if (*f > 0) {
+    (*f)--;
+  } else if (*f < 0) {
+    (*f)++;
   }
 
-  if (abs(anim->iframe) & FLICKER_DURATION) {
-    anim->iframe *= -1;
+  if (abs(*f) % FLICKER_DURATION == 0) {
+    *f *= -1;
   }
 
-  return (anim->iframe < 0);
+  return (*f < 0);
 }
 
 int sign(int x) {

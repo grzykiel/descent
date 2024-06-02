@@ -3,6 +3,7 @@
 #include "globals.h"
 #include "player.h"
 #include "enemies.h"
+#include "hud.h"
 
 #define WALL_WIDTH_MAX 4
 #define DASH_WIDTH_MIN 2

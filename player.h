@@ -2,6 +2,7 @@
 #define PLAYER_H
 #include "levels.h"
 #include "globals.h"
+#include "hud.h"
 
 
 typedef struct {

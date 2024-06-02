@@ -169,6 +169,7 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
       } else if (type.v == TOP) {
         nextVel->x = -KICKBACK_V;
         flicker();
+        HUD::onDamaged();
       }
 
 
@@ -179,6 +180,7 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
           nextVel->y = -KICKBACK_H;
         }
         flicker();
+        HUD::onDamaged();
       }
     }
   }

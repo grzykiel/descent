@@ -3,6 +3,7 @@
 #include "globals.h"
 #include "bitmaps.h"
 #include "player.h"
+#include "bullet.h"
 
 #define MAX_ENEMIES   5
 
