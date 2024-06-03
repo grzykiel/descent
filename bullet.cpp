@@ -24,7 +24,6 @@ sprite_t bulletSprite = {
 };
 
 bullet_t bullet[5];
-// uint8_t bulletsUsed = 0;
 // TODO include in initBullets()
 uint8_t bulletCapacity = MAX_BULLETS;
 uint8_t bulletsRemaining = bulletCapacity;
@@ -64,6 +63,9 @@ void shoot() {
     chamber = (chamber + 1) % MAX_BULLETS;
 
     bulletsRemaining--;
+    HUD::onShoot();
+  } else {
+
   }
 }
 

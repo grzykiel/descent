@@ -4,6 +4,7 @@
 #include "bitmaps.h"
 #include "player.h"
 #include "game.h"
+#include "hud.h"
 
 typedef struct {
   animation_t animation; //TODO refactor to remove wrapper struct

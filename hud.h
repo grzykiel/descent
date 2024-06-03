@@ -7,13 +7,12 @@
 typedef struct {
   const unsigned char *sprite;
   uint8_t t;
-  uint8_t displayDuration;
   int8_t f;
-  uint8_t flickerDuration;
   position_t pos;
 } hud_t;
 
 extern hud_t damageCounter;
+extern hud_t ammoCounter;
 
 namespace HUD {
 
@@ -24,6 +23,7 @@ namespace HUD {
   void draw(hud_t hud, uint8_t frame);
 
   void onDamaged();
+  void onShoot();
 
 
 }

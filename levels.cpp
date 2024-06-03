@@ -140,6 +140,10 @@ void shiftMap() {
     damageCounter.pos.x += 128 * PIXEL_SCALE;
   }
 
+  if (ammoCounter.t > 0) {
+    ammoCounter.pos.x += 128 * PIXEL_SCALE;
+  }
+
 
   copyMap(levelMap, 16, levelMap, 0);
   copyMap(levelMap, 32, levelMap, 16);
