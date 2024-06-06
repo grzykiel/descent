@@ -1,7 +1,6 @@
 
 #include "levels.h"
-#include "game.h"
-#include "bitmaps.h"
+
 
 
 uint8_t nextRoom[SCREENHEIGHT][SCREENWIDTH];
@@ -134,6 +133,11 @@ void shiftMap() {
     } else {
       enemy[i].animation.active = false;
     }
+  }
+
+  for (uint8_t i = 0; i < MAX_BLOCK_FRAGMENTS; i++) {
+    if (blockFragment[i].active) continue;
+    blockFragment[i].pos.x += 128*PIXEL_SCALE;
   }
 
   if (damageCounter.t > 0) {

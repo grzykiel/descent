@@ -1,8 +1,4 @@
 #include "game.h"
-// #include "levels.h"
-// #include "player.h"
-// #include "enemies.h"
-// #include "bitmaps.h"
 
 namespace Game {
 void loop() {
@@ -42,7 +38,8 @@ void input() {
   //debug & tuning
   if (arduboy.justPressed(B_BUTTON)) {
     // Level::clearBlocks();
-    Player::flicker();
+    // Player::flicker();
+    Particles::spawnBlockFragment(8, 4);
   }
 
   if (arduboy.justPressed(up_btn)) {
@@ -55,6 +52,7 @@ void update() {
   Player::update();
   Bullet::update();
   Enemies::update();
+  Particles::update();
   HUD::update();
   Level::update();
   updateCamera();
@@ -72,11 +70,9 @@ void draw() {
 
   // draw level
   Level::draw();
-
   Bullet::draw();
-
   Enemies::draw();
-
+  Particles::draw();
   HUD::draw();
 }
 

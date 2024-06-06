@@ -6,19 +6,19 @@
 
 #define FPS 60
 
-#define STATE_MENU    0
-#define STATE_GAME    1
+#define STATE_MENU 0
+#define STATE_GAME 1
 #define STATE_SANDBOX 2
 
 //debug movement modes
-#define TOPDOWN   0
-#define PLATFORM  1
+#define TOPDOWN 0
+#define PLATFORM 1
 
-#define SCREENLEFT    0
-#define SCREENRIGHT   64
-#define SCREENTOP     128
-#define SCREENBOTTOM  0
-#define SCREENMID     64
+#define SCREENLEFT 0
+#define SCREENRIGHT 64
+#define SCREENTOP 128
+#define SCREENBOTTOM 0
+#define SCREENMID 64
 
 #define MAPWIDTH 8
 #define MAPHEIGHT 48
@@ -26,44 +26,44 @@
 #define REMAP_THRESHOLD 64
 
 //screen dimensions in blocks
-#define SCREENWIDTH   8
-#define SCREENHEIGHT  16
+#define SCREENWIDTH 8
+#define SCREENHEIGHT 16
 
 #define BLOCKSIZE 8
-#define PLAYER_WIDTH  6
+#define PLAYER_WIDTH 6
 #define PLAYER_HEIGHT 8
-#define PLAYER_OFFSET 1 //sprite offset
+#define PLAYER_OFFSET 1  //sprite offset
 
 // special tile indices
-#define DASH  17
+#define DASH 17
 #define BLOCK 18
 
 // Collision locations
-#define NONE        0
-#define RIGHT       1
-#define LEFT        2
-#define BOTTOM      1
-#define TOP         2
+#define NONE 0
+#define RIGHT 1
+#define LEFT 2
+#define BOTTOM 1
+#define TOP 2
 
 // Jump
 #define GRAVITY -7
 #define JUMP_VELOCITY 246
 #define THRUST 7
 #define BOUNCE_VELOCITY 128
-#define HALF_JUMP   15
-#define JUMP_TOP    25
-#define JUMPFRAMES  50
-#define FALL_FRAME  4
+#define HALF_JUMP 15
+#define JUMP_TOP 25
+#define JUMPFRAMES 50
+#define FALL_FRAME 4
 #define TERMINAL_VELOCITY -4
 
-#define RUN_ACCEL     64
+#define RUN_ACCEL 64
 #define RUN_VELOCITY 128
 
-#define KICKBACK_H   384
-#define KICKBACK_V    64
+#define KICKBACK_H 384
+#define KICKBACK_V 64
 
-#define PLAYER_IFRAMES   90
-#define FLICKER_DURATION  5
+#define PLAYER_IFRAMES 90
+#define FLICKER_DURATION 5
 
 #define PIXEL_SCALE 128
 
@@ -72,12 +72,11 @@ extern Sprites sprites;
 
 extern uint8_t gameState;
 
-extern uint8_t movementMode; //debug
+extern uint8_t movementMode;  //debug
 
 extern int16_t cameraOffset;
 
-enum class Direction : uint8_t
-{
+enum class Direction : uint8_t {
   up,
   down,
   left,
@@ -114,8 +113,8 @@ typedef struct {
   uint8_t last;
   uint8_t *transitions;
 
-  uint8_t dx;
-  uint8_t dy;
+  int8_t dx;
+  int8_t dy;
   uint8_t w;
   uint8_t h;
 } sprite_t;
@@ -133,31 +132,43 @@ typedef struct {
 } animation_t;
 
 typedef struct {
+  const unsigned char *sprite;
+  uint8_t *transitions;
+  bool active;
+  int8_t t;
+  uint8_t frame;
+  uint8_t last;
+  position_t pos;
+} particle_t;
+
+typedef struct {
   uint8_t xMin;
   uint8_t xMax;
   uint8_t yMin;
   uint8_t yMax;
 } window_t;
 
-namespace Utils 
-{
-  int trim(int p, int l, int h);
-  int sign(int x);
-  window_t getCollisionWindow(position_t pos);
-  window_t getCollisionWindow(uint16_t x, int16_t y);
-  bool collides(animation_t anim, Rect block);
-  bool collides(animation_t anim1, animation_t anim2);
-  collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider, bool horizontal, bool vertical);
-  collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider);
+namespace Utils {
+int trim(int p, int l, int h);
+int sign(int x);
+window_t getCollisionWindow(position_t pos);
+window_t getCollisionWindow(uint16_t x, int16_t y);
+bool collides(animation_t anim, Rect block);
+bool collides(animation_t anim1, animation_t anim2);
+collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider, bool horizontal, bool vertical);
+collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider);
 
-  bool updateAnimation(animation_t *animation);
-  bool flickering(animation_t *animation);
-  bool flickering(int8_t *f);
+bool updateAnimation(animation_t *animation);
+bool updateAnimation(particle_t *particle);
+bool flickering(animation_t *animation);
+bool flickering(int8_t *f);
 
-  void println(char *str);
-  void println(int pr_int);
-  void println(uint16_t pr_int);
-  void println(uint8_t pr_int);
+
+//DEBUG
+void println(char *str);
+void println(int pr_int);
+void println(uint16_t pr_int);
+void println(uint8_t pr_int);
 }
 
 

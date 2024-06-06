@@ -124,6 +124,7 @@ void collisionCheck() {
               bullet[b].animation.active = false;
               if (levelMap[i][j] == BLOCK) {
                 levelMap[i][j] = 0;
+                Particles::spawnBlockFragment(i, j);
               }
             }
           }

@@ -4,6 +4,9 @@
 #include "player.h"
 #include "enemies.h"
 #include "hud.h"
+#include "game.h"
+#include "bitmaps.h"
+#include "particles.h"
 
 #define WALL_WIDTH_MAX 4
 #define DASH_WIDTH_MIN 2
@@ -36,6 +39,8 @@ namespace Level
   void generateBlocks(uint8_t room[][SCREENWIDTH]);
 
   void generateEnemies(uint8_t room[][SCREENWIDTH]);
+
+  void destroyBlock(int16_t i, uint8_t j);
 
   void clearBlocks(); // for debug
 

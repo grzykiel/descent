@@ -24,7 +24,7 @@ void update() {
     damageCounter.t--;
   }
 
-  if (bulletsRemaining > 0) {
+  if (bulletsRemaining > 0 && ammoCounter.t > 0) {
     ammoCounter.t--;
     if (ammoCounter.t > 30 || ammoCounter.f == 0) {
       ammoCounter.pos.x = player.animation.pos.x + 8 * PIXEL_SCALE;

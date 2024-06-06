@@ -5,6 +5,7 @@
 #include "player.h"
 #include "game.h"
 #include "hud.h"
+#include "particles.h"
 
 typedef struct {
   animation_t animation; //TODO refactor to remove wrapper struct

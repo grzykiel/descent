@@ -97,6 +97,18 @@ bool updateAnimation(animation_t *anim) {
   return true;
 }
 
+bool updateAnimation(particle_t *particle) {
+  particle->t++;
+  if (particle->t == particle->transitions[particle->frame]) {
+    if (particle->frame < particle->last) {
+      particle->frame++;
+    } else {
+      return false;
+    }
+  }
+  return true;
+}
+
 bool flickering(animation_t *anim) {
   return flickering(&anim->iframe);
 }

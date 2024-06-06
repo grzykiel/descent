@@ -11,6 +11,7 @@
 #include "player.h"
 #include "enemies.h"
 #include "hud.h"
+#include "particles.h"
 
 
 void setup() {

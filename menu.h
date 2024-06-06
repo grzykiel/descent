@@ -26,6 +26,8 @@ namespace Menu
       Player::init();
       Enemies::init();
       Level::init();
+      Bullet::init();
+      Particles::init();
       gameState = STATE_GAME;
 
     }

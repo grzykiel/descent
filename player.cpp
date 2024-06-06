@@ -4,7 +4,6 @@
 // #include "levels.h"
 #include "bitmaps.h"
 #include "enemies.h"
-// #include "enums.h"
 
 sprite_t playerRunSprite = {
   Player::runRightSprite,
@@ -113,8 +112,6 @@ void updateAnimation() {
     Utils::updateAnimation(&player.animation);
   }
 }
-
-
 
 void draw() {
   if (Utils::flickering(&player.animation)) return;
