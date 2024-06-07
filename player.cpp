@@ -138,7 +138,7 @@ void checkTileCollisions(position_t *nextPos, velocity_t *nextVel) {
               Player::land();
             }
           } else if (type.v == TOP && levelMap[i][j] == BLOCK) {
-            levelMap[i][j] = 0;
+            Level::destroyBlock(i, j);
           }
           nextVel->x = 0;
         }

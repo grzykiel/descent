@@ -15,8 +15,14 @@ namespace Particles {
   void update();
   void draw();
 
+  void initRecharge();
+  void activateRecharge();
+
   void draw(particle_t);
+
+  void initBlockFragment(uint8_t i);
   void spawnBlockFragment(uint16_t i, uint8_t j);
+
 }
 
 #endif

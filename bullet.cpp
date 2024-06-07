@@ -65,12 +65,14 @@ void shoot() {
     bulletsRemaining--;
     HUD::onShoot();
   } else {
-
   }
 }
 
 void reload() {
-  bulletsRemaining = bulletCapacity;
+  if (bulletsRemaining < bulletCapacity) {
+    bulletsRemaining = bulletCapacity;
+    Particles::activateRecharge();
+  }
 }
 
 void initMuzzleFlash() {
@@ -123,8 +125,7 @@ void collisionCheck() {
             if (Utils::collides(bullet[b].animation, blockRect)) {
               bullet[b].animation.active = false;
               if (levelMap[i][j] == BLOCK) {
-                levelMap[i][j] = 0;
-                Particles::spawnBlockFragment(i, j);
+                Level::destroyBlock(i, j);
               }
             }
           }

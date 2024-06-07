@@ -4,6 +4,7 @@
 #include "bitmaps.h"
 #include "player.h"
 #include "game.h"
+#include "levels.h"
 #include "hud.h"
 #include "particles.h"
 

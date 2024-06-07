@@ -137,7 +137,7 @@ void shiftMap() {
 
   for (uint8_t i = 0; i < MAX_BLOCK_FRAGMENTS; i++) {
     if (blockFragment[i].active) continue;
-    blockFragment[i].pos.x += 128*PIXEL_SCALE;
+    blockFragment[i].pos.x += 128 * PIXEL_SCALE;
   }
 
   if (damageCounter.t > 0) {
@@ -319,6 +319,11 @@ void generateEnemies(uint8_t room[][SCREENWIDTH]) {
   } else {
     Enemies::spawn(EnemyType::tortoise, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
   }
+}
+
+void destroyBlock(int16_t i, uint8_t j) {
+  levelMap[i][j] = 0;
+  Particles::spawnBlockFragment(i, j);
 }
 
 
