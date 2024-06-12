@@ -4,6 +4,12 @@
 #include "globals.h"
 #include "hud.h"
 
+#include "game.h"
+// #include "levels.h"
+#include "bitmaps.h"
+#include "enemies.h"
+#include "bullet.h"
+
 
 typedef struct {
   // Direction dir;

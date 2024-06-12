@@ -28,10 +28,17 @@ void input() {
 
   if (arduboy.justPressed(A_BUTTON)) {
     if (player.state != PlayerState::grounded) {
+      shootTimer = 0;
       Bullet::shoot();
     } else {
       Player::jump();
+      triggerReleased = false;
     }
+  } else if (arduboy.pressed(A_BUTTON) && player.state != PlayerState::grounded) {
+    if (triggerReleased) Bullet::shoot();
+  } else if (arduboy.justReleased(A_BUTTON)) {
+    triggerReleased = true;
+    shootTimer = FIRE_RATE;
   }
 
 
@@ -39,7 +46,6 @@ void input() {
   if (arduboy.justPressed(B_BUTTON)) {
     // Level::clearBlocks();
     // Player::flicker();
-    Particles::spawnBlockFragment(8, 4);
   }
 
   if (arduboy.justPressed(up_btn)) {

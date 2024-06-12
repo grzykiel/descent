@@ -1,9 +1,6 @@
 #include "player.h"
 
-#include "game.h"
-// #include "levels.h"
-#include "bitmaps.h"
-#include "enemies.h"
+
 
 sprite_t playerRunSprite = {
   Player::runRightSprite,
@@ -248,6 +245,7 @@ void fall() {
 void land() {
   player.state = PlayerState::grounded;
   player.animation.sprite = &playerRunSprite;
+  triggerReleased = false;
   /*if (player.dir == Direction::left) {
     player.animation.sprite->sprite = Player::runLeftSprite;
   } else {

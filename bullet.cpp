@@ -28,6 +28,8 @@ bullet_t bullet[5];
 uint8_t bulletCapacity = MAX_BULLETS;
 uint8_t bulletsRemaining = bulletCapacity;
 uint8_t chamber = 0;
+uint8_t shootTimer = 0;
+bool triggerReleased = false;
 
 namespace Bullet {
 void init() {
@@ -46,25 +48,31 @@ void draw() {
 }
 
 void shoot() {
-  if (bulletsRemaining > 0) {
-    Player::thrust();
+  if (shootTimer > 0) {
+    shootTimer--;
+  } else if (shootTimer == 0) {
+    if (bulletsRemaining > 0) {
+      Player::thrust();
 
-    muzzleFlash.active = true;
-    muzzleFlash.t = 0;
-    muzzleFlash.frame = 0;
+      muzzleFlash.active = true;
+      muzzleFlash.t = 0;
+      muzzleFlash.frame = 0;
 
-    bullet[chamber].animation.active = true;
-    bullet[chamber].animation.pos.x = player.animation.pos.x;
-    bullet[chamber].animation.pos.y = player.animation.pos.y;
-    bullet[chamber].animation.vel.x = BULLET_START_VEL;
-    bullet[chamber].animation.vel.y = player.animation.vel.y;
-    bullet[chamber].animation.frame = 0;
-    bullet[chamber].animation.t = 0;
-    chamber = (chamber + 1) % MAX_BULLETS;
+      bullet[chamber].animation.active = true;
+      bullet[chamber].animation.pos.x = player.animation.pos.x;
+      bullet[chamber].animation.pos.y = player.animation.pos.y;
+      bullet[chamber].animation.vel.x = BULLET_START_VEL;
+      bullet[chamber].animation.vel.y = player.animation.vel.y;
+      bullet[chamber].animation.frame = 0;
+      bullet[chamber].animation.t = 0;
+      chamber = (chamber + 1) % MAX_BULLETS;
 
-    bulletsRemaining--;
-    HUD::onShoot();
-  } else {
+      bulletsRemaining--;
+      HUD::onShoot();
+
+      shootTimer = FIRE_RATE;
+    } else {
+    }
   }
 }
 

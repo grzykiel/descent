@@ -15,10 +15,13 @@ typedef struct {
 #define MAX_BULLETS 5
 #define BULLET_ACCEL 20
 #define BULLET_START_VEL 410
+#define FIRE_RATE 15
 
 const uint8_t muzzleFlashTransitions[1] = {5};
 extern sprite_t muzzleFlashSprite;
 extern animation_t muzzleFlash;
+extern uint8_t shootTimer;
+extern bool triggerReleased;
 
 extern sprite_t bulletSprite;
 extern animation_t bulletAnim;
