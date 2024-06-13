@@ -31,6 +31,9 @@ uint8_t maxF = 120;
 
 uint8_t speed = 30;
 
+uint8_t x,y;
+uint8_t frame;
+
 
 
 namespace Sandbox {
@@ -46,52 +49,37 @@ void init() {
 
 void input() {
 
-  if (arduboy.justPressed(A_BUTTON)) {
-    f = maxF;
+  if (arduboy.pressed(left_btn)) {
+    y--;
+  } else if (arduboy.pressed(right_btn)) {
+    y++;
   }
-  if (arduboy.justPressed(up_btn)) {
-    speed++;
-  } else if (arduboy.justPressed(down_btn)) {
-    speed--;
+  if (arduboy.pressed(up_btn)) {
+    x++;
+  } else if (arduboy.pressed(down_btn)) {
+    x--;
   }
 
-  if (arduboy.justPressed(left_btn)) {
-    maxF--;
-  } else if (arduboy.justPressed(right_btn)) {
-    maxF++;
+  if (arduboy.justPressed(A_BUTTON)) {
+    frame++;
+  } else if (arduboy.justPressed(B_BUTTON)) {
+    frame--;
   }
+
 }
 
 void update() {
-
+  arduboy.fillRect(32, 32, 16, 16);
+  Sprites::drawPlusMask(x, y, Particles::explosionSprite, frame);
 }
 
 
 
 
 void draw() {
-  if (!flashing(&f)) arduboy.drawRect(60, 28, 8, 8);
-  Utils::println(speed);
-  Utils::println(maxF);
+
 }
 
-bool flashing(int8_t *f) {
-  // arduboy.print(*f);
-  if (*f == 0) return false;
-  if (*f > 0) {
-    *f = *f-1;
-    // arduboy.print(*f);
-  } else if (*f < 0) {
-    *f = *f+1;
-    // arduboy.print("false");
-  }
-
-  if (abs(*f)%speed == 0) {
-    *f *= -1;
-  }
-
-  return (*f < 0);  
-}
 
 
 }

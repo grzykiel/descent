@@ -190,7 +190,6 @@ void run(Direction dir) {
 }
 
 void stop() {
-  // arduboy.println("STOP");
   if (player.animation.vel.y < 0) {
     player.animation.vel.y = min(player.animation.vel.y + RUN_ACCEL, 0);
   } else if (player.animation.vel.y > 0) {
@@ -203,11 +202,6 @@ void jump() {
   player.animation.t = 0;
   player.state = PlayerState::jumping;
   player.animation.sprite = &playerJumpSprite;
-  /*if (player.dir == Direction::left) {
-    player.animation.sprite->sprite = Player::jumpLeftSprite;
-  } else {
-    player.animation.sprite->sprite = Player::jumpRightSprite;
-  }*/
   player.animation.frame = 0;
 }
 
@@ -216,11 +210,6 @@ void bounce() {
   player.animation.t = 0;
   player.state = PlayerState::bouncing;
   player.animation.sprite = &playerJumpSprite;  //TODO replace with bounce sprite
-  /*if (player.dir == Direction::left) {
-    player.animation.sprite->sprite = Player::jumpLeftSprite;
-  } else {
-    player.animation.sprite->sprite = Player::jumpRightSprite;
-  }*/
   player.animation.frame = 0;
 }
 
@@ -234,11 +223,6 @@ void fall() {
 
   player.state = PlayerState::falling;
   player.animation.sprite = &playerJumpSprite;
-  /*if (player.dir == Direction::left) {
-    player.animation.sprite->sprite = Player::jumpLeftSprite;
-  } else {
-    player.animation.sprite->sprite = Player::jumpRightSprite;
-  }*/
   player.animation.frame = FALL_FRAME;
 }
 
@@ -246,11 +230,6 @@ void land() {
   player.state = PlayerState::grounded;
   player.animation.sprite = &playerRunSprite;
   triggerReleased = false;
-  /*if (player.dir == Direction::left) {
-    player.animation.sprite->sprite = Player::runLeftSprite;
-  } else {
-    player.animation.sprite->sprite = Player::runRightSprite;
-  }*/
 }
 
 void flicker() {

@@ -46,6 +46,7 @@ void input() {
   if (arduboy.justPressed(B_BUTTON)) {
     // Level::clearBlocks();
     // Player::flicker();
+    Particles::spawnExplosion(player.animation.pos);
   }
 
   if (arduboy.justPressed(up_btn)) {

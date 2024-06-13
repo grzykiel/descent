@@ -17,7 +17,6 @@ namespace Sandbox
   void update();
   void draw();
 
-  bool flashing(int8_t *f);
 }
 
 extern uint8_t sandbox[SANDBOX_HEIGHT][SCREENWIDTH];

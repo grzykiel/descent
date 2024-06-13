@@ -230,13 +230,19 @@ void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
         if (enemy->type == EnemyType::tortoise) return;
         enemy->hp--;
         if (enemy->hp < 1) {
-          enemy->animation.active = false;
+          // enemy->animation.active = false;
+          kill(enemy);
         } else if (enemy->type == EnemyType::blob) {
           nextVel->x = BLOB_RECOIL_VEL;
         }
       }
     }
   }
+}
+
+void kill(enemy_t *enemy) {
+  enemy->animation.active = false;
+  Particles::spawnExplosion(enemy->animation.pos);
 }
 
 bool updateSprite(enemy_t *enemy) {

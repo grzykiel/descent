@@ -47,6 +47,7 @@ namespace Enemies {
   void wake(enemy_t *bat);
   void testWake();
 
+  void kill(enemy_t *enemy);
 }
 
 #endif
