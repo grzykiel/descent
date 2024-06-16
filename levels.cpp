@@ -121,8 +121,8 @@ void shiftMap() {
   player.animation.pos.x += 128 * PIXEL_SCALE;  //TODO #define shift value
 
   for (uint8_t i = 0; i < MAX_BULLETS; i++) {
-    if (bullet[i].animation.active) {
-      bullet[i].animation.pos.x += 128 * PIXEL_SCALE;
+    if (bullet[i].active) {
+      bullet[i].pos.x += 128 * PIXEL_SCALE;
     }
   }
 
@@ -136,9 +136,16 @@ void shiftMap() {
   }
 
   for (uint8_t i = 0; i < MAX_BLOCK_FRAGMENTS; i++) {
-    if (blockFragment[i].active) continue;
+    if (!blockFragment[i].active) continue;
     blockFragment[i].pos.x += 128 * PIXEL_SCALE;
   }
+
+  for (uint8_t i = 0; i < MAX_EXPLOSIONS; i++) {
+    if (!explosion[i].active) continue;
+    explosion[i].pos.x += 128 * PIXEL_SCALE;
+  }
+
+  if (smoke.active) smoke.pos.x += 128 * PIXEL_SCALE;
 
   if (damageCounter.t > 0) {
     damageCounter.pos.x += 128 * PIXEL_SCALE;
@@ -147,6 +154,8 @@ void shiftMap() {
   if (ammoCounter.t > 0) {
     ammoCounter.pos.x += 128 * PIXEL_SCALE;
   }
+
+
 
 
   copyMap(levelMap, 16, levelMap, 0);

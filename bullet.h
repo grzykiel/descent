@@ -8,16 +8,12 @@
 #include "hud.h"
 #include "particles.h"
 
-typedef struct {
-  animation_t animation; //TODO refactor to remove wrapper struct
-} bullet_t;
-
 #define MAX_BULLETS 5
 #define BULLET_ACCEL 20
 #define BULLET_START_VEL 410
 #define FIRE_RATE 15
 
-const uint8_t muzzleFlashTransitions[1] = {5};
+const uint8_t muzzleFlashTransitions[] = {5};
 extern sprite_t muzzleFlashSprite;
 extern animation_t muzzleFlash;
 extern uint8_t shootTimer;
@@ -25,12 +21,12 @@ extern bool triggerReleased;
 
 extern sprite_t bulletSprite;
 extern animation_t bulletAnim;
-extern bullet_t bullet[MAX_BULLETS];
+extern animation_t bullet[MAX_BULLETS];
 extern uint8_t capacity;
 extern uint8_t bulletsRemaining;
 extern uint8_t chamber;
 
-const uint8_t bulletTransitions[7] = {1, 2, 3, 5, 8, 11, 15}; //, 20};
+const uint8_t bulletTransitions[] = {1, 2, 3, 5, 8, 11, 15}; //, 20};
 
 namespace Bullet {
   void init();

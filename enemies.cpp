@@ -224,9 +224,9 @@ void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel) {
 
 void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
   for (uint8_t i = 0; i < MAX_BULLETS; i++) {
-    if (bullet[i].animation.active) {
-      if (Utils::collides(enemy->animation, bullet[i].animation)) {
-        bullet[i].animation.active = false;
+    if (bullet[i].active) {
+      if (Utils::collides(enemy->animation, bullet[i])) {
+        bullet[i].active = false;
         if (enemy->type == EnemyType::tortoise) return;
         enemy->hp--;
         if (enemy->hp < 1) {
