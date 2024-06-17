@@ -132,7 +132,6 @@ typedef struct {
 } animation_t;
 
 typedef struct {
-  const unsigned char *sprite;
   uint8_t *transitions;
   bool active;
   int8_t t;

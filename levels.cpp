@@ -88,7 +88,8 @@ void init() {
 void draw() {
 
   //wall boundaries
-  arduboy.drawRect(SCREENBOTTOM - 1, SCREENLEFT, SCREENTOP + 2, SCREENRIGHT);
+  arduboy.drawFastHLine(0, 0, 128);
+  arduboy.drawFastHLine(0, 63, 128);
 
   // levelMap
   int xMin = ceil(player.animation.pos.x / PIXEL_SCALE / (1.0f * BLOCKSIZE)) + 8;

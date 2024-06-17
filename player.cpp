@@ -159,7 +159,7 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
         bounce();
         nextVel->x = BOUNCE_VELOCITY;
         Bullet::reload();
-        enemy[i].animation.active = false;
+        Enemies::kill(&enemy[i], false);
       } else if (type.v == TOP) {
         nextVel->x = -KICKBACK_V;
         flicker();
