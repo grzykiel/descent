@@ -97,10 +97,10 @@ bool updateAnimation(animation_t *anim) {
   return true;
 }
 
-bool updateAnimation(particle_t *particle) {
+bool updateAnimation(particle_t *particle, uint8_t last) {
   particle->t++;
   if (particle->t == particle->transitions[particle->frame]) {
-    if (particle->frame < particle->last) {
+    if (particle->frame < last) { //} particle->last) {
       particle->frame++;
     } else {
       return false;

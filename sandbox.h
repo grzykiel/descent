@@ -7,7 +7,6 @@
 #include "game.h"
 #include "bullet.h"
 
-#define SANDBOX_HEIGHT 16
 
 namespace Sandbox
 {
@@ -19,9 +18,8 @@ namespace Sandbox
 
 }
 
-extern uint8_t sandbox[SANDBOX_HEIGHT][SCREENWIDTH];
 
-extern int camera;
+
 
 
 

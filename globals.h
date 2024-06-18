@@ -136,7 +136,7 @@ typedef struct {
   bool active;
   int8_t t;
   uint8_t frame;
-  uint8_t last;
+  // uint8_t last;
   position_t pos;
 } particle_t;
 
@@ -158,7 +158,7 @@ collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider, 
 collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider);
 
 bool updateAnimation(animation_t *animation);
-bool updateAnimation(particle_t *particle);
+bool updateAnimation(particle_t *particle, uint8_t last);
 bool flickering(animation_t *animation);
 bool flickering(int8_t *f);
 

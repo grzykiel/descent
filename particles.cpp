@@ -23,32 +23,27 @@ void init() {
   for (uint8_t i = 0; i < MAX_BLOCK_FRAGMENTS; i++) {
     blockFragment[i].transitions = blockTransitions;
     blockFragment[i].active = false;
-    blockFragment[i].last = 2;
     initBlockFragment(i);
   }
 
   for (uint8_t i = 0; i < MAX_EXPLOSIONS; i++) {
     explosion[i].transitions = explosionTransitions;
     explosion[i].active = false;
-    explosion[i].last = 7;
     initExplosion(i);
   }
 
   for (uint8_t i = 0; i < MAX_POPS; i++) {
     pop[i].transitions = popTransitions;
     pop[i].active = false;
-    pop[i].last = 7;
     initPop(i);
   }
 
   rechargeAnimation.transitions = rechargeTransitions;
   rechargeAnimation.active = false;
-  rechargeAnimation.last = 6;
   initRecharge();
 
   smoke.transitions = smokeTransitions;
   smoke.active = false;
-  smoke.last = 3;
   initSmoke();
 }
 
@@ -72,7 +67,7 @@ void initExplosion(uint8_t i) {
 
 void spawnExplosion(position_t pos) {
   initExplosion(explosionIndex);
-  explosion[explosionIndex].pos.x = pos.x / PIXEL_SCALE - 4; // TODO shift according to enemy centre
+  explosion[explosionIndex].pos.x = pos.x / PIXEL_SCALE - 4; // TODO shift according to 
   explosion[explosionIndex].pos.y = pos.y / PIXEL_SCALE;
   explosion[explosionIndex].active = true;
   explosionIndex = (explosionIndex + 1) % MAX_EXPLOSIONS;
@@ -85,8 +80,8 @@ void initPop(uint8_t i) {
 
 void spawnPop(position_t pos) {
   initPop(popIndex);
-  pop[popIndex].pos.x = pos.x / PIXEL_SCALE - 8; // TODO shift according to enemy centre
-  pop[popIndex].pos.y = pos.y / PIXEL_SCALE;
+  pop[popIndex].pos.x = pos.x / PIXEL_SCALE - 4; // TODO shift according to enemy centre
+  pop[popIndex].pos.y = pos.y / PIXEL_SCALE - 4;
   pop[popIndex].active = true;
   popIndex = (popIndex + 1) % MAX_POPS;
 }
@@ -117,30 +112,30 @@ void activateRecharge() {
 void update() {
   for (uint8_t i = 0; i < MAX_BLOCK_FRAGMENTS; i++) {
     if (blockFragment[i].active) {
-      blockFragment[i].active = Utils::updateAnimation(&blockFragment[i]);
+      blockFragment[i].active = Utils::updateAnimation(&blockFragment[i], BLOCK_TRANSITIONS);
     }
   }
 
   for (uint8_t i = 0; i < MAX_EXPLOSIONS; i++) {
     if (explosion[i].active) {
-      explosion[i].active = Utils::updateAnimation(&explosion[i]);
+      explosion[i].active = Utils::updateAnimation(&explosion[i], EXPLOSION_TRANSITIONS);
     }
   }
 
   for (uint8_t i = 0; i < MAX_POPS; i++) {
     if (pop[i].active) {
-      pop[i].active = Utils::updateAnimation(&pop[i]);
+      pop[i].active = Utils::updateAnimation(&pop[i], POP_TRANSITIONS);
     }
   }
 
   if (rechargeAnimation.active) {
-    rechargeAnimation.active = Utils::updateAnimation(&rechargeAnimation);
+    rechargeAnimation.active = Utils::updateAnimation(&rechargeAnimation, RECHARGE_TRANSITIONS);
     rechargeAnimation.pos.x = player.animation.pos.x / PIXEL_SCALE;
     rechargeAnimation.pos.y = player.animation.pos.y / PIXEL_SCALE - 4;
   }
 
   if (smoke.active) {
-    smoke.active = Utils::updateAnimation(&smoke);
+    smoke.active = Utils::updateAnimation(&smoke, SMOKE_TRANSITIONS);
   }
 }
 

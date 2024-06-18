@@ -9,6 +9,12 @@
 #define MAX_EXPLOSIONS      5
 #define MAX_POPS            5
 
+#define BLOCK_TRANSITIONS     2
+#define EXPLOSION_TRANSITIONS 7
+#define POP_TRANSITIONS       7
+#define SMOKE_TRANSITIONS     3
+#define RECHARGE_TRANSITIONS  6
+
 extern particle_t blockFragment[MAX_BLOCK_FRAGMENTS];
 extern particle_t explosion[MAX_EXPLOSIONS];
 extern particle_t pop[MAX_POPS];
