@@ -7,6 +7,14 @@ void loop() {
   draw();
 }
 
+void init() {
+  Player::init();
+  Enemies::init();
+  Level::init();
+  Particles::init();
+  Bullet::init();
+}
+
 void input() {
   if (arduboy.pressed(left_btn)) {
     Player::run(Direction::left);
@@ -52,7 +60,6 @@ void input() {
   if (arduboy.justPressed(up_btn)) {
   } else if (arduboy.justPressed(down_btn)) {
   }
-
 }
 
 void update() {

@@ -118,14 +118,17 @@ void update() {
   }
 }
 
-void shiftMap() {
-  player.animation.pos.x += 128 * PIXEL_SCALE;  //TODO #define shift value
+void shiftPos(position_t *pos) {
+  pos->x += 128*PIXEL_SCALE;
+}
 
-  for (uint8_t i = 0; i < MAX_BULLETS; i++) {
-    if (bullet[i].active) {
-      bullet[i].pos.x += 128 * PIXEL_SCALE;
-    }
-  }
+// TODO
+// - generic position shift function
+// - onShiftMap() for each namespace
+void shiftMap() {
+  shiftPos(&player.animation.pos);
+
+  Bullet::onShiftMap();
 
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
     if (!enemy[i].animation.active) continue;
@@ -136,27 +139,9 @@ void shiftMap() {
     }
   }
 
-  for (uint8_t i = 0; i < MAX_BLOCK_FRAGMENTS; i++) {
-    if (!blockFragment[i].active) continue;
-    blockFragment[i].pos.x += 128 * PIXEL_SCALE;
-  }
+  Particles::onShiftMap();
 
-  for (uint8_t i = 0; i < MAX_EXPLOSIONS; i++) {
-    if (!explosion[i].active) continue;
-    explosion[i].pos.x += 128 * PIXEL_SCALE;
-  }
-
-  if (smoke.active) smoke.pos.x += 128 * PIXEL_SCALE;
-
-  if (damageCounter.t > 0) {
-    damageCounter.pos.x += 128 * PIXEL_SCALE;
-  }
-
-  if (ammoCounter.t > 0) {
-    ammoCounter.pos.x += 128 * PIXEL_SCALE;
-  }
-
-
+  HUD::onShiftMap();
 
 
   copyMap(levelMap, 16, levelMap, 0);
@@ -337,16 +322,5 @@ void destroyBlock(int16_t i, uint8_t j) {
 }
 
 
-//For debug
-//TODO: remove
-void clearBlocks() {
-  for (uint8_t i = 0; i < MAPHEIGHT; i++) {
-    for (uint8_t j = 0; j < MAPWIDTH; j++) {
-      if (levelMap[i][j] == BLOCK) {
-        levelMap[i][j] = 0;
-      }
-    }
-  }
-}
 
 }

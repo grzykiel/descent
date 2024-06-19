@@ -15,6 +15,7 @@
 namespace Game {
   void loop();
   void input();
+  void init();
   void update();
   void draw();
   void updateCamera();

@@ -3,7 +3,6 @@
 Arduboy2 arduboy;
 Sprites sprites;
 
-// uint8_t gameState = STATE_SANDBOX;
 // uint8_t gameState = STATE_GAME;
 uint8_t gameState = STATE_MENU;
 
@@ -97,10 +96,10 @@ bool updateAnimation(animation_t *anim) {
   return true;
 }
 
-bool updateAnimation(particle_t *particle, uint8_t last) {
+bool updateAnimation(particle_t *particle, uint8_t *transitions, uint8_t last) {
   particle->t++;
-  if (particle->t == particle->transitions[particle->frame]) {
-    if (particle->frame < last) { //} particle->last) {
+  if (particle->t == transitions[particle->frame]) {
+    if (particle->frame < last) { 
       particle->frame++;
     } else {
       return false;

@@ -45,6 +45,8 @@ namespace Bullet {
   void drawBullets();
 
   void drawAmmo();
+
+  void onShiftMap();
 }
 
 #endif

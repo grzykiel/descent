@@ -7,7 +7,6 @@
 #include "controls.h"
 #include "menu.h"
 #include "game.h"
-#include "sandbox.h"
 #include "player.h"
 #include "enemies.h"
 #include "hud.h"
@@ -21,14 +20,8 @@ void setup() {
 
   switch (gameState) {
     case STATE_GAME:
-      //TODO move to Game::init();
-      Player::init();
-      Enemies::init();
-      Level::init();
-
+      Game::init();
       break;
-    case STATE_SANDBOX:
-      Sandbox::init();
   }
 }
 
@@ -50,9 +43,6 @@ void stateLoop() {
       break;
     case STATE_GAME:
       Game::loop();
-      break;
-    case STATE_SANDBOX:
-      Sandbox::loop();
       break;
   }
 }

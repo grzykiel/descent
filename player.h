@@ -5,7 +5,6 @@
 #include "hud.h"
 
 #include "game.h"
-// #include "levels.h"
 #include "bitmaps.h"
 #include "enemies.h"
 #include "bullet.h"
@@ -16,7 +15,6 @@ typedef struct {
 
   animation_t animation;
 
-  // bool grounded = false;
   PlayerState state = PlayerState::falling;
 
 } player_t;

@@ -1,5 +1,4 @@
 #include "enemies.h"
-// #include "bullet.h"
 
 
 uint8_t blobTransitions[2] = { 45, 90 };
@@ -227,7 +226,10 @@ void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
     if (bullet[i].active) {
       if (Utils::collides(enemy->animation, bullet[i])) {
         bullet[i].active = false;
-        if (enemy->type == EnemyType::tortoise) return;
+        if (enemy->type == EnemyType::tortoise) {
+          Particles::spawnClink(enemy->animation.pos);
+          return;
+        }
         enemy->hp--;
         if (enemy->hp < 1) {
           kill(enemy, true);

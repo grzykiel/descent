@@ -69,4 +69,14 @@ void onShoot() {
 void draw(hud_t hud, uint8_t frame) {
   sprites.drawSelfMasked(hud.pos.x / PIXEL_SCALE - cameraOffset, hud.pos.y / PIXEL_SCALE, hud.sprite, frame);
 }
+
+void onShiftMap() {
+  if (damageCounter.t > 0) {
+    Level::shiftPos(&damageCounter.pos);
+  }
+
+  if (ammoCounter.t > 0) {
+    Level::shiftPos(&ammoCounter.pos);
+  }
+}
 }

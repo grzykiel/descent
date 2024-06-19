@@ -42,7 +42,7 @@ namespace Level
 
   void destroyBlock(int16_t i, uint8_t j);
 
-  void clearBlocks(); // for debug
+  void shiftPos(position_t *pos);
 
 }
 

@@ -145,10 +145,16 @@ void collisionCheck() {
 }
 
 void drawBullets() {
-  for (int i = 0; i < MAX_BULLETS; i++) {
+  for (uint8_t i = 0; i < MAX_BULLETS; i++) {
     if (bullet[i].active) {
       Sprites::drawSelfMasked(bullet[i].pos.x / PIXEL_SCALE - cameraOffset, bullet[i].pos.y / PIXEL_SCALE, bullet[i].sprite->spriteR, bullet[i].frame);
     }
+  }
+}
+
+void onShiftMap() {
+  for (uint8_t i = 0; i<MAX_BULLETS; i++) { 
+    if (bullet[i].active) Level::shiftPos(&bullet[i].pos);
   }
 }
 

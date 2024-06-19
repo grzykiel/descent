@@ -25,6 +25,8 @@ namespace HUD {
   void onDamaged();
   void onShoot();
 
+  void onShiftMap();
+
 
 }
 
