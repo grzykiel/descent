@@ -55,6 +55,10 @@ void onDamaged() {
   damageCounter.t = 60;  // TODO #define
 }
 
+void onRecharge() {
+  ammoCounter.f = 0;
+}
+
 void onShoot() {
   if (bulletsRemaining == 0) {
     ammoCounter.t = 60;

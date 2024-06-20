@@ -227,7 +227,7 @@ void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
       if (Utils::collides(enemy->animation, bullet[i])) {
         bullet[i].active = false;
         if (enemy->type == EnemyType::tortoise) {
-          Particles::spawnClink(enemy->animation.pos);
+          Particles::spawnClink(enemy->animation.pos, 4, 2);
           return;
         }
         enemy->hp--;
@@ -244,9 +244,13 @@ void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
 void kill(enemy_t *enemy, bool shot) {
   enemy->animation.active = false;
   if (shot) {
-    Particles::spawnExplosion(enemy->animation.pos);
+    Particles::spawnExplosion(enemy->animation.pos, 
+    enemy->animation.sprite->dx + enemy->animation.sprite->h/2, 
+    enemy->animation.sprite->dy + enemy->animation.sprite->w/2);
   } else {
-    Particles::spawnPop(enemy->animation.pos);
+    Particles::spawnPop(enemy->animation.pos,
+    enemy->animation.sprite->dx + enemy->animation.sprite->h/2,
+    enemy->animation.sprite->dy + enemy->animation.sprite->w/2);
   }
 }
 
@@ -309,6 +313,17 @@ void wake(enemy_t *bat) {
   bat->animation.sprite = &batSprite;
 }
 
+
+void onShiftMap() {
+  for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
+    if (!enemy[i].animation.active) continue;
+    if (enemy[i].animation.pos.x < 49152 - 128 * PIXEL_SCALE) {  //TODO #define threshold
+      Level::shiftPos(&enemy[i].animation.pos);
+    } else {
+      enemy[i].animation.active = false;
+    }
+  }
+}
 
 
 }

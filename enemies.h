@@ -48,6 +48,8 @@ namespace Enemies {
   void testWake();
 
   void kill(enemy_t *enemy, bool shot);
+
+  void onShiftMap();
 }
 
 #endif

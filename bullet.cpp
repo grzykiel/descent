@@ -81,6 +81,7 @@ void reload() {
   if (bulletsRemaining < bulletCapacity) {
     bulletsRemaining = bulletCapacity;
     Particles::activateRecharge();
+    HUD::onRecharge();
   }
 }
 
@@ -133,6 +134,8 @@ void collisionCheck() {
             Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
             if (Utils::collides(bullet[b], blockRect)) {
               bullet[b].active = false;
+              bullet[b].pos.x = blockRect.x * PIXEL_SCALE;
+              Particles::spawnClink(bullet[b].pos, 8, 2);
               if (levelMap[i][j] == BLOCK) {
                 Level::destroyBlock(i, j);
               }

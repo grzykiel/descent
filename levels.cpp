@@ -130,14 +130,7 @@ void shiftMap() {
 
   Bullet::onShiftMap();
 
-  for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
-    if (!enemy[i].animation.active) continue;
-    if (enemy[i].animation.pos.x < 49152 - 128 * PIXEL_SCALE) {  //TODO #define threshold
-      enemy[i].animation.pos.x += 128 * PIXEL_SCALE;
-    } else {
-      enemy[i].animation.active = false;
-    }
-  }
+  Enemies::onShiftMap();
 
   Particles::onShiftMap();
 

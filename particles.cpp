@@ -69,10 +69,10 @@ void initExplosion(uint8_t i) {
   explosion[i].frame = 0;
 }
 
-void spawnExplosion(position_t pos) {
+void spawnExplosion(position_t pos, int8_t dx, int8_t dy) {
   initExplosion(explosionIndex);
-  explosion[explosionIndex].pos.x = pos.x / PIXEL_SCALE - 4;  // TODO shift according to
-  explosion[explosionIndex].pos.y = pos.y / PIXEL_SCALE;
+  explosion[explosionIndex].pos.x = pos.x / PIXEL_SCALE + dx - 4; 
+  explosion[explosionIndex].pos.y = pos.y / PIXEL_SCALE + dy - 4;
   explosion[explosionIndex].active = true;
   explosionIndex = (explosionIndex + 1) % MAX_EXPLOSIONS;
 }
@@ -82,10 +82,10 @@ void initClink(uint8_t i) {
   clink[i].frame = 0;
 }
 
-void spawnClink(position_t pos) {
+void spawnClink(position_t pos, int8_t dx, int8_t dy) {
   initClink(clinkIndex);
-  clink[clinkIndex].pos.x = pos.x / PIXEL_SCALE + 4;
-  clink[clinkIndex].pos.y = pos.y / PIXEL_SCALE;
+  clink[clinkIndex].pos.x = pos.x / PIXEL_SCALE + dx;
+  clink[clinkIndex].pos.y = pos.y / PIXEL_SCALE + dy;
   clink[clinkIndex].active = true;
   clinkIndex = (clinkIndex + 1) % MAX_CLINKS;
 }
@@ -95,10 +95,10 @@ void initPop(uint8_t i) {
   pop[i].frame = 0;
 }
 
-void spawnPop(position_t pos) {
+void spawnPop(position_t pos, int8_t dx, int8_t dy) {
   initPop(popIndex);
-  pop[popIndex].pos.x = pos.x / PIXEL_SCALE - 4;  // TODO shift according to enemy centre
-  pop[popIndex].pos.y = pos.y / PIXEL_SCALE - 4;
+  pop[popIndex].pos.x = pos.x / PIXEL_SCALE + dx - 8;
+  pop[popIndex].pos.y = pos.y / PIXEL_SCALE + dy - 8;
   pop[popIndex].active = true;
   popIndex = (popIndex + 1) % MAX_POPS;
 }
