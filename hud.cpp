@@ -27,7 +27,7 @@ void update() {
   if (bulletsRemaining > 0 && ammoCounter.t > 0) {
     ammoCounter.t--;
     if (ammoCounter.t > 30 || ammoCounter.f == 0) {
-      ammoCounter.pos.x = player.animation.pos.x + 8 * PIXEL_SCALE;
+      ammoCounter.pos.x = player.animation.pos.x + 9 * PIXEL_SCALE;
       ammoCounter.pos.y = player.animation.pos.y - 8 * PIXEL_SCALE;
     }
   } else {

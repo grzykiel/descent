@@ -231,6 +231,7 @@ void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
           return;
         }
         enemy->hp--;
+        enemy->animation.iframe = 30;
         if (enemy->hp < 1) {
           kill(enemy, true);
         } else if (enemy->type == EnemyType::blob) {
@@ -267,7 +268,7 @@ bool updateSprite(enemy_t *enemy) {
 
 void draw() {
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
-    if (enemy[i].animation.active) {
+    if (enemy[i].animation.active & !Utils::flickering(&enemy[i].animation)) {
       if (enemy[i].animation.dir == Direction::left) {
         Sprites::drawSelfMasked((enemy[i].animation.pos.x / PIXEL_SCALE) - cameraOffset, enemy[i].animation.pos.y / PIXEL_SCALE, enemy[i].animation.sprite->spriteL, enemy[i].animation.frame);
       } else {

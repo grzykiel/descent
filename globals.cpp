@@ -1,6 +1,6 @@
 #include "globals.h"
 
-Arduboy2 arduboy;
+Arduboy2Base arduboy;
 Sprites sprites;
 
 // uint8_t gameState = STATE_GAME;
@@ -129,28 +129,6 @@ bool flickering(int8_t *f) {
 
 int sign(int x) {
   return (x > 0) - (x < 0);
-}
-
-// For debug
-// TODO remove
-void println(char *str) {
-  arduboy.print(str);
-  arduboy.print("\n");
-}
-
-void println(int pr_int) {
-  arduboy.print(pr_int);
-  arduboy.print("\n");
-}
-
-void println(uint16_t pr_int) {
-  arduboy.print(pr_int);
-  arduboy.print("\n");
-}
-
-void println(uint8_t pr_int) {
-  arduboy.print(pr_int);
-  arduboy.print("\n");
 }
 
 

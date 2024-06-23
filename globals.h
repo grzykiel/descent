@@ -67,7 +67,7 @@
 
 #define PIXEL_SCALE 128
 
-extern Arduboy2 arduboy;
+extern Arduboy2Base arduboy;
 extern Sprites sprites;
 
 extern uint8_t gameState;
