@@ -11,17 +11,19 @@
 #define BLOB_RECOIL_VEL -96
 #define BAT_VEL 16
 
-#define BLOB_HP 3
-#define BAT_HP  2
-#define WORM_HP 1
+#define BLOB_HP     3
+#define BAT_HP      2
+#define WORM_HP     1
 #define TORTOISE_HP 1
+#define CRAWLER_HP  1
 
 enum class EnemyType : uint8_t {
   blob,
   hangingBat,
   bat,
   worm,
-  tortoise
+  tortoise,
+  crawler
 };
 
 typedef struct {
@@ -38,14 +40,18 @@ namespace Enemies {
   void update();
   void draw();
 
-  void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel);
-  void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel);
+  void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel); // TODO remove
+  void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel); // TODO remove
   void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel);
   bool updateSprite(enemy_t *enemy);
 
+  void checkTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel);
+  void updateCrawling(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel);
+  void updateFlying(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel);
+  bool ledgeDetect(animation_t animation);
+
   void spawn(EnemyType type, uint16_t x, uint8_t y);
   void wake(enemy_t *bat);
-  void testWake();
 
   void kill(enemy_t *enemy, bool shot);
 

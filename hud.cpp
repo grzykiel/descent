@@ -4,7 +4,6 @@ hud_t damageCounter = {
   HUD::minusOne,
   0,
   0,
-
 };
 
 hud_t ammoCounter = {
@@ -13,22 +12,33 @@ hud_t ammoCounter = {
   0,
 };
 
+hud_t HP = {
+  HUD::hp,
+  0,
+  0,
+};
+
 namespace HUD {
 
 void update() {
   if (damageCounter.t > 0) {
-    if (damageCounter.t > 50) {
+    if (damageCounter.t > DAMAGE_COUNTER_FRAMES) {
       damageCounter.pos.x += 128;
       damageCounter.pos.y = player.animation.pos.y;
     }
     damageCounter.t--;
   }
 
+
+
   if (bulletsRemaining > 0 && ammoCounter.t > 0) {
     ammoCounter.t--;
-    if (ammoCounter.t > 30 || ammoCounter.f == 0) {
+    if (ammoCounter.t > AMMO_COUNTER_IFRAMES || ammoCounter.f == 0) {
       ammoCounter.pos.x = player.animation.pos.x + 9 * PIXEL_SCALE;
       ammoCounter.pos.y = player.animation.pos.y - 8 * PIXEL_SCALE;
+
+      HP.pos.x = ammoCounter.pos.x + 6*PIXEL_SCALE;
+      HP.pos.y = ammoCounter.pos.y;
     }
   } else {
     if (ammoCounter.t > 0) {
@@ -47,24 +57,25 @@ void draw() {
   }
   if (ammoCounter.t > 0) {
     draw(ammoCounter, bulletsRemaining);
+    draw(HP, 2);
   }
 }
 
 void onDamaged() {
   damageCounter.pos = player.animation.pos;
-  damageCounter.t = 60;  // TODO #define
+  damageCounter.t = 60; //DAMAGE_COUNTER_FRAMES;
 }
 
 void onRecharge() {
   ammoCounter.f = 0;
+  ammoCounter.t = AMMO_COUNTER_FRAMES;
 }
 
 void onShoot() {
+  ammoCounter.t = AMMO_COUNTER_FRAMES;
   if (bulletsRemaining == 0) {
-    ammoCounter.t = 60;
-    ammoCounter.f = 30;
+    ammoCounter.f = AMMO_COUNTER_IFRAMES;
   } else {
-    ammoCounter.t = 60;
     ammoCounter.f = 0;
   }
 }
@@ -81,6 +92,7 @@ void onShiftMap() {
 
   if (ammoCounter.t > 0) {
     Level::shiftPos(&ammoCounter.pos);
+    Level::shiftPos(&HP.pos);
   }
 }
 }

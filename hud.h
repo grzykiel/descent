@@ -4,6 +4,10 @@
 #include "player.h"
 #include "bitmaps.h"
 
+#define DAMAGE_COUNTER_FRAMES 50
+#define AMMO_COUNTER_FRAMES   60
+#define AMMO_COUNTER_IFRAMES  30
+
 typedef struct {
   const unsigned char *sprite;
   uint8_t t;
@@ -13,6 +17,8 @@ typedef struct {
 
 extern hud_t damageCounter;
 extern hud_t ammoCounter;
+extern hud_t HP;
+
 
 namespace HUD {
 

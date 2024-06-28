@@ -1,7 +1,6 @@
 #include <Arduboy2.h>
 #include <math.h>
 
-
 #include "globals.h"
 #include "bitmaps.h"
 #include "controls.h"

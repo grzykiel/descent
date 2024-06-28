@@ -1,7 +1,5 @@
 #include "player.h"
 
-
-
 sprite_t playerRunSprite = {
   Player::runRightSprite,
   Player::runLeftSprite,
@@ -159,13 +157,13 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
         bounce();
         nextVel->x = BOUNCE_VELOCITY;
         Bullet::reload();
+        HUD::onRecharge();
         Enemies::kill(&enemy[i], false);
       } else if (type.v == TOP) {
         nextVel->x = -KICKBACK_V;
         flicker();
         HUD::onDamaged();
       }
-
 
       if (type.h > NONE) {
         if (type.h == LEFT) {
