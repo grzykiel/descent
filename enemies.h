@@ -25,7 +25,7 @@
 #define CRAWLER_RIGHT 1
 #define CRAWLER_DOWN  2
 #define CRAWLER_LEFT  3
-#define CRAWLER_WIDTH 7
+#define CRAWLER_WIDTH 5
 #define CRAWLER_HEIGHT 4
 
 enum class EnemyType : uint8_t {

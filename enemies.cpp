@@ -56,8 +56,8 @@ sprite_t crawlerSprite = {
   nullptr,
   0,
   0,
-  7,
-  4
+  CRAWLER_WIDTH,
+  CRAWLER_HEIGHT
 };
 
 sprite_t tortoiseSprite = {
@@ -150,15 +150,15 @@ void checkCrawlerCollision(enemy_t *enemy, position_t *nextPos, velocity_t *next
 
     if (levelMap[x_m][y]) {
       setCrawlerDirection(enemy, Direction::up);
-      nextPos->x = x * PIXEL_SCALE * BLOCKSIZE;
+      nextPos->x = (x * BLOCKSIZE - enemy->animation.sprite->dx) * PIXEL_SCALE;
       nextPos->y = (y + 1) * PIXEL_SCALE * BLOCKSIZE;
       nextVel->y = 0;
     } else if (!levelMap[x_m + 1][y]) {
       if (levelMap[x_m + 1][y + 1]) {
         setCrawlerDirection(enemy, Direction::down);
-        nextPos->x = (x - 1) * PIXEL_SCALE * BLOCKSIZE;
+        nextPos->x = ((x - 1) * BLOCKSIZE + enemy->animation.sprite->dx) * PIXEL_SCALE;
         nextPos->y = y * PIXEL_SCALE * BLOCKSIZE;
-        // nextVel->y = 0;
+        nextVel->y = 0;
       } else {
         //crawlerDrop(enemy);
       }
@@ -169,13 +169,15 @@ void checkCrawlerCollision(enemy_t *enemy, position_t *nextPos, velocity_t *next
     y = nextPos->y / PIXEL_SCALE / BLOCKSIZE;
     if (levelMap[x_m][y]) {
       setCrawlerDirection(enemy, Direction::right);
-      nextPos->x = (x - 1) * PIXEL_SCALE * BLOCKSIZE;
-      nextPos->y = y * PIXEL_SCALE * BLOCKSIZE;
+      nextPos->x = ((x - 1) * BLOCKSIZE) * PIXEL_SCALE;
+      nextPos->y = (y * BLOCKSIZE - enemy->animation.sprite->dy) * PIXEL_SCALE;
+      nextVel->x = 0;
     } else if (!levelMap[x_m][y - 1]) {
       if (levelMap[x_m + 1][y - 1]) {
         setCrawlerDirection(enemy, Direction::left);
         nextPos->x = x * PIXEL_SCALE * BLOCKSIZE;
-        nextPos->y = (y - 1) * PIXEL_SCALE * BLOCKSIZE;
+        nextPos->y = ((y - 1) * BLOCKSIZE + enemy->animation.sprite->dy) * PIXEL_SCALE;
+        nextVel->x = 0;
       } else {
         //crawlerDrop(enemy);
       }
@@ -187,13 +189,15 @@ void checkCrawlerCollision(enemy_t *enemy, position_t *nextPos, velocity_t *next
 
     if (levelMap[x_m][y]) {
       setCrawlerDirection(enemy, Direction::down);
-      nextPos->x = x * PIXEL_SCALE * BLOCKSIZE;
+      nextPos->x = (x * BLOCKSIZE + enemy->animation.sprite->dx) * PIXEL_SCALE;
       nextPos->y = (y - 1) * PIXEL_SCALE * BLOCKSIZE;
+      nextVel->y = 0;
     } else if (!levelMap[x_m - 1][y]) {
       if (levelMap[x_m - 1][y - 1]) {
         setCrawlerDirection(enemy, Direction::up);
-        nextPos->x = (x + 1) * PIXEL_SCALE * BLOCKSIZE;
+        nextPos->x = ((x + 1) * BLOCKSIZE - enemy->animation.sprite->dx) * PIXEL_SCALE;
         nextPos->y = y * PIXEL_SCALE * BLOCKSIZE;
+        nextVel->y = 0;
       } else {
         //crawlerDrop();
       }
@@ -212,7 +216,7 @@ void checkCrawlerCollision(enemy_t *enemy, position_t *nextPos, velocity_t *next
       if (levelMap[x_m - 1][y + 1]) {
         setCrawlerDirection(enemy, Direction::right);
         nextPos->x = x * PIXEL_SCALE * BLOCKSIZE;
-        nextPos->y = (y + 1) * PIXEL_SCALE * BLOCKSIZE;
+        nextPos->y = ((y + 1) * BLOCKSIZE - enemy->animation.sprite->dy)*PIXEL_SCALE;
       }
     } else {
       //crawlerDrop()
@@ -287,13 +291,6 @@ void checkTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel
 
         if (temp.v == BOTTOM || temp.v == TOP) {
           nextVel->x = 0;
-          /*if (enemy->type == EnemyType::crawler) {
-            if (temp.v == TOP && enemy->animation.frame == CRAWLER_RIGHT) {
-              setCrawlerDirection(enemy, Direction::right);
-            } else if (temp.v == BOTTOM && enemy->animation.frame == CRAWLER_LEFT) {
-              setCrawlerDirection(enemy, Direction::left);
-            }
-          }*/
         }
         if (temp.h == LEFT || temp.h == RIGHT) {
           nextVel->y = 0;
@@ -303,13 +300,7 @@ void checkTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel
             } else if (temp.h == RIGHT) {
               enemy->animation.dir = Direction::left;
             }
-          } /*else if (enemy->type == EnemyType::crawler) {
-            if (temp.h == LEFT && enemy->animation.frame == CRAWLER_UP) {
-              setCrawlerDirection(enemy, Direction::up);
-            } else if (temp.h == RIGHT && enemy->animation.frame == CRAWLER_DOWN) {
-              setCrawlerDirection(enemy, Direction::down);
-            }
-          }*/
+          }
         } else {
           if ((enemy->type == EnemyType::worm || enemy->type == EnemyType::tortoise) && ledgeDetect(enemy->animation)) {
             enemy->animation.dir = enemy->animation.dir == Direction::left ? Direction::right : Direction::left;
@@ -436,24 +427,24 @@ void setCrawlerDirection(enemy_t *crawler, Direction dir) {
   if (dir == Direction::left) {
     crawler->animation.frame = CRAWLER_UP;
     crawler->animation.sprite->dx = 0;
-    crawler->animation.sprite->dy = 1;
+    crawler->animation.sprite->dy = 2;
     crawler->animation.sprite->w = CRAWLER_WIDTH;
     crawler->animation.sprite->h = CRAWLER_HEIGHT;
   } else if (dir == Direction::right) {
     crawler->animation.frame = CRAWLER_DOWN;
     crawler->animation.sprite->dx = 3;
-    crawler->animation.sprite->dy = 0;
+    crawler->animation.sprite->dy = 1;
     crawler->animation.sprite->w = CRAWLER_WIDTH;
     crawler->animation.sprite->h = CRAWLER_HEIGHT;
   } else if (dir == Direction::up) {
     crawler->animation.frame = CRAWLER_RIGHT;
-    crawler->animation.sprite->dx = 0;
-    crawler->animation.sprite->dy = 1;
+    crawler->animation.sprite->dx = 1;
+    crawler->animation.sprite->dy = 0;
     crawler->animation.sprite->w = CRAWLER_HEIGHT;
     crawler->animation.sprite->h = CRAWLER_WIDTH;
   } else if (dir == Direction::down) {
     crawler->animation.frame = CRAWLER_LEFT;
-    crawler->animation.sprite->dx = 0;
+    crawler->animation.sprite->dx = 2;
     crawler->animation.sprite->dy = 3;
     crawler->animation.sprite->w = CRAWLER_HEIGHT;
     crawler->animation.sprite->h = CRAWLER_WIDTH;
