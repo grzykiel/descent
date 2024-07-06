@@ -63,16 +63,16 @@ uint8_t levelMap[MAPHEIGHT][MAPWIDTH] = {
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 1, 1, 0, 0, 0 },
+  { 0, 0, 1, 0, 0, 1, 0, 0 },
+  { 0, 1, 0, 0, 0, 0, 1, 0 },
+  { 0, 1, 0, 0, 0, 0, 1, 0 },
+  { 0, 0, 1, 0, 0, 1, 0, 0 },
+  { 0, 0, 0, 1, 1, 0, 0, 0 },
+  { 0, 0, 0, 1, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 15, 9, 18, 18, 18, 18, 3, 15 },
-  { 10, 0, 0, 0, 0, 0, 0, 4 },
+  { 10, 0, 18, 0, 0, 0, 0, 4 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
 
@@ -83,6 +83,7 @@ uint8_t levelMap[MAPHEIGHT][MAPWIDTH] = {
 namespace Level {
 
 void init() {
+  Enemies::spawn(EnemyType::crawler, 7 * BLOCKSIZE, 3 * BLOCKSIZE);
 }
 
 void draw() {
@@ -119,14 +120,11 @@ void update() {
 }
 
 void shiftPos(position_t *pos) {
-  pos->x += 128*PIXEL_SCALE;
+  pos->x += 128 * PIXEL_SCALE;
 }
 
-// TODO
-// - generic position shift function
-// - onShiftMap() for each namespace
 void shiftMap() {
-  shiftPos(&player.animation.pos);
+  shiftPos(&player.animation.pos);  // TODO Player::onShiftMap();
 
   Bullet::onShiftMap();
 
@@ -145,7 +143,7 @@ void shiftMap() {
   autoTile(nextRoom);
   generateDashes(nextRoom);
   generateBlocks(nextRoom);
-  generateEnemies(nextRoom);
+  // generateEnemies(nextRoom);
   copyMap(nextRoom, 0, levelMap, 32);
 }
 
