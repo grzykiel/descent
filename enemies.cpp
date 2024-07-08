@@ -103,7 +103,7 @@ void update() {
       updateCrawling(&enemy[i], &nextPos, &nextVel);
     } else if (enemy[i].type == EnemyType::blob || enemy[i].type == EnemyType::bat) {
       updateFlying(&enemy[i], &nextPos, &nextVel);
-    } else if (enemy[i].type == EnemyType::crawler) {
+    } else if (enemy[i].type == EnemyType::crawler || enemy[i].type == EnemyType::fallingCrawler) {
       updateCrawler(&enemy[i], &nextPos, &nextVel);
     }
 
@@ -123,6 +123,11 @@ void update() {
 }
 
 void updateCrawler(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel) {
+  if (enemy->type == EnemyType::fallingCrawler) {
+    nextVel->x = max(nextVel->x + GRAVITY, TERMINAL_VELOCITY * PIXEL_SCALE);
+    return;
+  }
+
   if (enemy->animation.dir == Direction::left) {
     nextVel->x = 0;
     nextVel->y = -CRAWLER_VEL;
@@ -160,7 +165,8 @@ void checkCrawlerCollision(enemy_t *enemy, position_t *nextPos, velocity_t *next
         nextPos->y = y * PIXEL_SCALE * BLOCKSIZE;
         nextVel->y = 0;
       } else {
-        //crawlerDrop(enemy);
+        // enemy->type = EnemyType::fallingCrawler;
+        crawlerFall(enemy, nextVel);
       }
     }
   } else if (enemy->animation.dir == Direction::up) {
@@ -179,7 +185,8 @@ void checkCrawlerCollision(enemy_t *enemy, position_t *nextPos, velocity_t *next
         nextPos->y = ((y - 1) * BLOCKSIZE + enemy->animation.sprite->dy) * PIXEL_SCALE;
         nextVel->x = 0;
       } else {
-        //crawlerDrop(enemy);
+        // enemy->type = EnemyType::fallingCrawler;
+        crawlerFall(enemy, nextVel);
       }
     }
   } else if (enemy->animation.dir == Direction::right) {
@@ -199,7 +206,8 @@ void checkCrawlerCollision(enemy_t *enemy, position_t *nextPos, velocity_t *next
         nextPos->y = y * PIXEL_SCALE * BLOCKSIZE;
         nextVel->y = 0;
       } else {
-        //crawlerDrop();
+        // enemy->type = EnemyType::fallingCrawler;
+        crawlerFall(enemy, nextVel);
       }
     }
   } else if (enemy->animation.dir == Direction::down) {
@@ -216,16 +224,17 @@ void checkCrawlerCollision(enemy_t *enemy, position_t *nextPos, velocity_t *next
       if (levelMap[x_m - 1][y + 1]) {
         setCrawlerDirection(enemy, Direction::right);
         nextPos->x = x * PIXEL_SCALE * BLOCKSIZE;
-        nextPos->y = ((y + 1) * BLOCKSIZE - enemy->animation.sprite->dy)*PIXEL_SCALE;
+        nextPos->y = ((y + 1) * BLOCKSIZE - enemy->animation.sprite->dy) * PIXEL_SCALE;
+      } else {
+        // enemy->type = EnemyType::fallingCrawler;
+        crawlerFall(enemy, nextVel);
       }
-    } else {
-      //crawlerDrop()
     }
   }
 }
 
 void updateCrawling(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel) {
-  nextVel->x = max(nextVel->x + GRAVITY, -4 * PIXEL_SCALE);  //TODO redefine terminal velocity
+  nextVel->x = max(nextVel->x + GRAVITY, TERMINAL_VELOCITY * PIXEL_SCALE);
 
   if (!updateSprite(enemy)) {
     nextVel->y = 0;
@@ -291,6 +300,13 @@ void checkTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel
 
         if (temp.v == BOTTOM || temp.v == TOP) {
           nextVel->x = 0;
+          if (temp.v == BOTTOM && enemy->type == EnemyType::fallingCrawler) {
+            uint16_t x = (nextPos->x / PIXEL_SCALE + enemy->animation.sprite->dx) / BLOCKSIZE;
+            nextPos->x = x * BLOCKSIZE * PIXEL_SCALE;
+            uint16_t y = (nextPos->y / PIXEL_SCALE + enemy->animation.sprite->dy) / BLOCKSIZE;
+            nextPos->y = y * BLOCKSIZE * PIXEL_SCALE;
+            crawlerLand(enemy, nextVel);
+          }
         }
         if (temp.h == LEFT || temp.h == RIGHT) {
           nextVel->y = 0;
@@ -449,6 +465,19 @@ void setCrawlerDirection(enemy_t *crawler, Direction dir) {
     crawler->animation.sprite->w = CRAWLER_HEIGHT;
     crawler->animation.sprite->h = CRAWLER_WIDTH;
   }
+}
+
+void crawlerFall(enemy_t *enemy, velocity_t *vel) {
+  enemy->type = EnemyType::fallingCrawler;
+  vel->x = 0;
+  vel->y = 0;
+}
+
+void crawlerLand(enemy_t *enemy, velocity_t *vel) {
+  enemy->type = EnemyType::crawler;
+  vel->x = 0;
+  vel->y = 0;
+  setCrawlerDirection(enemy, Direction::left);
 }
 
 void onShiftMap() {

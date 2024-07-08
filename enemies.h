@@ -34,14 +34,14 @@ enum class EnemyType : uint8_t {
   bat,
   worm,
   tortoise,
-  crawler
+  crawler,
+  fallingCrawler
 };
 
 typedef struct {
   EnemyType type;
   uint8_t hp;
 	animation_t animation;
-  // bool falling;
 } enemy_t;
 
 extern enemy_t enemy[MAX_ENEMIES];
@@ -67,6 +67,8 @@ namespace Enemies {
   void spawn(EnemyType type, uint16_t x, uint8_t y);
   void wake(enemy_t *bat);
   void setCrawlerDirection(enemy_t *crawler, Direction dir);
+  void crawlerFall(enemy_t *crawler, velocity_t *nextVel);
+  void crawlerLand(enemy_t *crawler, velocity_t *nextVel);
 
   void kill(enemy_t *enemy, bool shot);
 

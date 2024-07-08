@@ -44,6 +44,8 @@ namespace Level
 
   void shiftPos(position_t *pos);
 
+  
+
 }
 
 #endif
