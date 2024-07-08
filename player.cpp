@@ -34,8 +34,8 @@ void init() {
   player.animation.frame = FALL_FRAME;
   player.animation.t = 0;
   player.animation.iframe = 0;
-  player.animation.pos.x = 128*PIXEL_SCALE; //128 * 3 * PIXEL_SCALE + 8;  //SCREENMID + 320;  //TODO #define
-  player.animation.pos.y = 28 * PIXEL_SCALE;           //TODO #define
+  player.animation.pos.x = 128 * PIXEL_SCALE;  //128 * 3 * PIXEL_SCALE + 8;  //SCREENMID + 320;  //TODO #define
+  player.animation.pos.y = 28 * PIXEL_SCALE;   //TODO #define
   player.animation.vel.x = 0;
   player.animation.vel.y = 0;
 
@@ -154,11 +154,17 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
       collision_t type = Utils::collisionCorrect(player.animation, nextPos, enemyRect, true, true);
 
       if (type.v == BOTTOM) {
-        bounce();
-        nextVel->x = BOUNCE_VELOCITY;
-        Bullet::reload();
-        HUD::onRecharge();
-        Enemies::kill(&enemy[i], false);
+        if (enemy[i].type == EnemyType::crawler) {
+          nextVel->x = KICKBACK_V;
+          flicker();
+          HUD::onDamaged();
+        } else {
+          bounce();
+          nextVel->x = BOUNCE_VELOCITY;
+          Bullet::reload();
+          HUD::onRecharge();
+          Enemies::kill(&enemy[i], false);
+        }
       } else if (type.v == TOP) {
         nextVel->x = -KICKBACK_V;
         flicker();
@@ -233,5 +239,4 @@ void land() {
 void flicker() {
   player.animation.iframe = PLAYER_IFRAMES;
 }
-
 }
