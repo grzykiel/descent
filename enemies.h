@@ -10,7 +10,7 @@
 #define BLOB_MAX_VEL    8
 #define BLOB_RECOIL_VEL -96
 #define BAT_VEL         16
-#define CRAWLER_VEL     8
+#define CRAWLER_VEL     1 //8
 #define WORM_VEL        1 //pixels moved on animation update
 #define TORTOISE_VEL    2 // """
 
@@ -62,6 +62,7 @@ namespace Enemies {
   void updateFlying(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel);
   void updateCrawler(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel);   // wall crawler
   void checkCrawlerCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel);
+  void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel);
   bool ledgeDetect(animation_t animation);
 
   void spawn(EnemyType type, uint16_t x, uint8_t y);

@@ -1,7 +1,4 @@
-
 #include "levels.h"
-
-
 
 uint8_t nextRoom[SCREENHEIGHT][SCREENWIDTH];
 /* = {
@@ -63,12 +60,12 @@ uint8_t levelMap[MAPHEIGHT][MAPWIDTH] = {
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 18, 18, 0, 0, 0 },
-  { 0, 0, 18, 0, 0, 18, 0, 0 },
-  { 0, 18, 0, 0, 0, 0, 18, 0 },
-  { 0, 18, 0, 0, 0, 0, 18, 0 },
-  { 0, 0, 18, 0, 18, 18, 0, 0 },
-  { 0, 0, 0, 18, 18, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 17, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 15, 9, 18, 18, 18, 18, 3, 15 },
@@ -77,13 +74,12 @@ uint8_t levelMap[MAPHEIGHT][MAPWIDTH] = {
   { 0, 0, 0, 0, 0, 0, 0, 0 },
 
 
-
 };
 
 namespace Level {
 
 void init() {
-  Enemies::spawn(EnemyType::crawler, 7 * BLOCKSIZE, 3 * BLOCKSIZE);
+  Enemies::spawn(EnemyType::crawler, 7 * BLOCKSIZE, 4 * BLOCKSIZE);
 }
 
 void draw() {

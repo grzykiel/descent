@@ -34,7 +34,7 @@ void init() {
   player.animation.frame = FALL_FRAME;
   player.animation.t = 0;
   player.animation.iframe = 0;
-  player.animation.pos.x = 128 * PIXEL_SCALE;  //128 * 3 * PIXEL_SCALE + 8;  //SCREENMID + 320;  //TODO #define
+  player.animation.pos.x = 112 * PIXEL_SCALE;  //128 * 3 * PIXEL_SCALE + 8;  //SCREENMID + 320;  //TODO #define
   player.animation.pos.y = 28 * PIXEL_SCALE;   //TODO #define
   player.animation.vel.x = 0;
   player.animation.vel.y = 0;

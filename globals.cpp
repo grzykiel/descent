@@ -54,7 +54,7 @@ collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider, 
   // arduboy.drawRect(collider.x - cameraOffset, collider.y, collider.width, collider.height);
 
   Rect rect = Rect(anim.pos.x / PIXEL_SCALE + anim.sprite->dx, next->y / PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
-  // arduboy.drawRect(rect.x - cameraOffset, rect.y, rect.width, rect.height);
+  arduboy.fillRect(rect.x - cameraOffset, rect.y, rect.width, rect.height);
   if (arduboy.collide(rect, collider)) {
     if (collider.y < anim.pos.y / PIXEL_SCALE + anim.sprite->dy) {
       type.h = LEFT;
@@ -66,7 +66,7 @@ collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider, 
   }
 
   rect = Rect(next->x / PIXEL_SCALE + anim.sprite->dx, anim.pos.y / PIXEL_SCALE + anim.sprite->dy, anim.sprite->h, anim.sprite->w);
-  // arduboy.drawRect(rect.x - cameraOffset, rect.y, rect.width, rect.height);
+  arduboy.fillRect(rect.x - cameraOffset, rect.y, rect.width, rect.height);
   if (arduboy.collide(rect, collider)) {
     if (collider.x < anim.pos.x / PIXEL_SCALE + anim.sprite->dx) {
       type.v = BOTTOM;

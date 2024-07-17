@@ -10,7 +10,7 @@ sprite_t muzzleFlashSprite = {
   8,                       //w
   8,                       //h
 };
-animation_t muzzleFlash; //TODO make particle_t
+animation_t muzzleFlash;  //TODO make particle_t
 
 sprite_t bulletSprite = {
   ShootShoes::bullet,  //sprite
@@ -135,9 +135,10 @@ void collisionCheck() {
             if (Utils::collides(bullet[b], blockRect)) {
               bullet[b].active = false;
               bullet[b].pos.x = blockRect.x * PIXEL_SCALE;
-              Particles::spawnClink(bullet[b].pos, 8, 2);
               if (levelMap[i][j] == BLOCK) {
                 Level::destroyBlock(i, j);
+              } else {
+                Particles::spawnClink(bullet[b].pos, 8, 2);
               }
             }
           }
@@ -156,7 +157,7 @@ void drawBullets() {
 }
 
 void onShiftMap() {
-  for (uint8_t i = 0; i<MAX_BULLETS; i++) { 
+  for (uint8_t i = 0; i < MAX_BULLETS; i++) {
     if (bullet[i].active) Level::shiftPos(&bullet[i].pos);
   }
 }
