@@ -115,7 +115,7 @@ void update() {
     } else {
       // checkTileCollision(&enemy[i], &nextPos, &nextVel);
     }*/
-  
+
     checkCrawlerTileCollision(&enemy[i], &nextPos, &nextVel);
 
     enemy[i].animation.pos = nextPos;
@@ -206,7 +206,7 @@ void checkTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel
         if (enemy->type == EnemyType::blob) {
           continue;
         } else {
-          block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE + 6, j * BLOCKSIZE, 2, BLOCKSIZE);
+          block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE + DASH_OFFSET, j * BLOCKSIZE, DASH_HEIGHT, BLOCKSIZE);
         }
       }
       collision_t temp = Utils::collisionCorrect(enemy->animation, nextPos, block);
@@ -249,7 +249,7 @@ void checkTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel
           setCrawlerDirection(enemy, Direction::up);
           nextVel->y = 0;
           nextPos->y += 2 * PIXEL_SCALE;
-        } else if (enemy->animation.frame == CRAWLER_DOWN && temp.h == RIGHT) {
+        } else if (enemy->animation.frame == CRAWLER_DOWN && (temp.h == RIGHT || nextPos->y/PIXEL_SCALE + 8 > SCREENRIGHT)) {
           setCrawlerDirection(enemy, Direction::down);
           nextVel->y = 0;
           nextPos->y -= 1 * PIXEL_SCALE;
@@ -278,7 +278,7 @@ void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *
 
       Rect block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
       if (levelMap[i][j] == DASH) {
-        block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE + 6, j * BLOCKSIZE, 2, BLOCKSIZE);
+        block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE + DASH_OFFSET, j * BLOCKSIZE, DASH_HEIGHT, BLOCKSIZE);
       }
       collision_t temp = Utils::collisionCorrect(enemy->animation, nextPos, block);
 
@@ -297,7 +297,7 @@ void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *
         }
       } else if (enemy->type == EnemyType::crawler) {
         if (enemy->animation.frame == CRAWLER_UP) {
-          if (temp.h == LEFT) {
+          if (temp.h == LEFT || nextPos->y < SCREENLEFT) {
             setCrawlerDirection(enemy, Direction::up);
             nextVel->y = 0;
             nextPos->y += 2 * PIXEL_SCALE;
@@ -308,7 +308,7 @@ void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *
             rotationCollision = rotationCollision || arduboy.collide(rr, block);
           }
         } else if (enemy->animation.frame == CRAWLER_DOWN) {
-          if (temp.h == RIGHT) {
+          if (temp.h == RIGHT || ((nextPos->y / PIXEL_SCALE) + 11 > SCREENRIGHT)) {
             setCrawlerDirection(enemy, Direction::down);
             nextVel->y = 0;
             nextPos->y -= 1 * PIXEL_SCALE;
@@ -324,10 +324,10 @@ void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *
             nextVel->x = 0;
             nextPos->x -= 1 * PIXEL_SCALE;
             return;
-          } else {
+          } else if (nextPos->y / PIXEL_SCALE >= SCREENLEFT) {
             Rect rr = Rect(nextPos->x / PIXEL_SCALE + 4, nextPos->y / PIXEL_SCALE - 6, CRAWLER_HEIGHT, CRAWLER_WIDTH);
             arduboy.drawRect(rr.x - cameraOffset, rr.y, rr.width, rr.height);
-            rotationCollision = rotationCollision || arduboy.collide(rr, block);
+            rotationCollision = rotationCollision || (arduboy.collide(rr, block) || rr.y < SCREENLEFT);
           }
         } else if (enemy->animation.frame == CRAWLER_LEFT) {
           if (temp.v == BOTTOM) {
@@ -339,7 +339,7 @@ void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *
           } else {
             Rect rr = Rect(nextPos->x / PIXEL_SCALE, nextPos->y / PIXEL_SCALE + 7, CRAWLER_HEIGHT, CRAWLER_WIDTH);
             arduboy.drawRect(rr.x - cameraOffset, rr.y, rr.width, rr.height);
-            rotationCollision = rotationCollision || arduboy.collide(rr, block);
+            rotationCollision = rotationCollision || (arduboy.collide(rr, block) || rr.y + CRAWLER_HEIGHT > SCREENRIGHT);
           }
         }
       }
@@ -350,7 +350,7 @@ void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *
   if (enemy->animation.frame == CRAWLER_UP) {
     setCrawlerDirection(enemy, Direction::down);
     nextPos->x -= 4 * PIXEL_SCALE;
-    nextPos->y -= 3 * PIXEL_SCALE;
+    nextPos->y -= 4 * PIXEL_SCALE;
     nextVel->y = 0;
   } else if (enemy->animation.frame == CRAWLER_RIGHT) {
     setCrawlerDirection(enemy, Direction::left);
@@ -359,7 +359,7 @@ void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *
     nextVel->x = 0;
   } else if (enemy->animation.frame == CRAWLER_LEFT) {
     setCrawlerDirection(enemy, Direction::right);
-    nextPos->x -= 3 * PIXEL_SCALE;
+    nextPos->x -= 4 * PIXEL_SCALE;
     nextPos->y += 3 * PIXEL_SCALE;
     nextVel->x = 0;
   } else if (enemy->animation.frame == CRAWLER_DOWN) {
@@ -521,9 +521,9 @@ void draw() {
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
     if (enemy[i].animation.active & !Utils::flickering(&enemy[i].animation)) {
       if (enemy[i].animation.dir == Direction::left) {
-        // Sprites::drawSelfMasked((enemy[i].animation.pos.x / PIXEL_SCALE) - cameraOffset, enemy[i].animation.pos.y / PIXEL_SCALE, enemy[i].animation.sprite->spriteL, enemy[i].animation.frame);
+        Sprites::drawSelfMasked((enemy[i].animation.pos.x / PIXEL_SCALE) - cameraOffset, enemy[i].animation.pos.y / PIXEL_SCALE, enemy[i].animation.sprite->spriteL, enemy[i].animation.frame);
       } else {
-        // Sprites::drawSelfMasked((enemy[i].animation.pos.x / PIXEL_SCALE) - cameraOffset, enemy[i].animation.pos.y / PIXEL_SCALE, enemy[i].animation.sprite->spriteR, enemy[i].animation.frame);
+        Sprites::drawSelfMasked((enemy[i].animation.pos.x / PIXEL_SCALE) - cameraOffset, enemy[i].animation.pos.y / PIXEL_SCALE, enemy[i].animation.sprite->spriteR, enemy[i].animation.frame);
       }
     }
   }
@@ -579,7 +579,7 @@ void setCrawlerDirection(enemy_t *crawler, Direction dir) {
     crawler->animation.sprite->h = CRAWLER_HEIGHT;
   } else if (dir == Direction::right) {
     crawler->animation.frame = CRAWLER_DOWN;
-    crawler->animation.sprite->dx = 3;
+    crawler->animation.sprite->dx = 4;
     crawler->animation.sprite->dy = 1;
     crawler->animation.sprite->w = CRAWLER_WIDTH;
     crawler->animation.sprite->h = CRAWLER_HEIGHT;
@@ -592,7 +592,7 @@ void setCrawlerDirection(enemy_t *crawler, Direction dir) {
   } else if (dir == Direction::down) {
     crawler->animation.frame = CRAWLER_LEFT;
     crawler->animation.sprite->dx = 2;
-    crawler->animation.sprite->dy = 3;
+    crawler->animation.sprite->dy = 4;
     crawler->animation.sprite->w = CRAWLER_HEIGHT;
     crawler->animation.sprite->h = CRAWLER_WIDTH;
   }

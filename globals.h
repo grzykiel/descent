@@ -38,6 +38,9 @@
 #define DASH 17
 #define BLOCK 18
 
+#define DASH_OFFSET 5
+#define DASH_HEIGHT 3
+
 // Collision locations
 #define NONE 0
 #define RIGHT 1
