@@ -110,13 +110,11 @@ void update() {
     nextPos.x += nextVel.x;
     nextPos.y += nextVel.y;
 
-    /*if (enemy[i].type == EnemyType::crawler) {
-      checkCrawlerCollision(&enemy[i], &nextPos, &nextVel);
+    if (enemy[i].type == EnemyType::crawler) {
+      checkCrawlerTileCollision(&enemy[i], &nextPos, &nextVel);
     } else {
-      // checkTileCollision(&enemy[i], &nextPos, &nextVel);
-    }*/
-
-    checkCrawlerTileCollision(&enemy[i], &nextPos, &nextVel);
+      checkTileCollision(&enemy[i], &nextPos, &nextVel);
+    }
 
     enemy[i].animation.pos = nextPos;
     checkBulletCollisions(&enemy[i], &nextVel);
@@ -242,6 +240,7 @@ void checkTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel
             uint16_t y = (nextPos->y / PIXEL_SCALE + enemy->animation.sprite->dy) / BLOCKSIZE;
             nextPos->y = y * BLOCKSIZE * PIXEL_SCALE;
             crawlerLand(enemy, nextVel);
+            return;
           }
         }
       } else if (enemy->type == EnemyType::crawler) {
@@ -249,7 +248,7 @@ void checkTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel
           setCrawlerDirection(enemy, Direction::up);
           nextVel->y = 0;
           nextPos->y += 2 * PIXEL_SCALE;
-        } else if (enemy->animation.frame == CRAWLER_DOWN && (temp.h == RIGHT || nextPos->y/PIXEL_SCALE + 8 > SCREENRIGHT)) {
+        } else if (enemy->animation.frame == CRAWLER_DOWN && (temp.h == RIGHT || nextPos->y / PIXEL_SCALE + 8 > SCREENRIGHT)) {
           setCrawlerDirection(enemy, Direction::down);
           nextVel->y = 0;
           nextPos->y -= 1 * PIXEL_SCALE;
@@ -271,11 +270,21 @@ void checkTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel
 void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel) {
   window_t wd = Utils::getCollisionWindow(enemy->animation.pos);
   bool rotationCollision = false;
+  bool grip = false;
 
   for (uint16_t i = wd.xMin; i <= wd.xMax; i++) {
     for (uint8_t j = wd.yMin; j <= wd.yMax; j++) {
-      if (!levelMap[i][j]) continue;
-
+      if (!levelMap[i][j]) {
+        if (enemy->type == EnemyType::crawler) {
+          if ((enemy->animation.frame == CRAWLER_RIGHT && enemy->animation.pos.y / PIXEL_SCALE <= SCREENLEFT + 1)
+              || (enemy->animation.frame == CRAWLER_LEFT && enemy->animation.pos.y / PIXEL_SCALE + enemy->animation.sprite->dy + CRAWLER_HEIGHT >= SCREENRIGHT)) {
+            rotationCollision = true;
+            grip = true;
+          }
+        }
+        continue;
+      }
+      
       Rect block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
       if (levelMap[i][j] == DASH) {
         block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE + DASH_OFFSET, j * BLOCKSIZE, DASH_HEIGHT, BLOCKSIZE);
@@ -287,13 +296,12 @@ void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *
       if (enemy->type == EnemyType::fallingCrawler) {
         if (temp.v == BOTTOM) {
           nextVel->x = 0;
-          if (temp.v == BOTTOM && enemy->type == EnemyType::fallingCrawler) {
-            uint16_t x = (nextPos->x / PIXEL_SCALE + enemy->animation.sprite->dx) / BLOCKSIZE;
-            nextPos->x = x * BLOCKSIZE * PIXEL_SCALE;
-            uint16_t y = (nextPos->y / PIXEL_SCALE + enemy->animation.sprite->dy) / BLOCKSIZE;
-            nextPos->y = y * BLOCKSIZE * PIXEL_SCALE;
-            crawlerLand(enemy, nextVel);
-          }
+          uint16_t x = (nextPos->x / PIXEL_SCALE + enemy->animation.sprite->dx) / BLOCKSIZE;
+          nextPos->x = x * BLOCKSIZE * PIXEL_SCALE;
+          uint16_t y = (nextPos->y / PIXEL_SCALE + enemy->animation.sprite->dy) / BLOCKSIZE;
+          nextPos->y = y * BLOCKSIZE * PIXEL_SCALE;
+          crawlerLand(enemy, nextVel);
+          return;
         }
       } else if (enemy->type == EnemyType::crawler) {
         if (enemy->animation.frame == CRAWLER_UP) {
@@ -303,9 +311,12 @@ void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *
             nextPos->y += 2 * PIXEL_SCALE;
             return;
           } else {
-            Rect rr = Rect(nextPos->x / PIXEL_SCALE - 5, nextPos->y / PIXEL_SCALE, CRAWLER_WIDTH, CRAWLER_HEIGHT);
-            arduboy.drawRect(rr.x - cameraOffset, rr.y, rr.width, rr.height);
-            rotationCollision = rotationCollision || arduboy.collide(rr, block);
+            Rect r = Rect(nextPos->x / PIXEL_SCALE - 5, nextPos->y / PIXEL_SCALE, CRAWLER_WIDTH, CRAWLER_HEIGHT);
+            rotationCollision = rotationCollision || arduboy.collide(r, block);
+
+            r = Rect(enemy->animation.pos.x / PIXEL_SCALE - 1, enemy->animation.pos.y / PIXEL_SCALE + enemy->animation.sprite->dy, 1, CRAWLER_WIDTH);
+            arduboy.drawRect(r.x - cameraOffset, r.y, r.width, r.height);
+            grip = grip || arduboy.collide(r, block);
           }
         } else if (enemy->animation.frame == CRAWLER_DOWN) {
           if (temp.h == RIGHT || ((nextPos->y / PIXEL_SCALE) + 11 > SCREENRIGHT)) {
@@ -314,9 +325,12 @@ void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *
             nextPos->y -= 1 * PIXEL_SCALE;
             return;
           } else {
-            Rect rr = Rect(nextPos->x / PIXEL_SCALE + 7, nextPos->y / PIXEL_SCALE + 4, CRAWLER_WIDTH, CRAWLER_HEIGHT);
-            arduboy.drawRect(rr.x - cameraOffset, rr.y, rr.width, rr.height);
-            rotationCollision = rotationCollision || arduboy.collide(rr, block);
+            Rect r = Rect(nextPos->x / PIXEL_SCALE + 7, nextPos->y / PIXEL_SCALE + 4, CRAWLER_WIDTH, CRAWLER_HEIGHT);
+            rotationCollision = rotationCollision || arduboy.collide(r, block);
+
+            r = Rect(enemy->animation.pos.x / PIXEL_SCALE + enemy->animation.sprite->dx + CRAWLER_HEIGHT, enemy->animation.pos.y / PIXEL_SCALE + enemy->animation.sprite->dy, 1, CRAWLER_WIDTH);
+            arduboy.drawRect(r.x - cameraOffset, r.y, r.width, r.height);
+            grip = grip || arduboy.collide(r, block);
           }
         } else if (enemy->animation.frame == CRAWLER_RIGHT) {
           if (temp.v == TOP) {
@@ -324,10 +338,13 @@ void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *
             nextVel->x = 0;
             nextPos->x -= 1 * PIXEL_SCALE;
             return;
-          } else if (nextPos->y / PIXEL_SCALE >= SCREENLEFT) {
-            Rect rr = Rect(nextPos->x / PIXEL_SCALE + 4, nextPos->y / PIXEL_SCALE - 6, CRAWLER_HEIGHT, CRAWLER_WIDTH);
-            arduboy.drawRect(rr.x - cameraOffset, rr.y, rr.width, rr.height);
-            rotationCollision = rotationCollision || (arduboy.collide(rr, block) || rr.y < SCREENLEFT);
+          } else {  // if (nextPos->y / PIXEL_SCALE >= SCREENLEFT) {
+            Rect r = Rect(nextPos->x / PIXEL_SCALE + 4, nextPos->y / PIXEL_SCALE - 6, CRAWLER_HEIGHT, CRAWLER_WIDTH);
+            rotationCollision = rotationCollision || (arduboy.collide(r, block) || r.y < SCREENLEFT);
+
+            r = Rect(enemy->animation.pos.x / PIXEL_SCALE + enemy->animation.sprite->dx, enemy->animation.pos.y / PIXEL_SCALE + enemy->animation.sprite->dy - 1, CRAWLER_WIDTH, 1);
+            grip = grip || arduboy.collide(r, block);  // || r.y <= SCREENLEFT);
+            arduboy.drawRect(r.x - cameraOffset, r.y, r.width, r.height);
           }
         } else if (enemy->animation.frame == CRAWLER_LEFT) {
           if (temp.v == BOTTOM) {
@@ -337,16 +354,27 @@ void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *
             nextPos->y -= 1 * PIXEL_SCALE;
             return;
           } else {
-            Rect rr = Rect(nextPos->x / PIXEL_SCALE, nextPos->y / PIXEL_SCALE + 7, CRAWLER_HEIGHT, CRAWLER_WIDTH);
-            arduboy.drawRect(rr.x - cameraOffset, rr.y, rr.width, rr.height);
-            rotationCollision = rotationCollision || (arduboy.collide(rr, block) || rr.y + CRAWLER_HEIGHT > SCREENRIGHT);
+            Rect r = Rect(nextPos->x / PIXEL_SCALE, nextPos->y / PIXEL_SCALE + 7, CRAWLER_HEIGHT, CRAWLER_WIDTH);
+            rotationCollision = rotationCollision || (arduboy.collide(r, block) || r.y + CRAWLER_HEIGHT > SCREENRIGHT);
+
+            r = Rect(enemy->animation.pos.x / PIXEL_SCALE + enemy->animation.sprite->dx, enemy->animation.pos.y / PIXEL_SCALE + enemy->animation.sprite->dy + CRAWLER_HEIGHT, CRAWLER_WIDTH, 1);
+            grip = grip || arduboy.collide(r, block);  // || r.y + CRAWLER_HEIGHT >= SCREENRIGHT);
+            arduboy.drawRect(r.x - cameraOffset, r.y, r.width, r.height);
           }
         }
       }
     }
   }
 
+  if (enemy->type == EnemyType::fallingCrawler) return;
+
+  if (!grip) {
+    crawlerFall(enemy, nextVel);
+    return;
+  }
+
   if (rotationCollision) return;
+
   if (enemy->animation.frame == CRAWLER_UP) {
     setCrawlerDirection(enemy, Direction::down);
     nextPos->x -= 4 * PIXEL_SCALE;
@@ -367,93 +395,6 @@ void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *
     nextPos->x += 3 * PIXEL_SCALE;
     nextPos->y += 4 * PIXEL_SCALE;
     nextVel->y = 0;
-  }
-}
-
-void checkCrawlerCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel) {
-  // arduboy.drawRect(enemy->animation.pos.x/PIXEL_SCALE + enemy->animation.sprite->dx - cameraOffset, enemy->animation.pos.y/PIXEL_SCALE + enemy->animation.sprite->dy, enemy->animation.sprite->h, enemy->animation.sprite->w);
-  uint16_t x;
-  uint16_t x_m;
-  uint8_t y;
-  if (enemy->animation.dir == Direction::left) {
-    x = nextPos->x / PIXEL_SCALE / BLOCKSIZE;
-    x_m = (MAPHEIGHT - x - 1);
-    y = (nextPos->y / PIXEL_SCALE + enemy->animation.sprite->dy) / BLOCKSIZE;
-
-    if ((levelMap[x_m][y] && levelMap[x_m][y] != DASH) || nextPos->y / PIXEL_SCALE < SCREENLEFT) {
-      setCrawlerDirection(enemy, Direction::up);
-      nextPos->x = (x * BLOCKSIZE - enemy->animation.sprite->dx) * PIXEL_SCALE;
-      nextPos->y = (nextPos->y / PIXEL_SCALE < SCREENLEFT) ? PIXEL_SCALE : (y + 1) * PIXEL_SCALE * BLOCKSIZE;
-      nextVel->y = 0;
-    } else if (!levelMap[x_m + 1][y]) {
-      if (levelMap[x_m + 1][y + 1]) {
-        setCrawlerDirection(enemy, Direction::down);
-        nextPos->x = ((x - 1) * BLOCKSIZE + enemy->animation.sprite->dx) * PIXEL_SCALE;
-        nextPos->y = y * PIXEL_SCALE * BLOCKSIZE;
-        nextVel->y = 0;
-      } else {
-        crawlerFall(enemy, nextVel);
-      }
-    }
-  } else if (enemy->animation.dir == Direction::up) {
-    x = (nextPos->x / PIXEL_SCALE + enemy->animation.sprite->h) / BLOCKSIZE;
-    x_m = (MAPHEIGHT - x - 1);
-    y = nextPos->y / PIXEL_SCALE / BLOCKSIZE;
-    if (levelMap[x_m][y]) {
-      setCrawlerDirection(enemy, Direction::right);
-      nextPos->x = ((x - 1) * BLOCKSIZE) * PIXEL_SCALE;
-      nextPos->y = (y * BLOCKSIZE - enemy->animation.sprite->dy) * PIXEL_SCALE;
-      nextVel->x = 0;
-    } else if (!levelMap[x_m][y - 1]) {
-      if (levelMap[x_m + 1][y - 1]) {
-        setCrawlerDirection(enemy, Direction::left);
-        nextPos->x = x * PIXEL_SCALE * BLOCKSIZE;
-        nextPos->y = ((y - 1) * BLOCKSIZE + enemy->animation.sprite->dy) * PIXEL_SCALE;
-        nextVel->x = 0;
-      } else if (y > 0) {
-        crawlerFall(enemy, nextVel);
-      }
-    }
-  } else if (enemy->animation.dir == Direction::right) {
-    x = (nextPos->x / PIXEL_SCALE + enemy->animation.sprite->dx + enemy->animation.sprite->h) / BLOCKSIZE;
-    x_m = (MAPHEIGHT - x - 1);
-    y = (nextPos->y / PIXEL_SCALE + enemy->animation.sprite->w) / BLOCKSIZE;
-
-    if (levelMap[x_m][y] || nextPos->y / PIXEL_SCALE > SCREENRIGHT - BLOCKSIZE) {
-      setCrawlerDirection(enemy, Direction::down);
-      nextPos->x = (x * BLOCKSIZE + enemy->animation.sprite->dx) * PIXEL_SCALE;
-      nextPos->y = (nextPos->y / PIXEL_SCALE > SCREENRIGHT - BLOCKSIZE) ? (SCREENRIGHT - CRAWLER_WIDTH) * PIXEL_SCALE : (y - 1) * PIXEL_SCALE * BLOCKSIZE;
-      // nextPos->y = (y - 1) * PIXEL_SCALE * BLOCKSIZE;
-      nextVel->y = 0;
-    } else if (!levelMap[x_m - 1][y]) {
-      if (levelMap[x_m - 1][y - 1]) {
-        setCrawlerDirection(enemy, Direction::up);
-        nextPos->x = ((x + 1) * BLOCKSIZE - enemy->animation.sprite->dx) * PIXEL_SCALE;
-        nextPos->y = y * PIXEL_SCALE * BLOCKSIZE;
-        nextVel->y = 0;
-      } else {
-        crawlerFall(enemy, nextVel);
-      }
-    }
-  } else if (enemy->animation.dir == Direction::down) {
-    x = (nextPos->x / PIXEL_SCALE + enemy->animation.sprite->dx) / BLOCKSIZE;
-    x_m = (MAPHEIGHT - x - 1);
-    y = (nextPos->y / PIXEL_SCALE + enemy->animation.sprite->dy + enemy->animation.sprite->w) / BLOCKSIZE;
-    // arduboy.drawRect(x * BLOCKSIZE - cameraOffset, y * BLOCKSIZE, 8, 8);
-
-    if (levelMap[x_m][y]) {
-      setCrawlerDirection(enemy, Direction::left);
-      nextPos->x = (x + 1) * PIXEL_SCALE * BLOCKSIZE;
-      nextPos->y = y * PIXEL_SCALE * BLOCKSIZE;
-    } else if (!levelMap[x_m][y + 1]) {
-      if (levelMap[x_m - 1][y + 1]) {
-        setCrawlerDirection(enemy, Direction::right);
-        nextPos->x = x * PIXEL_SCALE * BLOCKSIZE;
-        nextPos->y = ((y + 1) * BLOCKSIZE - enemy->animation.sprite->dy) * PIXEL_SCALE;
-      } else {
-        crawlerFall(enemy, nextVel);
-      }
-    }
   }
 }
 
@@ -603,6 +544,7 @@ void crawlerFall(enemy_t *enemy, velocity_t *vel) {
   vel->x = 0;
   vel->y = 0;
 }
+
 
 void crawlerLand(enemy_t *enemy, velocity_t *vel) {
   enemy->type = EnemyType::crawler;

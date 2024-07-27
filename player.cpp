@@ -154,7 +154,7 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
       collision_t type = Utils::collisionCorrect(player.animation, nextPos, enemyRect, true, true);
 
       if (type.v == BOTTOM) {
-        if (enemy[i].type == EnemyType::crawler) {
+        if (enemy[i].type == EnemyType::crawler || enemy[i].type == EnemyType::fallingCrawler) {
           nextVel->x = KICKBACK_V;
           flicker();
           HUD::onDamaged();

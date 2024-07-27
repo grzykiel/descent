@@ -99,7 +99,7 @@ void draw() {
   for (int i = xMin; i < xMax; i++) {
     for (int j = 0; j < MAPWIDTH; j++) {
       if (levelMap[i][j]) {
-        if (levelMap[i][j] == DASH | levelMap[i][j] == BLOCK) {
+        if (levelMap[i][j] == DASH || levelMap[i][j] == BLOCK) {
           Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, levelMap[i][j]);
         } else {
           Sprites::drawOverwrite((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, levelMap[i][j]);
