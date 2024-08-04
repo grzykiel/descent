@@ -65,11 +65,11 @@ uint8_t levelMap[MAPHEIGHT][MAPWIDTH] = {
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0,18,18,17, 0, 0 },
-  { 0, 0, 0,17, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 15,9,18,18,18,18, 3,15 },
-  { 10,0,18, 0, 0, 0, 0, 4 },
+  { 0, 0, 0, 18, 18, 0, 0, 0 },
+  { 0, 0, 1, 0, 0, 1, 0, 0 },
+  { 0, 0, 1, 0, 0, 1, 0, 0 },
+  { 15, 9, 18, 18, 18, 18, 3, 15 },
+  { 10, 0, 0, 0, 0, 0, 0, 4 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
 
@@ -79,7 +79,7 @@ uint8_t levelMap[MAPHEIGHT][MAPWIDTH] = {
 namespace Level {
 
 void init() {
-  Enemies::spawn(EnemyType::crawler, 7 * BLOCKSIZE, 3 * BLOCKSIZE);
+  // Enemies::spawn(EnemyType::crawler, 3 * BLOCKSIZE, 3 * BLOCKSIZE);
 }
 
 void draw() {
@@ -94,8 +94,6 @@ void draw() {
   xMin = max(MAPHEIGHT - 1 - xMin, 0);
   xMax = min(MAPHEIGHT - xMax, MAPHEIGHT - 1);
 
-  // for (int i = 0; i < MAPHEIGHT; i++) {
-  //   for (int j = 0; j < MAPWIDTH; j++) {
   for (int i = xMin; i < xMax; i++) {
     for (int j = 0; j < MAPWIDTH; j++) {
       if (levelMap[i][j]) {
@@ -139,7 +137,7 @@ void shiftMap() {
   autoTile(nextRoom);
   generateDashes(nextRoom);
   generateBlocks(nextRoom);
-  // generateEnemies(nextRoom);
+  generateEnemies(nextRoom);
   copyMap(nextRoom, 0, levelMap, 32);
 }
 
@@ -275,6 +273,7 @@ void generateEnemies(uint8_t room[][SCREENWIDTH]) {
   uint8_t i = random(1, SCREENHEIGHT - 1);
   uint8_t j = random(0, SCREENWIDTH);
 
+  /*
   if (random(0, 2) > 0) {
     // BLOB
     while (room[i][j]) {
@@ -295,12 +294,27 @@ void generateEnemies(uint8_t room[][SCREENWIDTH]) {
   while (room[i][j] || !room[i + 1][j]) {
     i = random(0, SCREENHEIGHT);
     j = random(0, SCREENWIDTH);
-  };
-  if (random(0, 2) > 0) {
-    Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
-  } else {
-    Enemies::spawn(EnemyType::tortoise, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
   }
+  if (random(0, 3) < 2) {
+    if (random(0, 2)) {
+      Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+    } else {
+      Enemies::spawn(EnemyType::tortoise, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+    }
+  } else {
+    // while (room[i][j] || !room[i + 1][j]) {
+    //   i = random(0, SCREENHEIGHT);
+    //   i = random(0, SCREENWIDTH);
+    // }
+    Enemies::spawn(EnemyType::crawler, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+  }*/
+
+  //debug crawler
+  while (room[i][j] || !room[i + 1][j]) {
+    i = random(0, SCREENHEIGHT);
+    j = random(0, SCREENWIDTH);
+  }
+  Enemies::spawn(EnemyType::crawler, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
 }
 
 void destroyBlock(int16_t i, uint8_t j) {

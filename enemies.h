@@ -5,7 +5,7 @@
 #include "player.h"
 #include "bullet.h"
 
-#define MAX_ENEMIES   5
+#define MAX_ENEMIES   3// 5
 
 #define BLOB_MAX_VEL    8
 #define BLOB_RECOIL_VEL -96
