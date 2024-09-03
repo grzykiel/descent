@@ -49,6 +49,8 @@ sprite_t wormSprite = {
   3
 };
 
+//TODO remove
+/*
 sprite_t crawlerSprite = {
   Enemies::crawler,
   Enemies::crawler,
@@ -58,6 +60,51 @@ sprite_t crawlerSprite = {
   2,
   CRAWLER_WIDTH,
   CRAWLER_HEIGHT
+};
+*/
+
+sprite_t crawlerSpriteUp = {
+  Enemies::crawler,
+  Enemies::crawler,
+  0,
+  nullptr,
+  0,
+  2,
+  CRAWLER_WIDTH,
+  CRAWLER_HEIGHT
+};
+
+sprite_t crawlerSpriteDown = {
+  Enemies::crawler,
+  Enemies::crawler,
+  0,
+  nullptr,
+  4,
+  1,
+  CRAWLER_WIDTH,
+  CRAWLER_HEIGHT
+};
+
+sprite_t crawlerSpriteLeft = { 
+  Enemies::crawler,
+  Enemies::crawler,
+  0,
+  nullptr,
+  2,
+  4,
+  CRAWLER_HEIGHT,
+  CRAWLER_WIDTH
+};
+
+sprite_t crawlerSpriteRight = {
+  Enemies::crawler,
+  Enemies::crawler,
+  0,
+  nullptr,
+  1,
+  0,
+  CRAWLER_HEIGHT,
+  CRAWLER_WIDTH
 };
 
 sprite_t tortoiseSprite = {
@@ -111,7 +158,7 @@ void update() {
     nextPos.y += nextVel.y;
 
     if (enemy[i].type == EnemyType::crawler || enemy[i].type == EnemyType::fallingCrawler) {
-      checkCrawlerTileCollision(&enemy[i], &nextPos, &nextVel);
+      checkCrawlerCollision(&enemy[i], &nextPos, &nextVel);
     } else {
       checkTileCollision(&enemy[i], &nextPos, &nextVel);
     }
@@ -232,24 +279,11 @@ void checkTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel
           enemy->animation.dir = enemy->animation.dir == Direction::left ? Direction::right : Direction::left;
         }
       }
-      /*else if (enemy->type == EnemyType::fallingCrawler) {
-        if (temp.v == BOTTOM) {
-          nextVel->x = 0;
-          if (temp.v == BOTTOM && enemy->type == EnemyType::fallingCrawler) {
-            uint16_t x = (nextPos->x / PIXEL_SCALE + enemy->animation.sprite->dx) / BLOCKSIZE;
-            nextPos->x = x * BLOCKSIZE * PIXEL_SCALE;
-            uint16_t y = (nextPos->y / PIXEL_SCALE + enemy->animation.sprite->dy) / BLOCKSIZE;
-            nextPos->y = y * BLOCKSIZE * PIXEL_SCALE;
-            crawlerLand(enemy, nextVel);
-            return;
-          }
-        }
-      }*/
     }
   }
 }
 
-void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel) {
+void checkCrawlerCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel) {
   window_t wd = Utils::getCollisionWindow(enemy->animation.pos);
   bool rotationCollision = false;
   bool grip = false;
@@ -479,7 +513,7 @@ void spawn(EnemyType type, uint16_t x, uint8_t y) {
     enemy[currentEnemy].animation.sprite = &tortoiseSprite;
     enemy[currentEnemy].hp = TORTOISE_HP;
   } else if (type == EnemyType::crawler) {
-    enemy[currentEnemy].animation.sprite = &crawlerSprite;
+    enemy[currentEnemy].animation.sprite = &crawlerSpriteUp;
     enemy[currentEnemy].hp = CRAWLER_HP;
     // enemy[currentEnemy].animation.dir = Direction::left;
     setCrawlerDirection(&enemy[currentEnemy], Direction::left);
@@ -499,28 +533,16 @@ void setCrawlerDirection(enemy_t *crawler, Direction dir) {
   crawler->animation.dir = dir;
   if (dir == Direction::left) {
     crawler->animation.frame = CRAWLER_UP;
-    crawler->animation.sprite->dx = 0;
-    crawler->animation.sprite->dy = 2;
-    crawler->animation.sprite->w = CRAWLER_WIDTH;
-    crawler->animation.sprite->h = CRAWLER_HEIGHT;
+    crawler->animation.sprite = &crawlerSpriteUp;
   } else if (dir == Direction::right) {
     crawler->animation.frame = CRAWLER_DOWN;
-    crawler->animation.sprite->dx = 4;
-    crawler->animation.sprite->dy = 1;
-    crawler->animation.sprite->w = CRAWLER_WIDTH;
-    crawler->animation.sprite->h = CRAWLER_HEIGHT;
+    crawler->animation.sprite = &crawlerSpriteDown;
   } else if (dir == Direction::up) {
     crawler->animation.frame = CRAWLER_RIGHT;
-    crawler->animation.sprite->dx = 1;
-    crawler->animation.sprite->dy = 0;
-    crawler->animation.sprite->w = CRAWLER_HEIGHT;
-    crawler->animation.sprite->h = CRAWLER_WIDTH;
+    crawler->animation.sprite = &crawlerSpriteRight;
   } else if (dir == Direction::down) {
     crawler->animation.frame = CRAWLER_LEFT;
-    crawler->animation.sprite->dx = 2;
-    crawler->animation.sprite->dy = 4;
-    crawler->animation.sprite->w = CRAWLER_HEIGHT;
-    crawler->animation.sprite->h = CRAWLER_WIDTH;
+    crawler->animation.sprite = &crawlerSpriteLeft;
   }
 }
 

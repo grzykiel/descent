@@ -5,7 +5,7 @@
 #include "player.h"
 #include "bullet.h"
 
-#define MAX_ENEMIES   3// 5
+#define MAX_ENEMIES   5
 
 #define BLOB_MAX_VEL    8
 #define BLOB_RECOIL_VEL -96
@@ -61,8 +61,8 @@ namespace Enemies {
   void updateCrawling(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel);  // worm & tortoise
   void updateFlying(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel);
   void updateCrawler(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel);   // wall crawler
-  void checkCrawlerTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel);
   bool ledgeDetect(animation_t animation);
+  void checkCrawlerCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel);
 
   void spawn(EnemyType type, uint16_t x, uint8_t y);
   void wake(enemy_t *bat);
