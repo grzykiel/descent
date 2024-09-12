@@ -24,17 +24,31 @@ sprite_t bulletSprite = {
 };
 
 animation_t bullet[5];
-// TODO include in initBullets()
-uint8_t bulletCapacity = MAX_BULLETS;
-uint8_t bulletsRemaining = bulletCapacity;
+uint8_t shootTimer;
+bool triggerReleased;
+
+animation_t bulletAnim;
+uint8_t bulletCapacity;
+uint8_t bulletsRemaining;
 uint8_t chamber = 0;
-uint8_t shootTimer = 0;
-bool triggerReleased = false;
+
+uint8_t bulletAccel;
+uint16_t bulletV0;
+uint8_t fireRate;
 
 namespace Bullet {
 void init() {
   initMuzzleFlash();
   initBullets();
+
+  shootTimer = 0;
+  triggerReleased = false;
+  bulletCapacity = AMMO_INIT;
+  bulletsRemaining = AMMO_INIT;
+
+  bulletAccel = BULLET_ACCEL_INITIAL;
+  bulletV0 = BULLET_V0_INITIAL;
+  fireRate = FIRE_RATE_INITIAL;
 }
 
 void update() {
@@ -61,16 +75,16 @@ void shoot() {
       bullet[chamber].active = true;
       bullet[chamber].pos.x = player.animation.pos.x;
       bullet[chamber].pos.y = player.animation.pos.y;
-      bullet[chamber].vel.x = BULLET_START_VEL;
+      bullet[chamber].vel.x = bulletV0;  //BULLET_START_VEL;
       bullet[chamber].vel.y = player.animation.vel.y;
       bullet[chamber].frame = 0;
       bullet[chamber].t = 0;
-      chamber = (chamber + 1) % MAX_BULLETS;
+      chamber = (chamber + 1) % AMMO_CAP;
 
       bulletsRemaining--;
       HUD::onShoot();
 
-      shootTimer = FIRE_RATE;
+      shootTimer = fireRate;
     } else {
       Particles::spawnSmoke();
     }
@@ -100,7 +114,7 @@ void drawMuzzleFlash() {
 }
 
 void initBullets() {
-  for (int i = 0; i < MAX_BULLETS; i++) {
+  for (int i = 0; i < AMMO_CAP; i++) {
     bullet[i].sprite = &bulletSprite;
     bullet[i].active = false;
     bullet[i].frame = 0;
@@ -109,10 +123,10 @@ void initBullets() {
 }
 
 void updateBullets() {
-  for (int i = 0; i < MAX_BULLETS; i++) {
+  for (int i = 0; i < AMMO_CAP; i++) {
     if (bullet[i].active) {
       bullet[i].pos.x -= bullet[i].vel.x;
-      bullet[i].vel.x -= BULLET_ACCEL;
+      bullet[i].vel.x -= bulletAccel;
       bullet[i].active = Utils::updateAnimation(&bullet[i]);
     }
   }
@@ -121,7 +135,7 @@ void updateBullets() {
 }
 
 void collisionCheck() {
-  for (int b = 0; b < MAX_BULLETS; b++) {
+  for (int b = 0; b < AMMO_CAP; b++) {
     if (!bullet[b].active) continue;
 
     // window_t wd = Utils::getCollisionWindow(bullet[b].pos.x/PIXEL_SCALE, bullet[b].animation.pos.y/PIXEL_SCALE);
@@ -129,17 +143,16 @@ void collisionCheck() {
 
     for (int i = wd.xMin; i <= wd.xMax; i++) {
       for (int j = wd.yMin; j <= wd.yMax; j++) {
-        if (levelMap[i][j]) {
-          if (levelMap[i][j] != DASH) {
-            Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
-            if (Utils::collides(bullet[b], blockRect)) {
-              bullet[b].active = false;
-              bullet[b].pos.x = blockRect.x * PIXEL_SCALE;
-              if (levelMap[i][j] == BLOCK) {
-                Level::destroyBlock(i, j);
-              } else {
-                Particles::spawnClink(bullet[b].pos, 8, 2);
-              }
+        if (!levelMap[i][j]) continue;
+        if (levelMap[i][j] != DASH) {
+          Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
+          if (Utils::collides(bullet[b], blockRect)) {
+            bullet[b].active = false;
+            bullet[b].pos.x = blockRect.x * PIXEL_SCALE;
+            if (levelMap[i][j] == BLOCK) {
+              Level::destroyBlock(i, j);
+            } else {
+              Particles::spawnClink(bullet[b].pos, 8, 2);
             }
           }
         }
@@ -149,7 +162,7 @@ void collisionCheck() {
 }
 
 void drawBullets() {
-  for (uint8_t i = 0; i < MAX_BULLETS; i++) {
+  for (uint8_t i = 0; i < AMMO_CAP; i++) {
     if (bullet[i].active) {
       Sprites::drawSelfMasked(bullet[i].pos.x / PIXEL_SCALE - cameraOffset, bullet[i].pos.y / PIXEL_SCALE, bullet[i].sprite->spriteR, bullet[i].frame);
     }
@@ -157,12 +170,20 @@ void drawBullets() {
 }
 
 void onShiftMap() {
-  for (uint8_t i = 0; i < MAX_BULLETS; i++) {
+  for (uint8_t i = 0; i < AMMO_CAP; i++) {
     if (bullet[i].active) Level::shiftPos(&bullet[i].pos);
   }
 }
 
+void decreaseFireRate() {
+  fireRate = max(fireRate - 1, FIRE_RATE_MIN);
+}
+
 // DEBUG
+void increaseFireRate() {
+  fireRate = min(fireRate + 1, 30);
+}
+
 void drawAmmo() {
   // arduboy.setCursor(player.animation.pos.x + 9 - cameraOffset, player.animation.pos.y);
   // arduboy.print(bulletsRemaining);

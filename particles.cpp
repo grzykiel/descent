@@ -69,6 +69,7 @@ void initExplosion(uint8_t i) {
   explosion[i].frame = 0;
 }
 
+// TODO simplify (pass only x y)
 void spawnExplosion(position_t pos, int8_t dx, int8_t dy) {
   initExplosion(explosionIndex);
   explosion[explosionIndex].pos.x = pos.x / PIXEL_SCALE + dx - 4; 

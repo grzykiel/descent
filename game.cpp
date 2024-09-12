@@ -13,6 +13,7 @@ void init() {
   Level::init();
   Particles::init();
   Bullet::init();
+  Powerups::init();
 }
 
 void input() {
@@ -22,16 +23,6 @@ void input() {
     Player::run(Direction::right);
   } else if (arduboy.notPressed(left_btn | right_btn)) {
     Player::stop();
-  }
-
-  if (movementMode == TOPDOWN) {
-    // if (arduboy.pressed(up_btn)) {
-    //   player.animation.vel.x = walkSpeed * PIXEL_SCALE - 1;
-    // } else if (arduboy.pressed(down_btn)) {
-    //   player.animation.vel.x = -walkSpeed * PIXEL_SCALE;
-    // } else if (arduboy.notPressed(up_btn | down_btn)) {
-    //   player.animation.vel.x = 0;
-    // }
   }
 
   if (arduboy.justPressed(A_BUTTON)) {
@@ -46,7 +37,7 @@ void input() {
     if (triggerReleased) Bullet::shoot();
   } else if (arduboy.justReleased(A_BUTTON)) {
     triggerReleased = true;
-    shootTimer = FIRE_RATE;
+    shootTimer = fireRate; //FIRE_RATE;
   }
 
 
@@ -80,13 +71,13 @@ void draw() {
   // draw player
   Player::draw();
   // arduboy.setCursor(player.animation.x - cameraOffset + 9, player.animation.y);
-  // arduboy.print(player.animation.t);
 
   // draw level
   Level::draw();
   Bullet::draw();
   Enemies::draw();
   Particles::draw();
+  Powerups::draw();
   HUD::draw();
 }
 

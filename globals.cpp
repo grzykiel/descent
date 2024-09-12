@@ -6,9 +6,6 @@ Sprites sprites;
 // uint8_t gameState = STATE_GAME;
 uint8_t gameState = STATE_MENU;
 
-// uint8_t movementMode = TOPDOWN;
-uint8_t movementMode = PLATFORM;
-
 int16_t cameraOffset = 0;
 
 namespace Utils {

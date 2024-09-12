@@ -26,6 +26,7 @@ player_t player;  //TODO initialise
 
 // const int8_t walkSpeed = 1;
 const uint8_t walkAnimDelay = 6;
+uint8_t maxHP;
 
 namespace Player {
 void init() {
@@ -38,10 +39,9 @@ void init() {
   player.animation.pos.y = 28 * PIXEL_SCALE;   //TODO #define
   player.animation.vel.x = 0;
   player.animation.vel.y = 0;
-
   player.animation.dir = Direction::right;
-
-  Bullet::init();
+  player.hp = HP_INIT;
+  maxHP = HP_INIT;
 }
 
 
@@ -50,14 +50,11 @@ void update() {
 
   velocity_t nextVel = player.animation.vel;
 
-  // physics update
-  if (movementMode == PLATFORM) {
-    nextVel.x += GRAVITY;
-    if (player.state == PlayerState::jumping) {
-      if (player.animation.t == HALF_JUMP && arduboy.notPressed(A_BUTTON | B_BUTTON)) {
-        nextVel.x = 0;
-        fall();
-      }
+  nextVel.x += GRAVITY;
+  if (player.state == PlayerState::jumping) {
+    if (player.animation.t == HALF_JUMP && arduboy.notPressed(A_BUTTON | B_BUTTON)) {
+      nextVel.x = 0;
+      fall();
     }
   }
   nextVel.x = max(nextVel.x, -8 * PIXEL_SCALE);  // TODO re#define terminal velocity
@@ -77,6 +74,8 @@ void update() {
     nextPos.y = (SCREENRIGHT - player.animation.sprite->w - player.animation.sprite->dy) * PIXEL_SCALE;
     nextVel.y = 0;
   }
+
+  checkPowerupCollisions(nextPos);
 
   player.animation.vel = nextVel;
 
@@ -156,8 +155,7 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
       if (type.v == BOTTOM) {
         if (enemy[i].type == EnemyType::crawler || enemy[i].type == EnemyType::fallingCrawler) {
           nextVel->x = KICKBACK_V;
-          flicker();
-          HUD::onDamaged();
+          onDamaged();
         } else {
           bounce();
           nextVel->x = BOUNCE_VELOCITY;
@@ -167,8 +165,7 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
         }
       } else if (type.v == TOP) {
         nextVel->x = -KICKBACK_V;
-        flicker();
-        HUD::onDamaged();
+        onDamaged();
       }
 
       if (type.h > NONE) {
@@ -177,9 +174,18 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
         } else if (type.h == RIGHT) {
           nextVel->y = -KICKBACK_H;
         }
-        flicker();
-        HUD::onDamaged();
+        onDamaged();
       }
+    }
+  }
+}
+
+void checkPowerupCollisions(position_t nextPos) {
+  for (uint8_t i = 0; i < N_POWERUPS; i++) {
+    if (!powerup[i].active) continue;
+    Rect pb = Rect(powerup[i].pos.x/PIXEL_SCALE, powerup[i].pos.y/PIXEL_SCALE, POWERUP_SIZE, POWERUP_SIZE);
+    if (Utils::collides(player.animation, pb)) {
+      Powerups::collect(i);
     }
   }
 }
@@ -239,4 +245,19 @@ void land() {
 void flicker() {
   player.animation.iframe = PLAYER_IFRAMES;
 }
+
+void onDamaged() {
+  player.hp = max(player.hp - 1, 0);
+  flicker();
+  HUD::onDamaged();
+}
+
+void onPickupHeart() {
+  player.hp = min(player.hp + 1, maxHP);
+}
+
+void onPickupHeartUpgrade() {
+  maxHP = min(maxHP + 1, HP_CAP);
+}
+
 }

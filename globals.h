@@ -20,6 +20,8 @@
 #define SCREENBOTTOM 0
 #define SCREENMID 64
 
+#define OFFSCREEN 32768
+
 #define MAPWIDTH 8
 #define MAPHEIGHT 48
 
@@ -33,6 +35,9 @@
 #define PLAYER_WIDTH 6
 #define PLAYER_HEIGHT 8
 #define PLAYER_OFFSET 1  //sprite offset
+
+#define POWERUP_SIZE 6
+#define N_POWERUPS 6
 
 // special tile indices
 #define DASH 17
@@ -74,8 +79,6 @@ extern Arduboy2Base arduboy;
 extern Sprites sprites;
 
 extern uint8_t gameState;
-
-extern uint8_t movementMode;  //debug
 
 extern int16_t cameraOffset;
 
@@ -140,6 +143,12 @@ typedef struct {
   uint8_t frame;
   position_t pos;
 } particle_t;
+
+typedef struct {
+  bool active;
+  position_t pos;
+  uint8_t prob;
+} powerup_t;
 
 typedef struct {
   uint8_t xMin;

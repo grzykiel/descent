@@ -10,6 +10,7 @@
 #include "enemies.h"
 #include "hud.h"
 #include "particles.h"
+#include "powerups.h"
 
 
 void setup() {

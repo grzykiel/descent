@@ -4,6 +4,7 @@
 #include "bitmaps.h"
 #include "player.h"
 #include "bullet.h"
+#include "powerups.h"
 
 #define MAX_ENEMIES   5
 

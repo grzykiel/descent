@@ -15,11 +15,6 @@ typedef struct {
   position_t pos;
 } hud_t;
 
-extern hud_t damageCounter;
-extern hud_t ammoCounter;
-extern hud_t HP;
-
-
 namespace HUD {
 
   void update();

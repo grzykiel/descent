@@ -29,8 +29,6 @@ void update() {
     damageCounter.t--;
   }
 
-
-
   if (bulletsRemaining > 0 && ammoCounter.t > 0) {
     ammoCounter.t--;
     if (ammoCounter.t > AMMO_COUNTER_IFRAMES || ammoCounter.f == 0) {
@@ -57,7 +55,7 @@ void draw() {
   }
   if (ammoCounter.t > 0) {
     draw(ammoCounter, bulletsRemaining);
-    draw(HP, 2);
+    draw(HP, player.hp);
   }
 }
 

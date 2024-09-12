@@ -9,6 +9,8 @@
 #include "enemies.h"
 #include "bullet.h"
 
+#define HP_CAP 5
+#define HP_INIT 3
 
 typedef struct {
   // Direction dir;
@@ -16,6 +18,8 @@ typedef struct {
   animation_t animation;
 
   PlayerState state = PlayerState::falling;
+
+  uint8_t hp;
 
 } player_t;
 
@@ -46,9 +50,6 @@ typedef struct {
 
 extern player_t player;
 
-extern const int8_t walkSpeed;
-extern const uint8_t walkAnimDelay;
-
 
 #endif
 
@@ -59,7 +60,6 @@ namespace Player {
   void draw();
 
   void updateAnimation();
-  // void initPlayer();
 
   void run(Direction dir);
   void jump();
@@ -73,4 +73,9 @@ namespace Player {
 
   void checkTileCollisions(position_t *nextPos, velocity_t *nextVel);
   void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel);
+  void checkPowerupCollisions(position_t nextPos);
+
+  void onDamaged(); 
+  void onPickupHeart();
+  void onPickupHeartUpgrade();
 }

@@ -85,7 +85,7 @@ sprite_t crawlerSpriteDown = {
   CRAWLER_HEIGHT
 };
 
-sprite_t crawlerSpriteLeft = { 
+sprite_t crawlerSpriteLeft = {
   Enemies::crawler,
   Enemies::crawler,
   0,
@@ -432,21 +432,20 @@ bool ledgeDetect(animation_t animation) {
 }
 
 void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
-  for (uint8_t i = 0; i < MAX_BULLETS; i++) {
-    if (bullet[i].active) {
-      if (Utils::collides(enemy->animation, bullet[i])) {
-        bullet[i].active = false;
-        if (enemy->type == EnemyType::tortoise) {
-          Particles::spawnClink(enemy->animation.pos, 4, 2);
-          return;
-        }
-        enemy->hp--;
-        enemy->animation.iframe = 30;
-        if (enemy->hp < 1) {
-          kill(enemy, true);
-        } else if (enemy->type == EnemyType::blob) {
-          nextVel->x = BLOB_RECOIL_VEL;
-        }
+  for (uint8_t i = 0; i < AMMO_CAP; i++) {
+    if (!bullet[i].active) continue;
+    if (Utils::collides(enemy->animation, bullet[i])) {
+      bullet[i].active = false;
+      if (enemy->type == EnemyType::tortoise) {
+        Particles::spawnClink(enemy->animation.pos, 4, 2);
+        return;
+      }
+      enemy->hp--;
+      enemy->animation.iframe = 30;
+      if (enemy->hp < 1) {
+        kill(enemy, true);
+      } else if (enemy->type == EnemyType::blob) {
+        nextVel->x = BLOB_RECOIL_VEL;
       }
     }
   }
@@ -458,6 +457,9 @@ void kill(enemy_t *enemy, bool shot) {
     Particles::spawnExplosion(enemy->animation.pos,
                               enemy->animation.sprite->dx + enemy->animation.sprite->h / 2,
                               enemy->animation.sprite->dy + enemy->animation.sprite->w / 2);
+    Powerups::spawn(HEART, 
+                    enemy->animation.pos.x/PIXEL_SCALE + enemy->animation.sprite->dx + enemy->animation.sprite->h / 2 - 3, 
+                    enemy->animation.pos.y);
   } else {
     Particles::spawnPop(enemy->animation.pos,
                         enemy->animation.sprite->dx + enemy->animation.sprite->h / 2,
@@ -563,7 +565,7 @@ void crawlerLand(enemy_t *enemy, velocity_t *vel) {
 void onShiftMap() {
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
     if (!enemy[i].animation.active) continue;
-    if (enemy[i].animation.pos.x < 49152 - 128 * PIXEL_SCALE) {  //TODO #define threshold
+    if (enemy[i].animation.pos.x < OFFSCREEN) {
       Level::shiftPos(&enemy[i].animation.pos);
     } else {
       enemy[i].animation.active = false;

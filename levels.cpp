@@ -65,9 +65,12 @@ uint8_t levelMap[MAPHEIGHT][MAPWIDTH] = {
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 18, 18, 0, 0, 0 },
-  { 0, 0, 1, 0, 0, 1, 0, 0 },
-  { 0, 0, 1, 0, 0, 1, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  // { 0, 0, 0, 18, 18, 0, 0, 0 },
+  // { 0, 0, 1, 0, 0, 1, 0, 0 },
+  // { 0, 0, 1, 0, 0, 1, 0, 0 },
   { 15, 9, 18, 18, 18, 18, 3, 15 },
   { 10, 0, 0, 0, 0, 0, 0, 4 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -80,6 +83,7 @@ namespace Level {
 
 void init() {
   // Enemies::spawn(EnemyType::crawler, 3 * BLOCKSIZE, 3 * BLOCKSIZE);
+  // Powerups::spawn(HEART, 0, 3*BLOCKSIZE);
 }
 
 void draw() {
@@ -121,12 +125,10 @@ void shiftMap() {
   shiftPos(&player.animation.pos);  // TODO Player::onShiftMap();
 
   Bullet::onShiftMap();
-
   Enemies::onShiftMap();
-
   Particles::onShiftMap();
-
   HUD::onShiftMap();
+  Powerups::onShiftMap();
 
 
   copyMap(levelMap, 16, levelMap, 0);
