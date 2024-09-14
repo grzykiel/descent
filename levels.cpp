@@ -82,6 +82,7 @@ uint8_t levelMap[MAPHEIGHT][MAPWIDTH] = {
 namespace Level {
 
 void init() {
+  // TODO generate start map
   // Enemies::spawn(EnemyType::crawler, 3 * BLOCKSIZE, 3 * BLOCKSIZE);
   // Powerups::spawn(HEART, 0, 3*BLOCKSIZE);
 }

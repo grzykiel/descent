@@ -11,7 +11,7 @@ sprite_t playerRunSprite = {
   8         //h
 };
 
-uint8_t jumpTransitions[5] = { 1, 15, 30, 45, 60 };
+const uint8_t jumpTransitions[5] PROGMEM = { 1, 15, 30, 45, 60 };
 sprite_t playerJumpSprite = {
   Player::jumpRightSprite,
   Player::jumpLeftSprite,
@@ -183,7 +183,7 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
 void checkPowerupCollisions(position_t nextPos) {
   for (uint8_t i = 0; i < N_POWERUPS; i++) {
     if (!powerup[i].active) continue;
-    Rect pb = Rect(powerup[i].pos.x/PIXEL_SCALE, powerup[i].pos.y/PIXEL_SCALE, POWERUP_SIZE, POWERUP_SIZE);
+    Rect pb = Rect(powerup[i].pos.x, powerup[i].pos.y, POWERUP_SIZE, POWERUP_SIZE);
     if (Utils::collides(player.animation, pb)) {
       Powerups::collect(i);
     }

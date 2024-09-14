@@ -1,9 +1,9 @@
 #include "enemies.h"
 
-uint8_t blobTransitions[2] = { 45, 90 };
-uint8_t batTransitions[2] = { 15, 30 };
-uint8_t wormTransitions[2] = { 15, 30 };  //{ 45, 90 };
-uint8_t tortoiseTransitions[2] = { 60, 120 };
+const uint8_t blobTransitions[2] PROGMEM = { 45, 90 };
+const uint8_t batTransitions[2] PROGMEM = { 15, 30 };
+const uint8_t wormTransitions[2] PROGMEM = { 15, 30 };  //{ 45, 90 };
+const uint8_t tortoiseTransitions[2] PROGMEM = { 60, 120 };
 
 sprite_t blobSprite = {
   Enemies::blob,
@@ -459,7 +459,7 @@ void kill(enemy_t *enemy, bool shot) {
                               enemy->animation.sprite->dy + enemy->animation.sprite->w / 2);
     Powerups::spawn(HEART, 
                     enemy->animation.pos.x/PIXEL_SCALE + enemy->animation.sprite->dx + enemy->animation.sprite->h / 2 - 3, 
-                    enemy->animation.pos.y);
+                    enemy->animation.pos.y/PIXEL_SCALE + enemy->animation.sprite->dy + enemy->animation.sprite->w / 2 - 3 );
   } else {
     Particles::spawnPop(enemy->animation.pos,
                         enemy->animation.sprite->dx + enemy->animation.sprite->h / 2,

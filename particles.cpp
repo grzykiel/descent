@@ -1,26 +1,26 @@
 #include "particles.h"
 
 particle_t blockFragment[MAX_BLOCK_FRAGMENTS];
-uint8_t blockTransitions[] = { 3, 6, 9 };
+const uint8_t blockTransitions[] PROGMEM = { 3, 6, 9 };
 uint8_t blockIndex = 0;
 
 particle_t explosion[MAX_EXPLOSIONS];
-uint8_t explosionTransitions[] = { 4, 8, 12, 16, 20, 24, 28, 32 };  //{ 6, 12, 18, 24, 30, 36, 42, 48 };
+const uint8_t explosionTransitions[] PROGMEM = { 4, 8, 12, 16, 20, 24, 28, 32 };  //{ 6, 12, 18, 24, 30, 36, 42, 48 };
 uint8_t explosionIndex = 0;
 
 particle_t clink[MAX_CLINKS];
-uint8_t clinkTransitions[] = { 2, 4, 7, 10 };
+const uint8_t clinkTransitions[] PROGMEM = { 2, 4, 7, 10 };
 uint8_t clinkIndex = 0;
 
 particle_t pop[MAX_POPS];
-uint8_t popTransitions[] = { 2, 4, 6, 8, 10, 12, 14, 16 };  //{3, 6, 9, 12, 15, 18, 21, 24};
+const uint8_t popTransitions[] PROGMEM = { 2, 4, 6, 8, 10, 12, 14, 16 };  //{3, 6, 9, 12, 15, 18, 21, 24};
 uint8_t popIndex = 0;
 
 particle_t rechargeAnimation;
-uint8_t rechargeTransitions[] = { 1, 2, 3, 4, 5, 6, 7 };
+const uint8_t rechargeTransitions[] PROGMEM = { 1, 2, 3, 4, 5, 6, 7 };
 
 particle_t smoke;
-uint8_t smokeTransitions[] = { 5, 11, 17, 23 };
+const uint8_t smokeTransitions[] PROGMEM = { 5, 11, 17, 23 };
 
 namespace Particles {
 void init() {

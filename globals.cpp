@@ -83,7 +83,7 @@ collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider) 
 
 bool updateAnimation(animation_t *anim) {
   anim->t++;
-  if (anim->t == anim->sprite->transitions[anim->frame]) {
+  if (anim->t == (uint8_t) pgm_read_word(&anim->sprite->transitions[anim->frame])) {
     if (anim->frame < anim->sprite->last) {
       anim->frame++;
     } else {
@@ -95,7 +95,7 @@ bool updateAnimation(animation_t *anim) {
 
 bool updateAnimation(particle_t *particle, uint8_t *transitions, uint8_t last) {
   particle->t++;
-  if (particle->t == transitions[particle->frame]) {
+  if (particle->t == (uint8_t) pgm_read_word(&transitions[particle->frame])) {
     if (particle->frame < last) { 
       particle->frame++;
     } else {

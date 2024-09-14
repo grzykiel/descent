@@ -15,7 +15,7 @@
 #define FIRE_RATE_INITIAL 15
 #define FIRE_RATE_MIN 5
 
-const uint8_t muzzleFlashTransitions[] = { 5 };
+const uint8_t muzzleFlashTransitions[] PROGMEM = { 5 };
 extern uint8_t shootTimer;
 extern bool triggerReleased;
 
@@ -23,7 +23,7 @@ extern animation_t bullet[AMMO_CAP];
 extern uint8_t bulletsRemaining;
 extern uint8_t fireRate;
 
-const uint8_t bulletTransitions[] = {2, 3, 5, 8, 11, 15, 20}; //{ 1, 2, 3, 5, 8, 11, 15 };  //, 20};
+const uint8_t bulletTransitions[] PROGMEM = {2, 3, 5, 8, 11, 15, 20}; //{ 1, 2, 3, 5, 8, 11, 15 };  //, 20};
 
 namespace Bullet {
 void init();

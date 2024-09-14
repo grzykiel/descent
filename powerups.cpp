@@ -2,20 +2,20 @@
 
 powerup_t powerup[N_POWERUPS];
 
-const uint8_t powerupSpawnProb[] = { 2, 10, 10, 10, 10, 10, 10 };  //TODO PROGMEM
+const uint8_t powerupSpawnProb[] PROGMEM = { 10, 10, 10, 10, 10, 10, 10 };  
 
 namespace Powerups {
 void init() {
   for (uint8_t i = 0; i < N_POWERUPS; i++) {
     powerup[i].active = false;
-    powerup[i].prob = powerupSpawnProb[i];
+    powerup[i].prob = (uint8_t) pgm_read_word(&powerupSpawnProb[i]);
   }
 }
 
 void draw() {
   for (uint8_t i = 0; i < N_POWERUPS; i++) {
     if (powerup[i].active) {
-      sprites.drawSelfMasked(powerup[i].pos.x / PIXEL_SCALE - cameraOffset, powerup[i].pos.y / PIXEL_SCALE, powerupSprite, i);
+      sprites.drawSelfMasked(powerup[i].pos.x - cameraOffset, powerup[i].pos.y, powerupSprite, i);
     }
   }
 }
@@ -35,8 +35,10 @@ void onShiftMap() {
 void spawn(uint8_t type, uint16_t x, int16_t y) {
   if (!random(0, powerup[type].prob)) {
     powerup[type].active = true;
-    powerup[type].pos.x = x * PIXEL_SCALE;
+    powerup[type].pos.x = x;
     powerup[type].pos.y = y;
+  } else {
+    powerup[type].active = false;
   }
 }
 
