@@ -20,6 +20,7 @@ namespace Game {
   void update();
   void draw();
   void updateCamera();
+  void onDie();
   
 }
 

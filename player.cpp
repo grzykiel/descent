@@ -46,6 +46,8 @@ void init() {
 
 
 void update() {
+
+
   position_t nextPos = player.animation.pos;
 
   velocity_t nextVel = player.animation.vel;
@@ -59,12 +61,14 @@ void update() {
   }
   nextVel.x = max(nextVel.x, -8 * PIXEL_SCALE);  // TODO re#define terminal velocity
 
+
   nextPos.x += nextVel.x;
   nextPos.y += nextVel.y;
 
   //adjust for collisions
   checkEnemyCollisions(&nextPos, &nextVel);
   checkTileCollisions(&nextPos, &nextVel);
+
 
   //Boundary check
   if (nextPos.y / PIXEL_SCALE <= SCREENLEFT - player.animation.sprite->dy) {
@@ -74,6 +78,8 @@ void update() {
     nextPos.y = (SCREENRIGHT - player.animation.sprite->w - player.animation.sprite->dy) * PIXEL_SCALE;
     nextVel.y = 0;
   }
+
+
 
   checkPowerupCollisions(nextPos);
 
@@ -249,7 +255,11 @@ void flicker() {
 void onDamaged() {
   player.hp = max(player.hp - 1, 0);
   flicker();
-  HUD::onDamaged();
+  if (player.hp == 0) {
+    Game::onDie();
+  } else {
+    HUD::onDamaged();
+  }
 }
 
 void onPickup(uint8_t type) {

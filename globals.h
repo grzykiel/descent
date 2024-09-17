@@ -98,8 +98,6 @@ enum class PlayerState : uint8_t {
   falling
 };
 
-
-
 typedef struct {
   uint8_t v;
   uint8_t h;

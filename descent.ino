@@ -37,12 +37,9 @@ void loop() {
 }
 
 void stateLoop() {
-  switch (gameState) {
-    case STATE_MENU:
-      Menu::loop();
-      break;
-    case STATE_GAME:
-      Game::loop();
-      break;
+  if (gameState == STATE_MENU || gameState == STATE_GAMEOVER) {
+    Menu::loop();
+  } else if (gameState == STATE_GAME || gameState == STATE_DEATH) {
+    Game::loop();
   }
 }

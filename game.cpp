@@ -1,8 +1,10 @@
 #include "game.h"
 
+int8_t deathTimer;
+
 namespace Game {
 void loop() {
-  input();
+  if (gameState != STATE_DEATH) input();
   update();
   draw();
 }
@@ -38,16 +40,13 @@ void input() {
     if (triggerReleased) Bullet::shoot();
   } else if (arduboy.justReleased(A_BUTTON)) {
     triggerReleased = true;
-    shootTimer = fireRate; //FIRE_RATE;
+    shootTimer = fireRate;  //FIRE_RATE;
   }
 
 
   //debug & tuning
   if (arduboy.justPressed(B_BUTTON)) {
-    // Level::clearBlocks();
-    // Player::flicker();
-    // Particles::spawnExplosion(player.animation.pos);
-    gameState = STATE_MENU;
+    Player::onDamaged();
   }
 
   if (arduboy.justPressed(up_btn)) {
@@ -56,6 +55,13 @@ void input() {
 }
 
 void update() {
+  if (gameState == STATE_DEATH) {
+    deathTimer--;
+    if (deathTimer <= 0) {
+      gameState = STATE_GAMEOVER;
+    }
+    return;
+  }
   Player::update();
   Bullet::update();
   Enemies::update();
@@ -81,6 +87,12 @@ void draw() {
   Particles::draw();
   Powerups::draw();
   HUD::draw();
+}
+
+void onDie() {
+  arduboy.setFrameRate(10);
+  gameState = STATE_DEATH;
+  deathTimer = 40;
 }
 
 }

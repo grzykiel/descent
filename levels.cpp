@@ -83,7 +83,6 @@ uint8_t levelMap[MAPHEIGHT][MAPWIDTH];
 const uint8_t startRoom[2][SCREENWIDTH] = {
   { 15, 9, 18, 18, 18, 18, 3, 15 },
   { 10, 0, 0, 0, 0, 0, 0, 4 },
-
 };
 
 namespace Level {
