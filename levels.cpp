@@ -20,7 +20,8 @@ uint8_t nextRoom[SCREENHEIGHT][SCREENWIDTH];
   { 1, 1, 0, 0, 0, 1, 1, 1 }
 };*/
 
-uint8_t levelMap[MAPHEIGHT][MAPWIDTH] = {
+uint8_t levelMap[MAPHEIGHT][MAPWIDTH];
+/* = {
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -77,11 +78,29 @@ uint8_t levelMap[MAPHEIGHT][MAPWIDTH] = {
   { 0, 0, 0, 0, 0, 0, 0, 0 },
 
 
+};*/
+
+const uint8_t startRoom[2][SCREENWIDTH] = {
+  { 15, 9, 18, 18, 18, 18, 3, 15 },
+  { 10, 0, 0, 0, 0, 0, 0, 4 },
+
 };
 
 namespace Level {
 
 void init() {
+  for (int i = 0; i < MAPHEIGHT; i++) {
+    for (int j = 0; j < MAPWIDTH; j++) {
+      levelMap[i][j] = 0;
+    }
+  }
+
+  for (int i = 0; i < 2; i++) {
+    for (int j = 0; j < SCREENWIDTH; j++) {
+      levelMap[i + 44][j] = startRoom[i][j];
+    }
+  }
+
   // TODO generate start map
   // Enemies::spawn(EnemyType::crawler, 3 * BLOCKSIZE, 3 * BLOCKSIZE);
   // Powerups::spawn(HEART, 0, 3*BLOCKSIZE);
@@ -158,10 +177,10 @@ void autoTile(uint8_t room[][SCREENWIDTH]) {
   for (int i = 0; i < SCREENHEIGHT; i++) {
     for (int j = 0; j < SCREENWIDTH; j++) {
       if (room[i][j]) {
-        int a = (i == 0) ? 1 : (room[i - 1][j] > 0) * 1;
-        int b = (j == SCREENWIDTH - 1) ? 2 : (room[i][j + 1] > 0) * 2;
-        int c = (i == SCREENHEIGHT - 1) ? 4 : (room[i + 1][j] > 0) * 4;
-        int d = (j == 0) ? 8 : (room[i][j - 1] > 0) * 8;
+        uint8_t a = (i == 0) ? 1 : (room[i - 1][j] > 0) * 1;
+        uint8_t b = (j == SCREENWIDTH - 1) ? 2 : (room[i][j + 1] > 0) * 2;
+        uint8_t c = (i == SCREENHEIGHT - 1) ? 4 : (room[i + 1][j] > 0) * 4;
+        uint8_t d = (j == 0) ? 8 : (room[i][j - 1] > 0) * 8;
         room[i][j] = a + b + c + d + 1;
       }
     }
@@ -169,14 +188,14 @@ void autoTile(uint8_t room[][SCREENWIDTH]) {
 }
 
 void generateWalls(uint8_t room[][SCREENWIDTH], bool left) {
-  int p = random(TOP_MARGIN, SCREENHEIGHT / 2);
-  int r = random(p, SCREENHEIGHT - BOTTOM_MARGIN);
-  int q = random(p, r);
-  int w = 0;
+  uint8_t p = random(TOP_MARGIN, SCREENHEIGHT / 2);
+  uint8_t r = random(p, SCREENHEIGHT - BOTTOM_MARGIN);
+  uint8_t q = random(p, r);
+  uint8_t w = 0;
 
-  for (int i = p; i < q; i++) {
+  for (uint8_t i = p; i < q; i++) {
     w = random(w, WALL_WIDTH_MAX);
-    for (int j = 0; j < w; j++) {
+    for (uint8_t j = 0; j < w; j++) {
       if (left) {
         room[i][j] = 1;
       } else {
@@ -185,9 +204,9 @@ void generateWalls(uint8_t room[][SCREENWIDTH], bool left) {
     }
   }
 
-  for (int i = q; i < r; i++) {
+  for (uint8_t i = q; i < r; i++) {
     w = random(1, w + 1);
-    for (int j = 0; j < w; j++) {
+    for (uint8_t j = 0; j < w; j++) {
       if (left) {
         room[i][j] = 1;
       } else {

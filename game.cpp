@@ -14,6 +14,7 @@ void init() {
   Particles::init();
   Bullet::init();
   Powerups::init();
+  HUD::init();
 }
 
 void input() {
@@ -46,6 +47,7 @@ void input() {
     // Level::clearBlocks();
     // Player::flicker();
     // Particles::spawnExplosion(player.animation.pos);
+    gameState = STATE_MENU;
   }
 
   if (arduboy.justPressed(up_btn)) {

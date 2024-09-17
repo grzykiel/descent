@@ -20,6 +20,15 @@ hud_t HP = {
 
 namespace HUD {
 
+  void init() {
+    damageCounter.t = 0;
+    damageCounter.f = 0;
+    ammoCounter.t = 0;
+    ammoCounter.f = 0;
+    HP.t = 0;
+    HP.f = 0;
+  }
+
 void update() {
   if (damageCounter.t > 0) {
     if (damageCounter.t > DAMAGE_COUNTER_FRAMES) {

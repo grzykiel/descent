@@ -125,6 +125,9 @@ uint8_t currentEnemy = 0;
 namespace Enemies {
 
 void init() {
+  for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
+    enemy[i].animation.active = false;
+  }
 }
 
 

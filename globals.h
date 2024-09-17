@@ -8,7 +8,9 @@
 
 #define STATE_MENU 0
 #define STATE_GAME 1
-#define STATE_SANDBOX 2
+#define STATE_DEATH 2
+#define STATE_GAMEOVER 3
+#define STATE_SANDBOX 4
 
 //debug movement modes
 #define TOPDOWN 0
@@ -147,7 +149,6 @@ typedef struct {
 typedef struct {
   bool active;
   position_t pos;
-  uint8_t prob;
 } powerup_t;
 
 typedef struct {

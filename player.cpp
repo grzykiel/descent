@@ -185,7 +185,7 @@ void checkPowerupCollisions(position_t nextPos) {
     if (!powerup[i].active) continue;
     Rect pb = Rect(powerup[i].pos.x, powerup[i].pos.y, POWERUP_SIZE, POWERUP_SIZE);
     if (Utils::collides(player.animation, pb)) {
-      Powerups::collect(i);
+      onPickup(i);
     }
   }
 }
@@ -252,12 +252,15 @@ void onDamaged() {
   HUD::onDamaged();
 }
 
-void onPickupHeart() {
-  player.hp = min(player.hp + 1, maxHP);
+void onPickup(uint8_t type) {
+  Powerups::collect(type);
+  if (type == HEART) {
+    player.hp = min(++player.hp, maxHP);
+  } else if (type == HEART_UPGRADE) {
+    maxHP = min(++maxHP, HP_CAP);
+  }
 }
 
-void onPickupHeartUpgrade() {
-  maxHP = min(maxHP + 1, HP_CAP);
-}
+
 
 }

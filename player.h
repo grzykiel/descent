@@ -76,6 +76,6 @@ namespace Player {
   void checkPowerupCollisions(position_t nextPos);
 
   void onDamaged(); 
-  void onPickupHeart();
-  void onPickupHeartUpgrade();
+  void onPickup(uint8_t type);
+
 }

@@ -16,7 +16,7 @@ typedef struct {
 } hud_t;
 
 namespace HUD {
-
+  void init();
   void update();
   void draw();
 
