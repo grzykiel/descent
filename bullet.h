@@ -41,7 +41,7 @@ void updateBullets();
 void collisionCheck();
 void drawBullets();
 
-void drawAmmo();
+void drawLaser();
 
 void onShiftMap();
 }

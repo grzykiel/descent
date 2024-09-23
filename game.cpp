@@ -10,6 +10,7 @@ void loop() {
 }
 
 void init() {
+  arduboy.setFrameRate(FPS);
   Player::init();
   Enemies::init();
   Level::init();
@@ -90,9 +91,9 @@ void draw() {
 }
 
 void onDie() {
-  arduboy.setFrameRate(10);
+  arduboy.setFrameRate(15);
   gameState = STATE_DEATH;
-  deathTimer = 40;
+  deathTimer = 45;
 }
 
 }

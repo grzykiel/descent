@@ -58,7 +58,7 @@ void update() {
 void draw() {
   drawMuzzleFlash();
   drawBullets();
-  drawAmmo();
+  drawLaser();
 }
 
 void shoot() {
@@ -169,6 +169,28 @@ void drawBullets() {
   }
 }
 
+void drawLaser() {
+  uint8_t x1 = player.animation.pos.x / PIXEL_SCALE - cameraOffset;
+  uint8_t y0 = player.animation.pos.y / PIXEL_SCALE;
+  uint8_t y1 = y0 + 4;
+  uint8_t x0 = 0;
+
+
+  uint8_t i_x = player.animation.pos.x / PIXEL_SCALE / BLOCKSIZE;
+  i_x = MAPHEIGHT - i_x - 1;
+  uint8_t i_y = player.animation.pos.y / PIXEL_SCALE / BLOCKSIZE;
+  for (uint8_t i = i_x; i < i_x + 5; i++) {
+    if (levelMap[i][i_y]) {
+      if (levelMap[i][i_y] != DASH && levelMap[i][i_y] != BLOCK) {
+        x0 = (MAPHEIGHT - i) * BLOCKSIZE - cameraOffset;
+        break;
+      }
+    }
+  }
+  // x1 = i_x * BLOCKSIZE - cameraOffset;
+  arduboy.fillRect(x0, y0, x1 - x0, y1 - y0);
+}
+
 void onShiftMap() {
   for (uint8_t i = 0; i < AMMO_CAP; i++) {
     if (bullet[i].active) Level::shiftPos(&bullet[i].pos);
@@ -184,8 +206,5 @@ void increaseFireRate() {
   fireRate = min(fireRate + 1, 30);
 }
 
-void drawAmmo() {
-  // arduboy.setCursor(player.animation.pos.x + 9 - cameraOffset, player.animation.pos.y);
-  // arduboy.print(bulletsRemaining);
-}
+
 }

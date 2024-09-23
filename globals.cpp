@@ -3,7 +3,6 @@
 Arduboy2Base arduboy;
 Sprites sprites;
 
-// uint8_t gameState = STATE_GAME;
 uint8_t gameState = STATE_MENU;
 
 int16_t cameraOffset = 0;

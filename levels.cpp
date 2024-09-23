@@ -1,24 +1,7 @@
 #include "levels.h"
 
 uint8_t nextRoom[SCREENHEIGHT][SCREENWIDTH];
-/* = {
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 1, 0, 0, 0, 0 },
-  { 0, 0, 1, 0, 0, 0, 0, 0 },
-  { 1, 0, 0, 1, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 1, 0, 0, 1 },
-  { 0, 0, 0, 1, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 0, 0, 0, 1 },
-  { 1, 1, 0, 0, 0, 1, 1, 1 }
-};*/
+
 
 uint8_t levelMap[MAPHEIGHT][MAPWIDTH];
 /* = {
@@ -100,7 +83,6 @@ void init() {
     }
   }
 
-  // TODO generate start map
   // Enemies::spawn(EnemyType::crawler, 3 * BLOCKSIZE, 3 * BLOCKSIZE);
   // Powerups::spawn(HEART, 0, 3*BLOCKSIZE);
 }
