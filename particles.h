@@ -5,15 +5,15 @@
 #include "player.h"
 #include "bullet.h"
 
-#define MAX_BLOCK_FRAGMENTS 5
+#define MAX_BLOCK_FRAGMENTS 4
 #define MAX_EXPLOSIONS      5
-#define MAX_POPS            5
+#define MAX_POPS            3
 #define MAX_CLINKS          5
 
 #define BLOCK_TRANSITIONS     2
 #define EXPLOSION_TRANSITIONS 7
 #define CLINK_TRANSITIONS     3
-#define POP_TRANSITIONS       7
+#define POP_TRANSITIONS       2 //7
 #define SMOKE_TRANSITIONS     3
 #define RECHARGE_TRANSITIONS  6
 

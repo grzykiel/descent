@@ -5,7 +5,7 @@ const uint8_t blockTransitions[] PROGMEM = { 3, 6, 9 };
 uint8_t blockIndex = 0;
 
 particle_t explosion[MAX_EXPLOSIONS];
-const uint8_t explosionTransitions[] PROGMEM = { 4, 8, 12, 16, 20, 24, 28, 32 };  //{ 6, 12, 18, 24, 30, 36, 42, 48 };
+const uint8_t explosionTransitions[] PROGMEM = { 4, 8, 12, 16, 20, 24, 28, 32 };
 uint8_t explosionIndex = 0;
 
 particle_t clink[MAX_CLINKS];
@@ -13,7 +13,7 @@ const uint8_t clinkTransitions[] PROGMEM = { 2, 4, 7, 10 };
 uint8_t clinkIndex = 0;
 
 particle_t pop[MAX_POPS];
-const uint8_t popTransitions[] PROGMEM = { 2, 4, 6, 8, 10, 12, 14, 16 };  //{3, 6, 9, 12, 15, 18, 21, 24};
+const uint8_t popTransitions[] PROGMEM = { 2, 4, 6 };  //{ 2, 4, 6, 8, 10, 12, 14, 16 };
 uint8_t popIndex = 0;
 
 particle_t rechargeAnimation;
@@ -72,7 +72,7 @@ void initExplosion(uint8_t i) {
 // TODO simplify (pass only x y)
 void spawnExplosion(position_t pos, int8_t dx, int8_t dy) {
   initExplosion(explosionIndex);
-  explosion[explosionIndex].pos.x = pos.x / PIXEL_SCALE + dx - 4; 
+  explosion[explosionIndex].pos.x = pos.x / PIXEL_SCALE + dx - 4;
   explosion[explosionIndex].pos.y = pos.y / PIXEL_SCALE + dy - 4;
   explosion[explosionIndex].active = true;
   explosionIndex = (explosionIndex + 1) % MAX_EXPLOSIONS;

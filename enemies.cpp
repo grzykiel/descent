@@ -130,7 +130,6 @@ void init() {
   }
 }
 
-
 void update() {
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
     if (!enemy[i].animation.active) continue;
@@ -435,6 +434,7 @@ bool ledgeDetect(animation_t animation) {
 }
 
 void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
+  if (activeGun == GunType::laser) return;
   for (uint8_t i = 0; i < AMMO_CAP; i++) {
     if (!bullet[i].active) continue;
     if (Utils::collides(enemy->animation, bullet[i])) {
@@ -452,6 +452,10 @@ void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
       }
     }
   }
+}
+
+void checkLaserCollisions(Rect laser) {
+  
 }
 
 void kill(enemy_t *enemy, bool shot) {
@@ -556,7 +560,6 @@ void crawlerFall(enemy_t *enemy, velocity_t *vel) {
   vel->x = 0;
   vel->y = 0;
 }
-
 
 void crawlerLand(enemy_t *enemy, velocity_t *vel) {
   enemy->type = EnemyType::crawler;

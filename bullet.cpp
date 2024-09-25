@@ -23,7 +23,7 @@ sprite_t bulletSprite = {
   4,                  //h
 };
 
-animation_t bullet[5];
+animation_t bullet[AMMO_CAP];
 uint8_t shootTimer;
 bool triggerReleased;
 
@@ -35,6 +35,8 @@ uint8_t chamber = 0;
 uint8_t bulletAccel;
 uint16_t bulletV0;
 uint8_t fireRate;
+
+GunType activeGun = GunType::laser;
 
 namespace Bullet {
 void init() {
@@ -52,16 +54,32 @@ void init() {
 }
 
 void update() {
-  updateBullets();
+  if (activeGun == GunType::automatic) {
+    updateBullets();
+  } else if (activeGun == GunType::laser) {
+    updateLaser();
+  }
 }
 
+
 void draw() {
+  if (activeGun == GunType::automatic) {
+    drawBullets();
+  } else if (activeGun == GunType::laser) {
+    drawLaser();
+  }
   drawMuzzleFlash();
-  drawBullets();
-  drawLaser();
 }
 
 void shoot() {
+  if (activeGun == GunType::automatic) {
+    fireAuto();
+  } else if (activeGun == GunType::laser) {
+    fireLaser();
+  }
+}
+
+void fireAuto() {
   if (shootTimer > 0) {
     shootTimer--;
   } else if (shootTimer == 0) {
@@ -75,7 +93,7 @@ void shoot() {
       bullet[chamber].active = true;
       bullet[chamber].pos.x = player.animation.pos.x;
       bullet[chamber].pos.y = player.animation.pos.y;
-      bullet[chamber].vel.x = bulletV0;  //BULLET_START_VEL;
+      bullet[chamber].vel.x = bulletV0;
       bullet[chamber].vel.y = player.animation.vel.y;
       bullet[chamber].frame = 0;
       bullet[chamber].t = 0;
@@ -87,6 +105,23 @@ void shoot() {
       shootTimer = fireRate;
     } else {
       Particles::spawnSmoke();
+    }
+  }
+}
+
+void fireLaser() {
+  if (!bullet[chamber].active) {
+    if (bulletsRemaining > 0) {
+      bullet[chamber].active = true;
+      bullet[chamber].t = LASER_TIME;
+      Player::thrust();
+
+      muzzleFlash.active = true;
+      muzzleFlash.t = 0;
+      muzzleFlash.frame = 0;
+
+      bulletsRemaining--;
+      HUD::onShoot();
     }
   }
 }
@@ -122,6 +157,8 @@ void initBullets() {
   }
 }
 
+
+
 void updateBullets() {
   for (int i = 0; i < AMMO_CAP; i++) {
     if (bullet[i].active) {
@@ -134,8 +171,17 @@ void updateBullets() {
   collisionCheck();
 }
 
+void updateLaser() {
+  if (bullet[chamber].active) {
+    bullet[chamber].t--;
+    if (bullet[chamber].t == 0) {
+      bullet[chamber].active = false;
+    }
+  }
+}
+
 void collisionCheck() {
-  for (int b = 0; b < AMMO_CAP; b++) {
+  for (uint8_t b = 0; b < AMMO_CAP; b++) {
     if (!bullet[b].active) continue;
 
     // window_t wd = Utils::getCollisionWindow(bullet[b].pos.x/PIXEL_SCALE, bullet[b].animation.pos.y/PIXEL_SCALE);
@@ -161,6 +207,7 @@ void collisionCheck() {
   }
 }
 
+
 void drawBullets() {
   for (uint8_t i = 0; i < AMMO_CAP; i++) {
     if (bullet[i].active) {
@@ -170,11 +217,12 @@ void drawBullets() {
 }
 
 void drawLaser() {
-  uint8_t x1 = player.animation.pos.x / PIXEL_SCALE - cameraOffset;
-  uint8_t y0 = player.animation.pos.y / PIXEL_SCALE;
-  uint8_t y1 = y0 + 4;
-  uint8_t x0 = 0;
+  if (bullet[chamber].t == 0) return;
 
+  uint8_t x1 = player.animation.pos.x / PIXEL_SCALE - cameraOffset;
+  uint8_t y0 = player.animation.pos.y / PIXEL_SCALE + 2;
+  uint8_t y1 = y0 + 3;
+  uint8_t x0 = 0;
 
   uint8_t i_x = player.animation.pos.x / PIXEL_SCALE / BLOCKSIZE;
   i_x = MAPHEIGHT - i_x - 1;
@@ -187,8 +235,8 @@ void drawLaser() {
       }
     }
   }
-  // x1 = i_x * BLOCKSIZE - cameraOffset;
   arduboy.fillRect(x0, y0, x1 - x0, y1 - y0);
+  Enemies::checkLaserCollisions(Rect(x0, y0, x1-x0, y1-y0));
 }
 
 void onShiftMap() {

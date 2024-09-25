@@ -98,6 +98,13 @@ enum class PlayerState : uint8_t {
   falling
 };
 
+enum class GunType : uint8_t {
+  automatic,
+  machine,
+  shot,
+  laser
+};
+
 typedef struct {
   uint8_t v;
   uint8_t h;

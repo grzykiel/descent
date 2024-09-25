@@ -37,7 +37,7 @@ void input() {
       Player::jump();
       triggerReleased = false;
     }
-  } else if (arduboy.pressed(A_BUTTON) && player.state != PlayerState::grounded) {
+  } else if (arduboy.pressed(A_BUTTON) && player.state != PlayerState::grounded && activeGun != GunType::laser) {
     if (triggerReleased) Bullet::shoot();
   } else if (arduboy.justReleased(A_BUTTON)) {
     triggerReleased = true;
