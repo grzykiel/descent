@@ -219,24 +219,40 @@ void drawBullets() {
 void drawLaser() {
   if (bullet[chamber].t == 0) return;
 
-  uint8_t x1 = player.animation.pos.x / PIXEL_SCALE - cameraOffset;
+  uint8_t x1 = player.animation.pos.x / PIXEL_SCALE;
   uint8_t y0 = player.animation.pos.y / PIXEL_SCALE + 2;
   uint8_t y1 = y0 + 3;
-  uint8_t x0 = 0;
+  uint8_t x0 = x1 - BLOCKSIZE;
 
   uint8_t i_x = player.animation.pos.x / PIXEL_SCALE / BLOCKSIZE;
   i_x = MAPHEIGHT - i_x - 1;
   uint8_t i_y = player.animation.pos.y / PIXEL_SCALE / BLOCKSIZE;
-  for (uint8_t i = i_x; i < i_x + 5; i++) {
-    if (levelMap[i][i_y]) {
-      if (levelMap[i][i_y] != DASH && levelMap[i][i_y] != BLOCK) {
-        x0 = (MAPHEIGHT - i) * BLOCKSIZE - cameraOffset;
+  Rect laserRect = Rect(x0, y0, x1 - x0, y1 - y0);
+  bool collides = false;
+  for (uint8_t i = i_x; i < i_x + 8; i++) {
+    x0 -= BLOCKSIZE;
+    Rect laserRect = Rect(x0, y0, x1 - x0, y1 - y0);
+
+    for (uint8_t j = i_y; j <= i_y + 1; j++) {
+      if (levelMap[i][j] == BLOCK) {
+        Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
+        // arduboy.fillRect(blockRect.x - cameraOffset, blockRect.y, 8, 8);
+        if (arduboy.collide(laserRect, blockRect)) {
+          Level::destroyBlock(i, j);
+        }
+      } else if (levelMap[i][j] && levelMap[i][j] != DASH) {
+        collides = true;
+        x0 = (MAPHEIGHT - i)*BLOCKSIZE;
+        Particles::spawnClink(x0, y0, 1, 0);
         break;
       }
+      
     }
+    if (collides) break;
+    
+    Enemies::checkLaserCollisions(Rect(x0, y0, x1 - x0, y1 - y0));
   }
-  arduboy.fillRect(x0, y0, x1 - x0, y1 - y0);
-  Enemies::checkLaserCollisions(Rect(x0, y0, x1-x0, y1-y0));
+  arduboy.fillRect(x0 - cameraOffset, y0, x1 - x0, y1 - y0);
 }
 
 void onShiftMap() {
@@ -253,6 +269,4 @@ void decreaseFireRate() {
 void increaseFireRate() {
   fireRate = min(fireRate + 1, 30);
 }
-
-
 }

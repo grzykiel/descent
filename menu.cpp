@@ -31,7 +31,7 @@ void draw() {
   }
 
   for (uint8_t i = 0; i < 10; i++) {
-    arduboy.fillRect((uint8_t) pgm_read_word(&blocksX[i]), (uint8_t) pgm_read_word(&blocksY[i]), (uint8_t) pgm_read_word(&blocksWidth[i]), (uint8_t) pgm_read_word(&blocksHeight[i]));
+    arduboy.fillRect((uint8_t)pgm_read_word(&blocksX[i]), (uint8_t)pgm_read_word(&blocksY[i]), (uint8_t)pgm_read_word(&blocksWidth[i]), (uint8_t)pgm_read_word(&blocksHeight[i]));
   }
 }
 }

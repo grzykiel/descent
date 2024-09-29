@@ -83,6 +83,14 @@ void initClink(uint8_t i) {
   clink[i].frame = 0;
 }
 
+void spawnClink(uint16_t x, uint8_t y, int8_t dx, int8_t dy) {
+  initClink(clinkIndex);
+  clink[clinkIndex].pos.x = x + dx - 2;
+  clink[clinkIndex].pos.y = y + dy;
+  clink[clinkIndex].active = true;
+  clinkIndex = (clinkIndex + 1) % MAX_CLINKS;
+}
+
 void spawnClink(position_t pos, int8_t dx, int8_t dy) {
   initClink(clinkIndex);
   clink[clinkIndex].pos.x = pos.x / PIXEL_SCALE + dx - 2;

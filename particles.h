@@ -35,6 +35,7 @@ void spawnExplosion(position_t pos, int8_t dx, int8_t dy);
 
 void initClink(uint8_t i);
 void spawnClink(position_t pos, int8_t dx, int8_t dy);
+void spawnClink(uint16_t x, uint8_t y, int8_t dx, int8_t dy);
 
 void initPop(uint8_t i);
 void spawnPop(position_t pos, int8_t dx, int8_t dy);
