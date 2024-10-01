@@ -230,27 +230,28 @@ void drawLaser() {
   Rect laserRect = Rect(x0, y0, x1 - x0, y1 - y0);
   bool collides = false;
   for (uint8_t i = i_x; i < i_x + 8; i++) {
-    x0 -= BLOCKSIZE;
+
     Rect laserRect = Rect(x0, y0, x1 - x0, y1 - y0);
+    Enemies::checkLaserCollisions(laserRect);
 
     for (uint8_t j = i_y; j <= i_y + 1; j++) {
-      if (levelMap[i][j] == BLOCK) {
-        Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
-        // arduboy.fillRect(blockRect.x - cameraOffset, blockRect.y, 8, 8);
-        if (arduboy.collide(laserRect, blockRect)) {
+      if (j >= SCREENWIDTH) continue;
+      if (!levelMap[i][j] || levelMap[i][j] == DASH) continue;
+
+      Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
+      if (arduboy.collide(laserRect, blockRect)) {
+        if (levelMap[i][j] == BLOCK) {
           Level::destroyBlock(i, j);
+        } else {
+          collides = true;
+          x0 = (MAPHEIGHT - i) * BLOCKSIZE;
+          Particles::spawnExplosion(x0, y0, 0, 0);
+          break;
         }
-      } else if (levelMap[i][j] && levelMap[i][j] != DASH) {
-        collides = true;
-        x0 = (MAPHEIGHT - i)*BLOCKSIZE;
-        Particles::spawnClink(x0, y0, 1, 0);
-        break;
       }
-      
     }
     if (collides) break;
-    
-    Enemies::checkLaserCollisions(Rect(x0, y0, x1 - x0, y1 - y0));
+    x0 -= BLOCKSIZE;  // TODO refactor to laserRect.x
   }
   arduboy.fillRect(x0 - cameraOffset, y0, x1 - x0, y1 - y0);
 }

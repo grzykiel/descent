@@ -78,6 +78,14 @@ void spawnExplosion(position_t pos, int8_t dx, int8_t dy) {
   explosionIndex = (explosionIndex + 1) % MAX_EXPLOSIONS;
 }
 
+void spawnExplosion(uint16_t x, uint8_t y, int8_t dx, int8_t dy) {
+  initExplosion(explosionIndex);
+  explosion[explosionIndex].pos.x = x + dx - 4;
+  explosion[explosionIndex].pos.y = y + dy - 4;
+  explosion[explosionIndex].active = true;
+  explosionIndex = (explosionIndex + 1) % MAX_EXPLOSIONS;
+}
+
 void initClink(uint8_t i) {
   clink[i].t = 0;
   clink[i].frame = 0;

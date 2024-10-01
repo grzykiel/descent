@@ -455,7 +455,14 @@ void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
 }
 
 void checkLaserCollisions(Rect laser) {
-  
+  for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
+    if (!enemy[i].animation.active) continue;
+    if (Utils::collides(enemy[i].animation, laser)) {
+      if (enemy[i].type != EnemyType::tortoise) {
+        kill(&enemy[i], true);
+      }
+    }
+  }
 }
 
 void kill(enemy_t *enemy, bool shot) {
@@ -464,9 +471,9 @@ void kill(enemy_t *enemy, bool shot) {
     Particles::spawnExplosion(enemy->animation.pos,
                               enemy->animation.sprite->dx + enemy->animation.sprite->h / 2,
                               enemy->animation.sprite->dy + enemy->animation.sprite->w / 2);
-    Powerups::spawn(HEART, 
-                    enemy->animation.pos.x/PIXEL_SCALE + enemy->animation.sprite->dx + enemy->animation.sprite->h / 2 - 3, 
-                    enemy->animation.pos.y/PIXEL_SCALE + enemy->animation.sprite->dy + enemy->animation.sprite->w / 2 - 3 );
+    Powerups::spawn(HEART,
+                    enemy->animation.pos.x / PIXEL_SCALE + enemy->animation.sprite->dx + enemy->animation.sprite->h / 2 - 3,
+                    enemy->animation.pos.y / PIXEL_SCALE + enemy->animation.sprite->dy + enemy->animation.sprite->w / 2 - 3);
   } else {
     Particles::spawnPop(enemy->animation.pos,
                         enemy->animation.sprite->dx + enemy->animation.sprite->h / 2,

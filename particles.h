@@ -32,6 +32,7 @@ void spawnBlockFragment(uint16_t i, uint8_t j);
 
 void initExplosion(uint8_t i);
 void spawnExplosion(position_t pos, int8_t dx, int8_t dy);
+void spawnExplosion(uint16_t x, uint8_t y, int8_t dx, int8_t dy);
 
 void initClink(uint8_t i);
 void spawnClink(position_t pos, int8_t dx, int8_t dy);
