@@ -64,7 +64,7 @@ namespace Player {
   void run(Direction dir);
   void jump();
   void fall();
-  void thrust();
+  void thrust(uint8_t multiplier);
   void bounce();
   void land();
   void stop();

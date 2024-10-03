@@ -454,15 +454,18 @@ void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
   }
 }
 
-void checkLaserCollisions(Rect laser) {
+bool checkLaserCollisions(Rect laser) {
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
     if (!enemy[i].animation.active) continue;
     if (Utils::collides(enemy[i].animation, laser)) {
       if (enemy[i].type != EnemyType::tortoise) {
         kill(&enemy[i], true);
+      } else {
+        return true;
       }
     }
   }
+  return false;
 }
 
 void kill(enemy_t *enemy, bool shot) {

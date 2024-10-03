@@ -56,7 +56,7 @@ namespace Enemies {
   void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel); // TODO remove
   void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel); // TODO remove
   void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel);
-  void checkLaserCollisions(Rect laser);
+  bool checkLaserCollisions(Rect laser);
   bool updateSprite(enemy_t *enemy);
 
   void checkTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel);

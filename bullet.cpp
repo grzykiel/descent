@@ -36,7 +36,7 @@ uint8_t bulletAccel;
 uint16_t bulletV0;
 uint8_t fireRate;
 
-GunType activeGun = GunType::laser;
+GunType activeGun = GunType::shot;
 
 namespace Bullet {
 void init() {
@@ -54,7 +54,7 @@ void init() {
 }
 
 void update() {
-  if (activeGun == GunType::automatic) {
+  if (activeGun == GunType::automatic || activeGun == GunType::shot) {
     updateBullets();
   } else if (activeGun == GunType::laser) {
     updateLaser();
@@ -63,7 +63,7 @@ void update() {
 
 
 void draw() {
-  if (activeGun == GunType::automatic) {
+  if (activeGun == GunType::automatic || activeGun == GunType::shot) {
     drawBullets();
   } else if (activeGun == GunType::laser) {
     drawLaser();
@@ -76,6 +76,8 @@ void shoot() {
     fireAuto();
   } else if (activeGun == GunType::laser) {
     fireLaser();
+  } else if (activeGun == GunType::shot) {
+    fireShotgun();
   }
 }
 
@@ -84,7 +86,7 @@ void fireAuto() {
     shootTimer--;
   } else if (shootTimer == 0) {
     if (bulletsRemaining > 0) {
-      Player::thrust();
+      Player::thrust(1);
 
       muzzleFlash.active = true;
       muzzleFlash.t = 0;
@@ -110,20 +112,36 @@ void fireAuto() {
 }
 
 void fireLaser() {
-  if (!bullet[chamber].active) {
-    if (bulletsRemaining > 0) {
-      bullet[chamber].active = true;
-      bullet[chamber].t = LASER_TIME;
-      Player::thrust();
+  if (bullet[chamber].active) return;
+  if (bulletsRemaining > 0) {
+    bullet[chamber].active = true;
+    bullet[chamber].t = LASER_TIME;
+    Player::thrust(2); // TODO #define LASER_THRUST 
 
-      muzzleFlash.active = true;
-      muzzleFlash.t = 0;
-      muzzleFlash.frame = 0;
+    muzzleFlash.active = true;
+    muzzleFlash.t = 0;
+    muzzleFlash.frame = 0;
 
-      bulletsRemaining--;
-      HUD::onShoot();
-    }
+    bulletsRemaining--;
+    HUD::onShoot();
   }
+}
+
+void fireShotgun() {
+  if (bulletsRemaining == 0) return;
+  for (uint8_t i = 0; i < N_SHOTS; i++) {
+    bullet[chamber].active = true;
+    bullet[chamber].pos.x = player.animation.pos.x;
+    bullet[chamber].pos.y = player.animation.pos.y;
+    bullet[chamber].vel.x = (uint8_t)pgm_read_word(&shotVelocitiesX[i]);//SHOT_V0_INIT;
+    bullet[chamber].vel.y = (int8_t)pgm_read_word(&shotVelocitiesY[i]);
+    bullet[chamber].frame = 0;
+    bullet[chamber].t = 0;
+    chamber = (chamber + 1) % AMMO_CAP;
+  }
+  Player::thrust(17);
+  bulletsRemaining--;
+  HUD::onShoot();
 }
 
 void reload() {
@@ -157,17 +175,19 @@ void initBullets() {
   }
 }
 
-
-
 void updateBullets() {
   for (int i = 0; i < AMMO_CAP; i++) {
     if (bullet[i].active) {
       bullet[i].pos.x -= bullet[i].vel.x;
-      bullet[i].vel.x -= bulletAccel;
+      if (activeGun == GunType::shot) {
+        bullet[i].pos.y -= bullet[i].vel.y;
+        bullet[i].vel.x -= SHOT_ACCEL_INIT;
+      } else {
+        bullet[i].vel.x -= bulletAccel;
+      }
       bullet[i].active = Utils::updateAnimation(&bullet[i]);
     }
   }
-
   collisionCheck();
 }
 
@@ -232,7 +252,11 @@ void drawLaser() {
   for (uint8_t i = i_x; i < i_x + 8; i++) {
 
     Rect laserRect = Rect(x0, y0, x1 - x0, y1 - y0);
-    Enemies::checkLaserCollisions(laserRect);
+    if (Enemies::checkLaserCollisions(laserRect)) {
+      x0 += 4;
+      Particles::spawnClink(x0, y0, 0, 0);
+      break;
+    }
 
     for (uint8_t j = i_y; j <= i_y + 1; j++) {
       if (j >= SCREENWIDTH) continue;

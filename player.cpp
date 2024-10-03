@@ -61,7 +61,6 @@ void update() {
   }
   nextVel.x = max(nextVel.x, -8 * PIXEL_SCALE);  // TODO re#define terminal velocity
 
-
   nextPos.x += nextVel.x;
   nextPos.y += nextVel.y;
 
@@ -78,8 +77,6 @@ void update() {
     nextPos.y = (SCREENRIGHT - player.animation.sprite->w - player.animation.sprite->dy) * PIXEL_SCALE;
     nextVel.y = 0;
   }
-
-
 
   checkPowerupCollisions(nextPos);
 
@@ -229,8 +226,8 @@ void bounce() {
   player.animation.frame = 0;
 }
 
-void thrust() {
-  player.animation.vel.x = THRUST;
+void thrust(uint8_t multiplier) {
+  player.animation.vel.x = THRUST * multiplier;
 }
 
 void fall() {
