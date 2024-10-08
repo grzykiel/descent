@@ -10,14 +10,21 @@
 
 #define AMMO_CAP 5
 #define AMMO_INIT 5
-#define BULLET_ACCEL_INITIAL 26  //20
-#define BULLET_V0_INITIAL 500    //410
-#define FIRE_RATE_INITIAL 15
+#define BULLET_ACCEL_INIT 26  //20
+#define BULLET_V0_INIT 500    //410
+#define FIRE_RATE_INIT 15
 #define FIRE_RATE_MIN 5
+#define BULLET_THRUST_SCALE 1
+
 #define LASER_TIME 5
+#define LASER_WIDTH_INIT 3
+#define LASER_THRUST_SCALE 17
+
 #define SHOT_ACCEL_INIT 5
 #define SHOT_V0_INIT 96
 #define N_SHOTS 3
+#define SHOT_THRUST_SCALE 17
+
 
 const uint8_t muzzleFlashTransitions[] PROGMEM = { 5 };
 extern uint8_t shootTimer;
@@ -54,6 +61,8 @@ void drawBullets();
 void drawLaser();
 
 void onShiftMap();
+
+void setActiveGun(GunType newType);
 }
 
 #endif

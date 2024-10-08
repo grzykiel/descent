@@ -36,7 +36,7 @@ uint8_t bulletAccel;
 uint16_t bulletV0;
 uint8_t fireRate;
 
-GunType activeGun = GunType::shot;
+GunType activeGun = GunType::automatic;
 
 namespace Bullet {
 void init() {
@@ -48,9 +48,9 @@ void init() {
   bulletCapacity = AMMO_INIT;
   bulletsRemaining = AMMO_INIT;
 
-  bulletAccel = BULLET_ACCEL_INITIAL;
-  bulletV0 = BULLET_V0_INITIAL;
-  fireRate = FIRE_RATE_INITIAL;
+  bulletAccel = BULLET_ACCEL_INIT;
+  bulletV0 = BULLET_V0_INIT;
+  fireRate = FIRE_RATE_INIT;
 }
 
 void update() {
@@ -86,7 +86,7 @@ void fireAuto() {
     shootTimer--;
   } else if (shootTimer == 0) {
     if (bulletsRemaining > 0) {
-      Player::thrust(1);
+      Player::thrust(BULLET_THRUST_SCALE);
 
       muzzleFlash.active = true;
       muzzleFlash.t = 0;
@@ -116,7 +116,7 @@ void fireLaser() {
   if (bulletsRemaining > 0) {
     bullet[chamber].active = true;
     bullet[chamber].t = LASER_TIME;
-    Player::thrust(2); // TODO #define LASER_THRUST 
+    Player::thrust(LASER_THRUST_SCALE);
 
     muzzleFlash.active = true;
     muzzleFlash.t = 0;
@@ -139,7 +139,7 @@ void fireShotgun() {
     bullet[chamber].t = 0;
     chamber = (chamber + 1) % AMMO_CAP;
   }
-  Player::thrust(17);
+  Player::thrust(SHOT_THRUST_SCALE);
   bulletsRemaining--;
   HUD::onShoot();
 }
@@ -240,8 +240,8 @@ void drawLaser() {
   if (bullet[chamber].t == 0) return;
 
   uint8_t x1 = player.animation.pos.x / PIXEL_SCALE;
-  uint8_t y0 = player.animation.pos.y / PIXEL_SCALE + 2;
-  uint8_t y1 = y0 + 3;
+  uint8_t y0 = player.animation.pos.y / PIXEL_SCALE + BLOCKSIZE/2 - LASER_WIDTH_INIT/2;
+  uint8_t y1 = y0 + LASER_WIDTH_INIT;
   uint8_t x0 = x1 - BLOCKSIZE;
 
   uint8_t i_x = player.animation.pos.x / PIXEL_SCALE / BLOCKSIZE;
@@ -251,7 +251,7 @@ void drawLaser() {
   bool collides = false;
   for (uint8_t i = i_x; i < i_x + 8; i++) {
 
-    Rect laserRect = Rect(x0, y0, x1 - x0, y1 - y0);
+    
     if (Enemies::checkLaserCollisions(laserRect)) {
       x0 += 4;
       Particles::spawnClink(x0, y0, 0, 0);
@@ -276,6 +276,7 @@ void drawLaser() {
     }
     if (collides) break;
     x0 -= BLOCKSIZE;  // TODO refactor to laserRect.x
+    laserRect = Rect(x0, y0, x1 - x0, y1 - y0);
   }
   arduboy.fillRect(x0 - cameraOffset, y0, x1 - x0, y1 - y0);
 }
@@ -284,6 +285,11 @@ void onShiftMap() {
   for (uint8_t i = 0; i < AMMO_CAP; i++) {
     if (bullet[i].active) Level::shiftPos(&bullet[i].pos);
   }
+}
+
+void setActiveGun(GunType newType) {
+  init();
+  activeGun = newType;
 }
 
 void decreaseFireRate() {

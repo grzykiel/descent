@@ -38,7 +38,7 @@
 #define PLAYER_HEIGHT 8
 #define PLAYER_OFFSET 1  //sprite offset
 
-#define POWERUP_SIZE 6
+#define POWERUP_SIZE 8
 #define N_POWERUPS 6
 
 // special tile indices

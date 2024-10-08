@@ -265,6 +265,14 @@ void onPickup(uint8_t type) {
     player.hp = min(++player.hp, maxHP);
   } else if (type == HEART_UPGRADE) {
     maxHP = min(++maxHP, HP_CAP);
+  } else if (type == SHOTGUN) {
+    Bullet::setActiveGun(GunType::shot);
+  } else if (type == LASER) {
+    Bullet::setActiveGun(GunType::laser);
+  } else if (type == MACHINEGUN) {
+    Bullet::setActiveGun(GunType::automatic);
+  } else if (type == AMMO_UPGRADE) {
+    
   }
 }
 

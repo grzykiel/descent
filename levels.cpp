@@ -315,6 +315,7 @@ void generateEnemies(uint8_t room[][SCREENWIDTH]) {
 void destroyBlock(int16_t i, uint8_t j) {
   levelMap[i][j] = 0;
   Particles::spawnBlockFragment(i, j);
+  Powerups::spawnUpgrade((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
 }
 
 

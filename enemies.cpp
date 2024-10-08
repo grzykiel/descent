@@ -474,9 +474,8 @@ void kill(enemy_t *enemy, bool shot) {
     Particles::spawnExplosion(enemy->animation.pos,
                               enemy->animation.sprite->dx + enemy->animation.sprite->h / 2,
                               enemy->animation.sprite->dy + enemy->animation.sprite->w / 2);
-    Powerups::spawn(HEART,
-                    enemy->animation.pos.x / PIXEL_SCALE + enemy->animation.sprite->dx + enemy->animation.sprite->h / 2 - 3,
-                    enemy->animation.pos.y / PIXEL_SCALE + enemy->animation.sprite->dy + enemy->animation.sprite->w / 2 - 3);
+    Powerups::spawnHeart(enemy->animation.pos.x / PIXEL_SCALE + enemy->animation.sprite->dx + enemy->animation.sprite->h / 2 - 3,
+                          enemy->animation.pos.y / PIXEL_SCALE + enemy->animation.sprite->dy + enemy->animation.sprite->w / 2 - 3);
   } else {
     Particles::spawnPop(enemy->animation.pos,
                         enemy->animation.sprite->dx + enemy->animation.sprite->h / 2,

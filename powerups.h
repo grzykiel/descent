@@ -11,11 +11,11 @@
 #define HEART 0
 #define HEART_UPGRADE 1
 #define AMMO_UPGRADE 2
-// #define SHOTGUN 3
-// #define LASER 4
-// #define MACHINEGUN 5
+#define SHOTGUN 3
+#define LASER 4
+#define MACHINEGUN 5
 
-#define HEART_PROB_INIT 5
+#define HEART_PROB_INIT 10
 #define UPGRADE_PROB_INIT 10
 #define PROB_MAX 128
 
@@ -29,8 +29,11 @@ void init();
 void draw();
 void onShiftMap();
 
-void spawn(uint8_t type, uint16_t x, int16_t y);
+// void spawn(uint8_t type, uint16_t x, int16_t y);
 void collect(uint8_t type);
+void spawnHeart(uint16_t x, uint8_t y);
+void spawnUpgrade(uint16_t x, uint8_t y);
+
 }
 
 #endif
