@@ -12,9 +12,9 @@ sprite_t blobSprite = {
   blobTransitions,  // frame transitions
   1,                // dx
   0,                // dy
-  7,                // w
-  5,                // h
-};
+  0x75
+}
+;
 
 sprite_t batHangingSprite = {
   Enemies::batHanging,
@@ -23,8 +23,7 @@ sprite_t batHangingSprite = {
   nullptr,
   3,
   1,
-  5,
-  5,
+  0x55
 };
 
 sprite_t batSprite = {
@@ -34,8 +33,7 @@ sprite_t batSprite = {
   batTransitions,
   2,
   1,
-  6,
-  4
+  0x64
 };
 
 sprite_t wormSprite = {
@@ -45,23 +43,8 @@ sprite_t wormSprite = {
   wormTransitions,
   0,
   0,
-  4,
-  3
+  0x43,
 };
-
-//TODO remove
-/*
-sprite_t crawlerSprite = {
-  Enemies::crawler,
-  Enemies::crawler,
-  0,
-  nullptr,
-  0,
-  2,
-  CRAWLER_WIDTH,
-  CRAWLER_HEIGHT
-};
-*/
 
 sprite_t crawlerSpriteUp = {
   Enemies::crawler,
@@ -70,8 +53,7 @@ sprite_t crawlerSpriteUp = {
   nullptr,
   0,
   2,
-  CRAWLER_WIDTH,
-  CRAWLER_HEIGHT
+  0x54
 };
 
 sprite_t crawlerSpriteDown = {
@@ -81,8 +63,7 @@ sprite_t crawlerSpriteDown = {
   nullptr,
   4,
   1,
-  CRAWLER_WIDTH,
-  CRAWLER_HEIGHT
+  0x54
 };
 
 sprite_t crawlerSpriteLeft = {
@@ -92,8 +73,7 @@ sprite_t crawlerSpriteLeft = {
   nullptr,
   2,
   4,
-  CRAWLER_HEIGHT,
-  CRAWLER_WIDTH
+  0x45
 };
 
 sprite_t crawlerSpriteRight = {
@@ -103,8 +83,7 @@ sprite_t crawlerSpriteRight = {
   nullptr,
   1,
   0,
-  CRAWLER_HEIGHT,
-  CRAWLER_WIDTH
+  0x45
 };
 
 sprite_t tortoiseSprite = {
@@ -114,8 +93,9 @@ sprite_t tortoiseSprite = {
   tortoiseTransitions,
   0,
   1,
-  6,
-  3
+  // 6,
+  // 3
+  0x63
 };
 
 enemy_t enemy[MAX_ENEMIES];
@@ -202,7 +182,7 @@ void updateCrawling(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel) {
 
   int8_t vel = enemy->type == EnemyType::worm ? WORM_VEL : TORTOISE_VEL;
   if (enemy->animation.dir == Direction::right) {
-    if (nextPos->y / PIXEL_SCALE > SCREENRIGHT - enemy->animation.sprite->dy - enemy->animation.sprite->w - 2) {
+    if (nextPos->y / PIXEL_SCALE > SCREENRIGHT - enemy->animation.sprite->dy - ((enemy->animation.sprite->dim & 0xF0) >> 4) - 2) {
       enemy->animation.dir = Direction::left;
     } else {
       nextVel->y = vel * PIXEL_SCALE;
@@ -424,7 +404,7 @@ bool ledgeDetect(animation_t animation) {
   if (animation.dir == Direction::left) {
     y = animation.pos.y / PIXEL_SCALE / BLOCKSIZE;
   } else {
-    y = (animation.pos.y / PIXEL_SCALE + animation.sprite->dy + animation.sprite->w) / 8;
+    y = (animation.pos.y / PIXEL_SCALE + animation.sprite->dy + (animation.sprite->dim & 0xF0) >> 4) / 8;
   }
 
   // arduboy.drawRect(x * BLOCKSIZE - cameraOffset, y * BLOCKSIZE, 8, 8);
@@ -435,7 +415,7 @@ bool ledgeDetect(animation_t animation) {
 
 void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
   if (activeGun == GunType::laser) return;
-  for (uint8_t i = 0; i < AMMO_CAP; i++) {
+  for (uint8_t i = 0; i < MAX_AMMO; i++) {
     if (!bullet[i].active) continue;
     if (Utils::collides(enemy->animation, bullet[i])) {
       bullet[i].active = false;
@@ -472,14 +452,14 @@ void kill(enemy_t *enemy, bool shot) {
   enemy->animation.active = false;
   if (shot) {
     Particles::spawnExplosion(enemy->animation.pos,
-                              enemy->animation.sprite->dx + enemy->animation.sprite->h / 2,
-                              enemy->animation.sprite->dy + enemy->animation.sprite->w / 2);
-    Powerups::spawnHeart(enemy->animation.pos.x / PIXEL_SCALE + enemy->animation.sprite->dx + enemy->animation.sprite->h / 2 - 3,
-                          enemy->animation.pos.y / PIXEL_SCALE + enemy->animation.sprite->dy + enemy->animation.sprite->w / 2 - 3);
+                              enemy->animation.sprite->dx + (enemy->animation.sprite->dim & 0x0F) / 2,
+                              enemy->animation.sprite->dy + ((enemy->animation.sprite->dim & 0xFF) >> 4) / 2);
+    Powerups::spawnHeart(enemy->animation.pos.x / PIXEL_SCALE + enemy->animation.sprite->dx + (enemy->animation.sprite->dim & 0x0F) / 2 - 3,
+                         enemy->animation.pos.y / PIXEL_SCALE + enemy->animation.sprite->dy + ((enemy->animation.sprite->dim & 0xFF) >> 4) / 2 - 3);
   } else {
     Particles::spawnPop(enemy->animation.pos,
-                        enemy->animation.sprite->dx + enemy->animation.sprite->h / 2,
-                        enemy->animation.sprite->dy + enemy->animation.sprite->w / 2);
+                        enemy->animation.sprite->dx + (enemy->animation.sprite->dim & 0x0F) / 2,
+                        enemy->animation.sprite->dy + ((enemy->animation.sprite->dim & 0xFF)>>4) / 2);
   }
 }
 

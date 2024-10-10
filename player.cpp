@@ -7,8 +7,7 @@ sprite_t playerRunSprite = {
   nullptr,  //frame transitions
   0,        //dx
   1,        //dy
-  6,        //w
-  8         //h
+  0x68
 };
 
 const uint8_t jumpTransitions[5] PROGMEM = { 1, 15, 30, 45, 60 };
@@ -19,8 +18,7 @@ sprite_t playerJumpSprite = {
   jumpTransitions,
   0,
   1,
-  6,
-  8
+  0x68
 };
 player_t player;  //TODO initialise
 
@@ -73,8 +71,8 @@ void update() {
   if (nextPos.y / PIXEL_SCALE <= SCREENLEFT - player.animation.sprite->dy) {
     nextPos.y = SCREENLEFT;
     nextVel.y = 0;
-  } else if (nextPos.y / PIXEL_SCALE > (SCREENRIGHT - player.animation.sprite->w - player.animation.sprite->dy)) {
-    nextPos.y = (SCREENRIGHT - player.animation.sprite->w - player.animation.sprite->dy) * PIXEL_SCALE;
+  } else if (nextPos.y / PIXEL_SCALE > (SCREENRIGHT - ((player.animation.sprite->dim & 0xF0) >> 4) - player.animation.sprite->dy)) {
+    nextPos.y = (SCREENRIGHT - ((player.animation.sprite->dim & 0xF0) >> 4) - player.animation.sprite->dy) * PIXEL_SCALE;
     nextVel.y = 0;
   }
 
@@ -151,7 +149,7 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
   if (player.animation.iframe != 0) return;
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
     if (enemy[i].animation.active) {
-      Rect enemyRect = Rect(enemy[i].animation.pos.x / PIXEL_SCALE + enemy[i].animation.sprite->dx, enemy[i].animation.pos.y / PIXEL_SCALE + enemy[i].animation.sprite->dy, enemy[i].animation.sprite->h, enemy[i].animation.sprite->w);
+      Rect enemyRect = Rect(enemy[i].animation.pos.x / PIXEL_SCALE + enemy[i].animation.sprite->dx, enemy[i].animation.pos.y / PIXEL_SCALE + enemy[i].animation.sprite->dy, enemy[i].animation.sprite->dim & 0x0F, (enemy[i].animation.sprite->dim & 0xF0) >> 4);
       // arduboy.drawRect(enemy[i].animation.pos.x/PIXEL_SCALE + enemy[i].animation.sprite->dx - cameraOffset, enemy[i].animation.pos.y/PIXEL_SCALE + enemy[i].animation.sprite->dy, enemy[i].animation.sprite->h, enemy[i].animation.sprite->w);
       collision_t type = Utils::collisionCorrect(player.animation, nextPos, enemyRect, true, true);
 
@@ -272,7 +270,7 @@ void onPickup(uint8_t type) {
   } else if (type == MACHINEGUN) {
     Bullet::setActiveGun(GunType::automatic);
   } else if (type == AMMO_UPGRADE) {
-    
+    // Bullet::increaseCap();
   }
 }
 

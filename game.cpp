@@ -46,7 +46,8 @@ void input() {
 
   //debug & tuning
   if (arduboy.justPressed(B_BUTTON)) {
-    Player::onDamaged();
+    // Player::onDamaged();
+    Bullet::increaseCap();
   }
 
   if (arduboy.justPressed(up_btn)) {

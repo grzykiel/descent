@@ -128,8 +128,9 @@ typedef struct {
 
   int8_t dx;
   int8_t dy;
-  uint8_t w;
-  uint8_t h;
+  // uint8_t w;
+  // uint8_t h;
+  uint8_t dim;
 } sprite_t;
 
 typedef struct {

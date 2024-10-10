@@ -7,8 +7,7 @@ sprite_t muzzleFlashSprite = {
   muzzleFlashTransitions,  //frame transitions
   8,                       //dx
   0,                       //dy
-  8,                       //w
-  8,                       //h
+  0x88
 };
 animation_t muzzleFlash;  //TODO make particle_t
 
@@ -19,11 +18,10 @@ sprite_t bulletSprite = {
   bulletTransitions,  //frame transitions
   0,                  //dx
   2,                  //dy
-  4,                  //w
-  4,                  //h
+  0x44
 };
 
-animation_t bullet[AMMO_CAP];
+animation_t bullet[MAX_AMMO];
 uint8_t shootTimer;
 bool triggerReleased;
 
@@ -84,7 +82,7 @@ void shoot() {
 void fireAuto() {
   if (shootTimer > 0) {
     shootTimer--;
-  } else if (shootTimer == 0) {
+  } else { // if (shootTimer == 0) {
     if (bulletsRemaining > 0) {
       Player::thrust(BULLET_THRUST_SCALE);
 
@@ -99,7 +97,7 @@ void fireAuto() {
       bullet[chamber].vel.y = player.animation.vel.y;
       bullet[chamber].frame = 0;
       bullet[chamber].t = 0;
-      chamber = (chamber + 1) % AMMO_CAP;
+      chamber = (chamber + 1) % MAX_AMMO;
 
       bulletsRemaining--;
       HUD::onShoot();
@@ -137,7 +135,7 @@ void fireShotgun() {
     bullet[chamber].vel.y = (int8_t)pgm_read_word(&shotVelocitiesY[i]);
     bullet[chamber].frame = 0;
     bullet[chamber].t = 0;
-    chamber = (chamber + 1) % AMMO_CAP;
+    chamber = (chamber + 1) % MAX_AMMO;
   }
   Player::thrust(SHOT_THRUST_SCALE);
   bulletsRemaining--;
@@ -167,7 +165,7 @@ void drawMuzzleFlash() {
 }
 
 void initBullets() {
-  for (int i = 0; i < AMMO_CAP; i++) {
+  for (int i = 0; i < MAX_AMMO; i++) {
     bullet[i].sprite = &bulletSprite;
     bullet[i].active = false;
     bullet[i].frame = 0;
@@ -176,7 +174,7 @@ void initBullets() {
 }
 
 void updateBullets() {
-  for (int i = 0; i < AMMO_CAP; i++) {
+  for (int i = 0; i < MAX_AMMO; i++) {
     if (bullet[i].active) {
       bullet[i].pos.x -= bullet[i].vel.x;
       if (activeGun == GunType::shot) {
@@ -201,7 +199,7 @@ void updateLaser() {
 }
 
 void collisionCheck() {
-  for (uint8_t b = 0; b < AMMO_CAP; b++) {
+  for (uint8_t b = 0; b < MAX_AMMO; b++) {
     if (!bullet[b].active) continue;
 
     // window_t wd = Utils::getCollisionWindow(bullet[b].pos.x/PIXEL_SCALE, bullet[b].animation.pos.y/PIXEL_SCALE);
@@ -229,7 +227,7 @@ void collisionCheck() {
 
 
 void drawBullets() {
-  for (uint8_t i = 0; i < AMMO_CAP; i++) {
+  for (uint8_t i = 0; i < MAX_AMMO; i++) {
     if (bullet[i].active) {
       Sprites::drawSelfMasked(bullet[i].pos.x / PIXEL_SCALE - cameraOffset, bullet[i].pos.y / PIXEL_SCALE, bullet[i].sprite->spriteR, bullet[i].frame);
     }
@@ -282,7 +280,7 @@ void drawLaser() {
 }
 
 void onShiftMap() {
-  for (uint8_t i = 0; i < AMMO_CAP; i++) {
+  for (uint8_t i = 0; i < MAX_AMMO; i++) {
     if (bullet[i].active) Level::shiftPos(&bullet[i].pos);
   }
 }
@@ -290,6 +288,10 @@ void onShiftMap() {
 void setActiveGun(GunType newType) {
   init();
   activeGun = newType;
+}
+
+void increaseCap() {
+  bulletCapacity = min(++bulletCapacity, MAX_AMMO);
 }
 
 void decreaseFireRate() {

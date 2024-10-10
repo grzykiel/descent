@@ -8,7 +8,7 @@
 #include "hud.h"
 #include "particles.h"
 
-#define AMMO_CAP 5
+#define MAX_AMMO 5
 #define AMMO_INIT 5
 #define BULLET_ACCEL_INIT 26  //20
 #define BULLET_V0_INIT 500    //410
@@ -30,7 +30,7 @@ const uint8_t muzzleFlashTransitions[] PROGMEM = { 5 };
 extern uint8_t shootTimer;
 extern bool triggerReleased;
 
-extern animation_t bullet[AMMO_CAP];
+extern animation_t bullet[MAX_AMMO];
 extern uint8_t bulletsRemaining;
 extern uint8_t fireRate;
 extern GunType activeGun;
@@ -63,6 +63,7 @@ void drawLaser();
 void onShiftMap();
 
 void setActiveGun(GunType newType);
+void increaseCap();
 }
 
 #endif
