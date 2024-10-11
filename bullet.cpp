@@ -5,9 +5,10 @@ sprite_t muzzleFlashSprite = {
   nullptr,
   0,                       //last frame
   muzzleFlashTransitions,  //frame transitions
-  8,                       //dx
-  0,                       //dy
-  0x88
+  // 8,                       //dx
+  // 0,                       //dy
+  0x80,                     // offsets
+  0x88                      // dim
 };
 animation_t muzzleFlash;  //TODO make particle_t
 
@@ -16,8 +17,9 @@ sprite_t bulletSprite = {
   nullptr,
   6,                  //last frame
   bulletTransitions,  //frame transitions
-  0,                  //dx
-  2,                  //dy
+  // 0,                  //dx
+  // 2,                  //dy
+  0x02,
   0x44
 };
 
@@ -159,7 +161,7 @@ void initMuzzleFlash() {
 
 void drawMuzzleFlash() {
   if (muzzleFlash.active) {
-    Sprites::drawSelfMasked(player.animation.pos.x / PIXEL_SCALE - cameraOffset - muzzleFlash.sprite->dx, player.animation.pos.y / PIXEL_SCALE, muzzleFlash.sprite->spriteR, muzzleFlash.frame);
+    Sprites::drawSelfMasked(player.animation.pos.x / PIXEL_SCALE - cameraOffset - ((muzzleFlash.sprite->offset & 0xF0) >> 4), player.animation.pos.y / PIXEL_SCALE, muzzleFlash.sprite->spriteR, muzzleFlash.frame);
     muzzleFlash.active = Utils::updateAnimation(&muzzleFlash);
   }
 }

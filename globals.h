@@ -126,11 +126,8 @@ typedef struct {
   uint8_t last;
   uint8_t *transitions;
 
-  int8_t dx;
-  int8_t dy;
-  // uint8_t w;
-  // uint8_t h;
-  uint8_t dim;
+  uint8_t offset; // dx, dy
+  uint8_t dim; // w, h
 } sprite_t;
 
 typedef struct {
