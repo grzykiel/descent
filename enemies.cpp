@@ -108,7 +108,7 @@ void update() {
       }
       uint8_t x = ((enemy[i].animation.pos.x / PIXEL_SCALE) / BLOCKSIZE) + 1;
       uint8_t y = (enemy[i].animation.pos.y / PIXEL_SCALE) / BLOCKSIZE;
-      if (!levelMap[MAPHEIGHT - x - 1][y]) wake(&enemy[i]);
+      if (Level::getMap(MAPHEIGHT - x - 1, y) == 0) wake(&enemy[i]);
       continue;
     }
 
@@ -170,7 +170,7 @@ void updateCrawling(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel) {
 
   int8_t vel = enemy->type == EnemyType::worm ? WORM_VEL : TORTOISE_VEL;
   if (enemy->animation.dir == Direction::right) {
-    if (nextPos->y / PIXEL_SCALE > SCREENRIGHT - (enemy->animation.sprite->offset & 0x0F) - ((enemy->animation.sprite->dim & 0xF0) >> 4) - 2) {
+    if (nextPos->y / PIXEL_SCALE > (SCREENRIGHT - (enemy->animation.sprite->offset & 0x0F) - ((enemy->animation.sprite->dim & 0xF0) >> 4) - 2)) {
       enemy->animation.dir = Direction::left;
     } else {
       nextVel->y = vel * PIXEL_SCALE;
@@ -214,10 +214,10 @@ void checkTileCollision(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel
 
   for (uint16_t i = wd.xMin; i <= wd.xMax; i++) {
     for (uint8_t j = wd.yMin; j <= wd.yMax; j++) {
-      if (!levelMap[i][j]) continue;
+      if (!Level::getMap(i, j)) continue;
 
       Rect block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
-      if (levelMap[i][j] == DASH) {
+      if (Level::getMap(i, j) == DASH) {
         if (enemy->type == EnemyType::blob) {
           continue;
         } else {
@@ -260,7 +260,7 @@ void checkCrawlerCollision(enemy_t *enemy, position_t *nextPos, velocity_t *next
 
   for (uint16_t i = wd.xMin; i <= wd.xMax; i++) {
     for (uint8_t j = wd.yMin; j <= wd.yMax; j++) {
-      if (!levelMap[i][j]) {
+      if (Level::getMap(i, j) == 0) {
         if (enemy->type == EnemyType::crawler) {
           if ((enemy->animation.frame == CRAWLER_RIGHT && enemy->animation.pos.y / PIXEL_SCALE <= SCREENLEFT + 1)
               || (enemy->animation.frame == CRAWLER_LEFT && enemy->animation.pos.y / PIXEL_SCALE + (enemy->animation.sprite->offset & 0x0F) + CRAWLER_HEIGHT >= SCREENRIGHT - 1)) {
@@ -272,7 +272,7 @@ void checkCrawlerCollision(enemy_t *enemy, position_t *nextPos, velocity_t *next
       }
 
       Rect block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
-      if (levelMap[i][j] == DASH) {
+      if (Level::getMap(i, j) == DASH) {
         block = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE + DASH_OFFSET, j * BLOCKSIZE, DASH_HEIGHT, BLOCKSIZE);
       }
       collision_t temp = Utils::collisionCorrect(enemy->animation, nextPos, block);
@@ -392,13 +392,14 @@ bool ledgeDetect(animation_t animation) {
   if (animation.dir == Direction::left) {
     y = animation.pos.y / PIXEL_SCALE / BLOCKSIZE;
   } else {
-    y = (animation.pos.y / PIXEL_SCALE + (animation.sprite->dim & 0x0F) + (animation.sprite->dim & 0xF0) >> 4) / 8;
+    y = (animation.pos.y / PIXEL_SCALE + (animation.sprite->dim & 0x0F) + ((animation.sprite->dim & 0xF0) >> 4)) / 8;
   }
 
   // arduboy.drawRect(x * BLOCKSIZE - cameraOffset, y * BLOCKSIZE, 8, 8);
   // arduboy.drawRect((x-1) * BLOCKSIZE - cameraOffset, y * BLOCKSIZE, 8, 8);
 
-  return (!levelMap[MAPHEIGHT - x - 1][y] && !levelMap[MAPHEIGHT - x][y]);
+  // return (!levelMap[MAPHEIGHT - x - 1][y] && !levelMap[MAPHEIGHT - x][y]);
+  return (Level::getMap(MAPHEIGHT - x - 1, y) == 0 && Level::getMap(MAPHEIGHT - x, y) == 0);
 }
 
 void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {

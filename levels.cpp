@@ -1,90 +1,29 @@
 #include "levels.h"
 
-uint8_t nextRoom[SCREENHEIGHT][SCREENWIDTH];
+uint8_t nextRoom[ROOMSIZE];
 
+uint8_t levelMap[MAPSIZE];
 
-uint8_t levelMap[MAPHEIGHT][MAPWIDTH];
-/* = {
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  // { 0, 0, 1, 1, 1, 0, 1, 1 },
+constexpr uint8_t startRoom[SCREENWIDTH] = {
+  // 0xF9, 0x22, 0x22, 0x3F,
 
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  // 0xF9, 0x00, 0x00, 0x3F,
+  // 0xA0, 0x00, 0x00, 0x04
 
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  // { 0, 0, 0, 18, 18, 0, 0, 0 },
-  // { 0, 0, 1, 0, 0, 1, 0, 0 },
-  // { 0, 0, 1, 0, 0, 1, 0, 0 },
-  { 15, 9, 18, 18, 18, 18, 3, 15 },
-  { 10, 0, 0, 0, 0, 0, 0, 4 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0 },
-
-
-};*/
-
-const uint8_t startRoom[2][SCREENWIDTH] = {
-  { 15, 9, 18, 18, 18, 18, 3, 15 },
-  { 10, 0, 0, 0, 0, 0, 0, 4 },
+  0xE8, 0x11, 0x11, 0x2E,
+  0x90, 0x00, 0x00, 0x03
 };
 
 namespace Level {
 
 void init() {
-  for (int i = 0; i < MAPHEIGHT; i++) {
-    for (int j = 0; j < MAPWIDTH; j++) {
-      levelMap[i][j] = 0;
-    }
+  for (uint8_t i = 0; i < MAPSIZE; i++) {
+    levelMap[i] = 0x00;
   }
 
-  for (int i = 0; i < 2; i++) {
-    for (int j = 0; j < SCREENWIDTH; j++) {
-      levelMap[i + 44][j] = startRoom[i][j];
-    }
+  for (uint8_t i = 0; i < 8; i++) {
+    levelMap[44 * 4 + i] = startRoom[i];
   }
-
-  // Enemies::spawn(EnemyType::crawler, 3 * BLOCKSIZE, 3 * BLOCKSIZE);
-  // Powerups::spawn(HEART, 0, 3*BLOCKSIZE);
 }
 
 void draw() {
@@ -101,11 +40,11 @@ void draw() {
 
   for (int i = xMin; i < xMax; i++) {
     for (int j = 0; j < MAPWIDTH; j++) {
-      if (levelMap[i][j]) {
-        if (levelMap[i][j] == DASH || levelMap[i][j] == BLOCK) {
-          Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, levelMap[i][j]);
+      if (getMap(i, j)) {
+        if (getMap(i, j) == DASH || getMap(i, j) == BLOCK) {
+          Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, getMap(i, j));
         } else {
-          Sprites::drawOverwrite((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, levelMap[i][j]);
+          Sprites::drawOverwrite((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, getMap(i, j));
         }
       }
     }
@@ -131,44 +70,60 @@ void shiftMap() {
   HUD::onShiftMap();
   Powerups::onShiftMap();
 
-
-  copyMap(levelMap, 16, levelMap, 0);
-  copyMap(levelMap, 32, levelMap, 16);
-  eraseRoom(nextRoom);
-  generateWalls(nextRoom, true);
-  generateWalls(nextRoom, false);
-  autoTile(nextRoom);
-  generateDashes(nextRoom);
-  generateBlocks(nextRoom);
-  generateEnemies(nextRoom);
-  copyMap(nextRoom, 0, levelMap, 32);
+  copyRoom(levelMap, 16 * 4, levelMap, 0);
+  copyRoom(levelMap, 32 * 4, levelMap, 16 * 4);
+  eraseRoom();
+  generateWalls(true);
+  generateWalls(false);
+  autoTile();
+  generateDashes();
+  generateBlocks();
+  generateEnemies();
+  copyRoom(nextRoom, 0, levelMap, 32 * 4);
 }
 
 
 //TODO out of bounds checking
-void copyMap(uint8_t fromMap[][MAPWIDTH], uint8_t fromIndex, uint8_t toMap[][MAPWIDTH], uint8_t toIndex) {
-  for (int i = 0; i < SCREENHEIGHT; i++) {
-    for (int j = 0; j < MAPWIDTH; j++) {
-      toMap[i + toIndex][j] = fromMap[i + fromIndex][j];
-    }
+void copyRoom(uint8_t from[], uint8_t f, uint8_t to[], uint8_t t) {
+  for (uint8_t i = 0; i < ROOMSIZE; i++) {
+    to[i + t] = from[i + f];
   }
 }
 
-void autoTile(uint8_t room[][SCREENWIDTH]) {
-  for (int i = 0; i < SCREENHEIGHT; i++) {
+void autoTile() {
+  /*for (int i = 0; i < SCREENHEIGHT; i++) {
     for (int j = 0; j < SCREENWIDTH; j++) {
-      if (room[i][j]) {
-        uint8_t a = (i == 0) ? 1 : (room[i - 1][j] > 0) * 1;
-        uint8_t b = (j == SCREENWIDTH - 1) ? 2 : (room[i][j + 1] > 0) * 2;
-        uint8_t c = (i == SCREENHEIGHT - 1) ? 4 : (room[i + 1][j] > 0) * 4;
-        uint8_t d = (j == 0) ? 8 : (room[i][j - 1] > 0) * 8;
-        room[i][j] = a + b + c + d + 1;
+      if (getRoom(nextRoom, i, j)) {
+        uint8_t a = (i == 0) ? 1 : (getRoom(nextRoom, i - 1, j) > 0) * 1;
+        uint8_t b = (j == SCREENWIDTH - 1) ? 2 : (getRoom(nextRoom, i, j + 1) > 0) * 2;
+        uint8_t c = (i == SCREENHEIGHT - 1) ? 4 : (getRoom(nextRoom, i + 1, j) > 0) * 4;
+        uint8_t d = (j == 0) ? 8 : (getRoom(nextRoom, i, j - 1) > 0) * 8;
+        writeRoom(nextRoom, i, j, a + b + c + d);
       }
     }
+  }*/
+  for (uint8_t i = 1; i < SCREENHEIGHT - 1; i++) {
+    for (uint8_t j = 0; j < SCREENWIDTH; j++) {
+      if (getRoom(nextRoom, i, j) == 0) continue;
+      uint8_t tile = 0;
+      tile = (getRoom(nextRoom, i - 1, j) != 0) & 0x01;
+      if (j == SCREENWIDTH - 1) {
+        tile |= 0x02;
+      } else {
+        tile |= (((getRoom(nextRoom, i, j + 1) != 0) << 1) & 0x02);
+      }
+      tile |= (((getRoom(nextRoom, i + 1, j) != 0) << 2) & 0x04);
+      if (j == 0) {
+        tile |= 0x08;
+      } else {
+        tile |= (((getRoom(nextRoom, i, j - 1) != 0) << 3) & 0x08);
+      }
+      writeRoom(nextRoom, i, j, tile);
+    }
   }
 }
 
-void generateWalls(uint8_t room[][SCREENWIDTH], bool left) {
+void generateWalls(bool left) {
   uint8_t p = random(TOP_MARGIN, SCREENHEIGHT / 2);
   uint8_t r = random(p, SCREENHEIGHT - BOTTOM_MARGIN);
   uint8_t q = random(p, r);
@@ -178,9 +133,9 @@ void generateWalls(uint8_t room[][SCREENWIDTH], bool left) {
     w = random(w, WALL_WIDTH_MAX);
     for (uint8_t j = 0; j < w; j++) {
       if (left) {
-        room[i][j] = 1;
+        writeRoom(nextRoom, i, j, 1);
       } else {
-        room[i][SCREENWIDTH - 1 - j] = 1;
+        writeRoom(nextRoom, i, SCREENWIDTH - 1 - j, 1);
       }
     }
   }
@@ -189,35 +144,35 @@ void generateWalls(uint8_t room[][SCREENWIDTH], bool left) {
     w = random(1, w + 1);
     for (uint8_t j = 0; j < w; j++) {
       if (left) {
-        room[i][j] = 1;
+        writeRoom(nextRoom, i, j, 1);
       } else {
-        room[i][SCREENWIDTH - 1 - j] = 1;
+        writeRoom(nextRoom, i, SCREENWIDTH - 1 - j, 1);
       }
     }
   }
 }
 
-void generateDashes(uint8_t room[][SCREENWIDTH]) {
+void generateDashes() {
   uint8_t i = random(1, SCREENHEIGHT / 2);
   while (i < SCREENHEIGHT - BOTTOM_MARGIN) {
     uint8_t cs = 0;
-    while (room[i][cs] && cs < SCREENWIDTH) {
+    while (getRoom(nextRoom, i, cs) && (cs < SCREENWIDTH)) {
       cs++;
     }
 
     uint8_t ce = cs + 1;
-    while (!room[i][ce] && ce < SCREENWIDTH) {
+    while ((getRoom(nextRoom, i, ce) == 0) && (ce < SCREENWIDTH)) {
       ce++;
     }
 
-    placeDashes(room, i, cs, ce);
+    placeDashes(i, cs, ce);
 
     if (i + 2 >= SCREENHEIGHT - BOTTOM_MARGIN) break;
     i = random(i + 2, SCREENHEIGHT - BOTTOM_MARGIN);
   }
 }
 
-void placeDashes(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t ce) {
+void placeDashes(uint8_t row, uint8_t cs, uint8_t ce) {
   uint8_t gap = ce - cs;
   uint8_t w = 0;
   uint8_t c;
@@ -236,15 +191,15 @@ void placeDashes(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t c
   }
 
   for (int i = c; i < (c + w); i++) {
-    if (!room[row - 1][i] && !room[row + 1][i]
-        && !room[row - 1][max(0, i - 1)] && !room[row - 1][min(MAPWIDTH, i + 1)]
-        && !room[row + 1][max(0, i - 1)] && !room[row + 1][min(MAPWIDTH, i + 1)]) {
-      room[row][i] = DASH;
+    if (!getRoom(nextRoom, row - 1, i) && !getRoom(nextRoom, row + 1, i)
+        && !getRoom(nextRoom, row - 1, max(0, i - 1)) && !getRoom(nextRoom, row - 1, min(MAPWIDTH, i + 1))
+        && !getRoom(nextRoom, row + 1, max(0, i - 1)) && !getRoom(nextRoom, row + 1, min(MAPWIDTH, i + 1))) {
+      writeRoom(nextRoom, row, i, DASH);
     }
   }
 }
 
-void generateBlocks(uint8_t room[][SCREENWIDTH]) {
+void generateBlocks() {
   uint8_t rs = random(TOP_MARGIN, SCREENHEIGHT / 2);
   while (rs + 2 < SCREENHEIGHT - BOTTOM_MARGIN) {
     uint8_t re = random(rs + 1, SCREENHEIGHT - BOTTOM_MARGIN);
@@ -254,7 +209,7 @@ void generateBlocks(uint8_t room[][SCREENWIDTH]) {
 
     for (int i = rs; i < re; i++) {
       for (int j = cs; j < ce; j++) {
-        if (!room[i][j] && !room[i - 1][j] && random(0, 4) > 1) room[i][j] = BLOCK;
+        if (!getRoom(nextRoom, i, j) && !getRoom(nextRoom, i - 1, j) && random(0, 4) > 1) writeRoom(nextRoom, i, j, BLOCK);
       }
     }
 
@@ -263,29 +218,34 @@ void generateBlocks(uint8_t room[][SCREENWIDTH]) {
   }
 }
 
-
-void eraseRoom(uint8_t room[][SCREENWIDTH]) {
-  for (int i = 0; i < SCREENHEIGHT; i++) {
-    for (int j = 0; j < SCREENWIDTH; j++) {
-      room[i][j] = 0;
-    }
+void eraseRoom() {
+  for (int i = 0; i < ROOMSIZE; i++) {
+    nextRoom[i] = 0x00;
   }
 }
 
-void generateEnemies(uint8_t room[][SCREENWIDTH]) {
+void generateEnemies() {
   uint8_t i = random(1, SCREENHEIGHT - 1);
   uint8_t j = random(0, SCREENWIDTH);
 
-  if (random(0, 2) > 0) {
+  while (getRoom(nextRoom, i, j) || !getRoom(nextRoom, i + 1, j)) {
+    i = random(0, SCREENHEIGHT);
+    j = random(0, SCREENWIDTH);
+  }
+  // Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+  Enemies::spawn(EnemyType::tortoise, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+
+
+  /*if (random(0, 2) > 0) {
     // BLOB
-    while (room[i][j]) {
+    while (getRoom(nextRoom, i, j)) {
       i = random(0, SCREENHEIGHT);
       j = random(0, SCREENWIDTH);
     }
     Enemies::spawn(EnemyType::blob, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
   } else {
     // BAT
-    while (room[i][j] || !room[i - 1][j] || room[i - 1][j] == DASH) {
+    while (getRoom(nextRoom, i, j) || !getRoom(nextRoom, i - 1, j) || getRoom(nextRoom, i - 1, j) == DASH) {
       i = random(1, SCREENHEIGHT - 1);
       j = random(0, SCREENWIDTH);
     }
@@ -293,7 +253,7 @@ void generateEnemies(uint8_t room[][SCREENWIDTH]) {
   }
 
   //WORM / TORTOISE
-  while (room[i][j] || !room[i + 1][j]) {
+  while (getRoom(nextRoom, i, j) || !getRoom(nextRoom, i + 1, j)) {
     i = random(0, SCREENHEIGHT);
     j = random(0, SCREENWIDTH);
   }
@@ -304,18 +264,48 @@ void generateEnemies(uint8_t room[][SCREENWIDTH]) {
       Enemies::spawn(EnemyType::tortoise, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
     }
   } else {
-    while (room[i][j] || !room[i + 1][j]) {
+    while (getRoom(nextRoom, i, j) || !getRoom(nextRoom, i + 1, j)) {
       i = random(0, SCREENHEIGHT);
       i = random(0, SCREENWIDTH);
     }
     Enemies::spawn(EnemyType::crawler, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
-  }
+  }*/
 }
 
 void destroyBlock(int16_t i, uint8_t j) {
-  levelMap[i][j] = 0;
+  writeMap(i, j, 0);
   Particles::spawnBlockFragment(i, j);
   Powerups::spawnUpgrade((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+}
+
+uint8_t getMap(int16_t i, uint8_t j) {
+  if (j % 2 != 0) {
+    return levelMap[i * 4 + j / 2] & 0x0F;
+  }
+  return (levelMap[i * 4 + j / 2] >> 4);  //& 0xFF) >> 4;
+}
+
+uint8_t getRoom(uint8_t room[], int16_t i, uint8_t j) {
+  if (j % 2 != 0) {
+    return room[i * 4 + j / 2] & 0x0F;
+  }
+  return (room[i * 4 + j / 2] >> 4);  //& 0xFF) >> 4;
+}
+
+void writeMap(int16_t i, uint8_t j, uint8_t tile) {
+  if ((j % 2) != 0) {
+    levelMap[i * 4 + j / 2] = (levelMap[i * 4 + j / 2] & 0xF0) | tile;
+  } else {
+    levelMap[i * 4 + j / 2] = (levelMap[i * 4 + j / 2] & 0x0F) | ((tile << 4) & 0xF0);
+  }
+}
+
+void writeRoom(uint8_t room[], int16_t i, uint8_t j, uint8_t tile) {
+  if ((j % 2) != 0) {
+    room[i * 4 + j / 2] = (room[i * 4 + j / 2] & 0xF0) | tile;
+  } else {
+    room[i * 4 + j / 2] = (room[i * 4 + j / 2] & 0x0F) | ((tile << 4) & 0xF0);
+  }
 }
 
 

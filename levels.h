@@ -17,8 +17,6 @@
 #define TOP_MARGIN    1
 #define BOTTOM_MARGIN 2
 
-extern uint8_t levelMap[MAPHEIGHT][MAPWIDTH];
-
 namespace Level 
 {
   void init();
@@ -26,25 +24,29 @@ namespace Level
   void update();
 
   void shiftMap();
-  void copyMap(uint8_t fromMap[][MAPWIDTH], uint8_t fromIndex, uint8_t toMap[][MAPWIDTH], uint8_t toIndex);
-  void eraseRoom(uint8_t room[][SCREENWIDTH]);
+  void copyRoom(uint8_t from[], uint8_t f, uint8_t toMap[], uint8_t t);
+  void eraseRoom();
 
-  void generateWalls(uint8_t room[][SCREENWIDTH], bool left);
+  void generateWalls(bool left);
   
-  void autoTile(uint8_t room[][SCREENWIDTH]);
+  void autoTile();
   
-  void generateDashes(uint8_t room[][SCREENWIDTH]);
-  void placeDashes(uint8_t room[][SCREENWIDTH], uint8_t row, uint8_t cs, uint8_t ce);
+  void generateDashes();
+  void placeDashes(uint8_t row, uint8_t cs, uint8_t ce);
 
-  void generateBlocks(uint8_t room[][SCREENWIDTH]);
+  void generateBlocks();
 
-  void generateEnemies(uint8_t room[][SCREENWIDTH]);
+  void generateEnemies();
 
   void destroyBlock(int16_t i, uint8_t j);
 
   void shiftPos(position_t *pos);
 
-  
+  uint8_t getMap(int16_t i, uint8_t j);
+  uint8_t getRoom(uint8_t room[], int16_t i, uint8_t j);
+
+  void writeMap(int16_t i, uint8_t j, uint8_t tile);
+  void writeRoom(uint8_t room[], int16_t i, uint8_t j, uint8_t tile);
 
 }
 

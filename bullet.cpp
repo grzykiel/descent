@@ -5,8 +5,6 @@ sprite_t muzzleFlashSprite = {
   nullptr,
   0,                       //last frame
   muzzleFlashTransitions,  //frame transitions
-  // 8,                       //dx
-  // 0,                       //dy
   0x80,                     // offsets
   0x88                      // dim
 };
@@ -17,8 +15,6 @@ sprite_t bulletSprite = {
   nullptr,
   6,                  //last frame
   bulletTransitions,  //frame transitions
-  // 0,                  //dx
-  // 2,                  //dy
   0x02,
   0x44
 };
@@ -209,13 +205,13 @@ void collisionCheck() {
 
     for (int i = wd.xMin; i <= wd.xMax; i++) {
       for (int j = wd.yMin; j <= wd.yMax; j++) {
-        if (!levelMap[i][j]) continue;
-        if (levelMap[i][j] != DASH) {
+        if (Level::getMap(i, j) == 0) continue;
+        if (Level::getMap(i, j) != DASH) {
           Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
           if (Utils::collides(bullet[b], blockRect)) {
             bullet[b].active = false;
             bullet[b].pos.x = blockRect.x * PIXEL_SCALE;
-            if (levelMap[i][j] == BLOCK) {
+            if (Level::getMap(i, j) == BLOCK) {
               Level::destroyBlock(i, j);
             } else {
               Particles::spawnClink(bullet[b].pos, 8, 2);
@@ -260,11 +256,11 @@ void drawLaser() {
 
     for (uint8_t j = i_y; j <= i_y + 1; j++) {
       if (j >= SCREENWIDTH) continue;
-      if (!levelMap[i][j] || levelMap[i][j] == DASH) continue;
+      if (Level::getMap(i, j) == 0 || Level::getMap(i, j) == DASH) continue;
 
       Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
       if (arduboy.collide(laserRect, blockRect)) {
-        if (levelMap[i][j] == BLOCK) {
+        if (Level::getMap(i, j) == BLOCK) {
           Level::destroyBlock(i, j);
         } else {
           collides = true;

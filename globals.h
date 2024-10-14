@@ -26,6 +26,8 @@
 
 #define MAPWIDTH 8
 #define MAPHEIGHT 48
+#define MAPSIZE 192
+#define ROOMSIZE 64
 
 #define REMAP_THRESHOLD 64
 
@@ -42,8 +44,8 @@
 #define N_POWERUPS 6
 
 // special tile indices
-#define DASH 17
-#define BLOCK 18
+#define DASH 4 //17
+#define BLOCK 1 //18 
 
 #define DASH_OFFSET 5
 #define DASH_HEIGHT 3
