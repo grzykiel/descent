@@ -228,15 +228,8 @@ void generateEnemies() {
   uint8_t i = random(1, SCREENHEIGHT - 1);
   uint8_t j = random(0, SCREENWIDTH);
 
-  while (getRoom(nextRoom, i, j) || !getRoom(nextRoom, i + 1, j)) {
-    i = random(0, SCREENHEIGHT);
-    j = random(0, SCREENWIDTH);
-  }
-  // Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
-  Enemies::spawn(EnemyType::tortoise, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
 
-
-  /*if (random(0, 2) > 0) {
+  if (random(0, 2) > 0) {
     // BLOB
     while (getRoom(nextRoom, i, j)) {
       i = random(0, SCREENHEIGHT);
@@ -269,7 +262,7 @@ void generateEnemies() {
       i = random(0, SCREENWIDTH);
     }
     Enemies::spawn(EnemyType::crawler, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
-  }*/
+  }
 }
 
 void destroyBlock(int16_t i, uint8_t j) {

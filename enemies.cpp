@@ -392,14 +392,13 @@ bool ledgeDetect(animation_t animation) {
   if (animation.dir == Direction::left) {
     y = animation.pos.y / PIXEL_SCALE / BLOCKSIZE;
   } else {
-    y = (animation.pos.y / PIXEL_SCALE + (animation.sprite->dim & 0x0F) + ((animation.sprite->dim & 0xF0) >> 4)) / 8;
+    y = (animation.pos.y / PIXEL_SCALE + (animation.sprite->offset & 0x0F) + ((animation.sprite->dim & 0xF0) >> 4)) / 8;
   }
 
   // arduboy.drawRect(x * BLOCKSIZE - cameraOffset, y * BLOCKSIZE, 8, 8);
   // arduboy.drawRect((x-1) * BLOCKSIZE - cameraOffset, y * BLOCKSIZE, 8, 8);
 
-  // return (!levelMap[MAPHEIGHT - x - 1][y] && !levelMap[MAPHEIGHT - x][y]);
-  return (Level::getMap(MAPHEIGHT - x - 1, y) == 0 && Level::getMap(MAPHEIGHT - x, y) == 0);
+  return (!Level::getMap(MAPHEIGHT - x - 1, y) && !Level::getMap(MAPHEIGHT - x, y));
 }
 
 void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
