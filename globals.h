@@ -3,6 +3,7 @@
 
 #include <Arduboy2.h>
 #include <stdint.h>
+#include "bitmaps.h"
 
 #define FPS 60
 
@@ -166,6 +167,7 @@ typedef struct {
 namespace Utils {
 int trim(int p, int l, int h);
 int sign(int x);
+
 window_t getCollisionWindow(position_t pos);
 window_t getCollisionWindow(uint16_t x, int16_t y);
 bool collides(animation_t anim, Rect block);
@@ -178,12 +180,8 @@ bool updateAnimation(particle_t *particle, uint8_t *transitions, uint8_t last);
 bool flickering(animation_t *animation);
 bool flickering(int8_t *f);
 
+void printNum(uint8_t x, uint8_t y, uint16_t n, uint8_t length, uint8_t font);
 
-//DEBUG
-void println(char *str);
-void println(int pr_int);
-void println(uint16_t pr_int);
-void println(uint8_t pr_int);
 }
 
 

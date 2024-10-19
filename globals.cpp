@@ -127,6 +127,19 @@ int sign(int x) {
   return (x > 0) - (x < 0);
 }
 
-
+// x y n length font
+void printNum(uint8_t x, uint8_t y, uint16_t n, uint8_t length, uint8_t font) {
+  y = length * 4 - 1;
+  for (uint8_t i = 0; i < length; i++) {
+    if (font == 4) {
+      Sprites::drawSelfMasked(x, y, Fonts::font_4x4, n % 10);
+    } else if (font == 5) {
+      Sprites::drawSelfMasked(x, y, Fonts::font_5x4, n % 10);
+    }
+    n -= n % 10;
+    n /= 10;
+    y -= 4;
+  }
+}
 
 }

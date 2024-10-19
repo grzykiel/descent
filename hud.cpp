@@ -66,6 +66,8 @@ void draw() {
     draw(ammoCounter, bulletsRemaining);
     draw(HP, player.hp);
   }
+
+  Utils::printNum(120, 0, player.hp, 2, 5);
 }
 
 void onDamaged() {
