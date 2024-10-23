@@ -63,12 +63,17 @@ void draw() {
   }
   if (ammoCounter.t > 0) {
     if (bulletsRemaining > 9) {
-      Utils::printNum(ammoCounter.pos.x/PIXEL_SCALE - cameraOffset, ammoCounter.pos.y/PIXEL_SCALE + 6, bulletsRemaining, 2);
-      Sprites::drawSelfMasked(ammoCounter.pos.x/PIXEL_SCALE - cameraOffset, ammoCounter.pos.y/PIXEL_SCALE + 15, Fonts::font_4x4, 37);
+      Utils::printNum(ammoCounter.pos.x / PIXEL_SCALE - cameraOffset, ammoCounter.pos.y / PIXEL_SCALE + 7, bulletsRemaining, 2);
+      Sprites::drawSelfMasked(ammoCounter.pos.x / PIXEL_SCALE - cameraOffset, ammoCounter.pos.y / PIXEL_SCALE + 15, Fonts::font_4x4, 37);
     } else {
       draw(ammoCounter, bulletsRemaining);
     }
-    draw(HP, player.hp);
+    if (player.hp > 3) {
+      Utils::printNum(HP.pos.x / PIXEL_SCALE - cameraOffset, HP.pos.y / PIXEL_SCALE + 8, player.hp, 1);
+      Sprites::drawSelfMasked(HP.pos.x / PIXEL_SCALE - cameraOffset, HP.pos.y / PIXEL_SCALE + 3, HUD::hp, 1);
+    } else {
+      draw(HP, player.hp);
+    }
   }
 
   drawTop();
@@ -79,7 +84,7 @@ void drawTop() {
 
   if (player.hp > 3) {
     Utils::printNum(123, 1, player.hp, 1);
-    Sprites::drawSelfMasked(123, -5, HUD::hp, 1);
+    Sprites::drawSelfMasked(123, -4, HUD::hp, 1);
   } else {
     Sprites::drawSelfMasked(123, 3 * player.hp - 12, HUD::hp, player.hp);
   }
