@@ -3,7 +3,7 @@
 namespace Menu {
 const uint8_t textX[] PROGMEM = { 97, 94, 92, 91, 92, 94, 97 };
 const uint8_t textFrames[] PROGMEM = { 0, 1, 2, 3, 1, 4, 5 };
-const uint8_t blocksX[] PROGMEM = { 47, 47, 50, 50, 53, 59, 59, 59, 59, 65 };
+const uint8_t blocksX[] PROGMEM = { 47, 47, 50, 50, 53, 59, 59, 59, 62, 65 };
 const uint8_t blocksY[] PROGMEM = { 21, 33, 21, 33, 27, 21, 30, 36, 39, 27 };
 const uint8_t blocksWidth[] PROGMEM = { 3, 3, 3, 3, 6, 3, 6, 6, 3, 3 };
 const uint8_t blocksHeight[] PROGMEM{ 3, 3, 6, 6, 12, 6, 3, 3, 6, 9 };

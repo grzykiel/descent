@@ -30,6 +30,8 @@ void init() {
 }
 
 void update() {
+  if (settings & 0x0F) return;
+  
   if (damageCounter.t > 0) {
     if (damageCounter.t > DAMAGE_COUNTER_FRAMES) {
       damageCounter.pos.x += 128;
@@ -38,15 +40,10 @@ void update() {
     damageCounter.t--;
   }
 
-  if (bulletsRemaining > 0 && ammoCounter.t > 0) {
-    ammoCounter.t--;
-    if (ammoCounter.t > AMMO_COUNTER_IFRAMES || ammoCounter.f == 0) {
-      ammoCounter.pos.x = player.animation.pos.x + 9 * PIXEL_SCALE;
-      ammoCounter.pos.y = player.animation.pos.y - 8 * PIXEL_SCALE;
-
-      HP.pos.x = ammoCounter.pos.x + 6 * PIXEL_SCALE;
-      HP.pos.y = ammoCounter.pos.y;
-    }
+  if (HP.t > 0) {
+    update(&HP);
+  } else if (bulletsRemaining > 0 && ammoCounter.t > 0) {
+    update(&ammoCounter);
   } else {
     if (ammoCounter.t > 0) {
       ammoCounter.t--;
@@ -57,26 +54,39 @@ void update() {
   }
 }
 
+void update(hud_t *hud) {
+  hud->t--;
+  if (hud->t > HUD_COUNTER_IFRAMES || hud->f == 0) {
+    hud->pos.x = player.animation.pos.x + 9 * PIXEL_SCALE;
+    hud->pos.y = player.animation.pos.y - 8 * PIXEL_SCALE;
+  }
+}
+
 void draw() {
+  if (settings & 0x0F) {
+    drawTop();
+    return;
+  }
+
   if (damageCounter.t > 0) {
     draw(damageCounter, 0);
   }
-  if (ammoCounter.t > 0) {
-    if (bulletsRemaining > 9) {
-      Utils::printNum(ammoCounter.pos.x / PIXEL_SCALE - cameraOffset, ammoCounter.pos.y / PIXEL_SCALE + 7, bulletsRemaining, 2);
-      Sprites::drawSelfMasked(ammoCounter.pos.x / PIXEL_SCALE - cameraOffset, ammoCounter.pos.y / PIXEL_SCALE + 15, Fonts::font_4x4, 37);
-    } else {
-      draw(ammoCounter, bulletsRemaining);
-    }
+
+  if (HP.t > 0) {
     if (player.hp > 3) {
       Utils::printNum(HP.pos.x / PIXEL_SCALE - cameraOffset, HP.pos.y / PIXEL_SCALE + 8, player.hp, 1);
       Sprites::drawSelfMasked(HP.pos.x / PIXEL_SCALE - cameraOffset, HP.pos.y / PIXEL_SCALE + 3, HUD::hp, 1);
     } else {
       draw(HP, player.hp);
     }
+  } else if (ammoCounter.t > 0) {
+    if (bulletsRemaining > 9) {
+      Utils::printNum(ammoCounter.pos.x / PIXEL_SCALE - cameraOffset, ammoCounter.pos.y / PIXEL_SCALE + 5, bulletsRemaining, 2);
+      Sprites::drawSelfMasked(ammoCounter.pos.x / PIXEL_SCALE - cameraOffset, ammoCounter.pos.y / PIXEL_SCALE + 4, HUD::ammo, 2);
+    } else {
+      draw(ammoCounter, bulletsRemaining);
+    }
   }
-
-  drawTop();
 }
 
 void drawTop() {
@@ -91,7 +101,7 @@ void drawTop() {
 
   if (bulletsRemaining > 9) {
     Utils::printNum(123, 45, bulletsRemaining, 2);
-    Sprites::drawSelfMasked(123, 42, HUD::ammo, 1);
+    Sprites::drawSelfMasked(123, 44, HUD::ammo, 2);
   } else if (bulletsRemaining > 0) {
     Sprites::drawSelfMasked(123, 33 + bulletsRemaining, HUD::ammo, bulletsRemaining);
   }
@@ -99,18 +109,25 @@ void drawTop() {
 
 void onDamaged() {
   damageCounter.pos = player.animation.pos;
-  damageCounter.t = 60;  //DAMAGE_COUNTER_FRAMES;
+  damageCounter.t = DAMAGE_COUNTER_FRAMES;  //60
+
+  HP.t = HUD_COUNTER_FRAMES;
+  HP.f = 0;
+  HP.pos = player.animation.pos;
+  HP.pos.x += 9 * PIXEL_SCALE;
+  ammoCounter.t = 0;
+  ammoCounter.f = 0;
 }
 
 void onRecharge() {
   ammoCounter.f = 0;
-  ammoCounter.t = AMMO_COUNTER_FRAMES;
+  ammoCounter.t = HUD_COUNTER_FRAMES;
 }
 
 void onShoot() {
-  ammoCounter.t = AMMO_COUNTER_FRAMES;
+  ammoCounter.t = HUD_COUNTER_FRAMES;
   if (bulletsRemaining == 0) {
-    ammoCounter.f = AMMO_COUNTER_IFRAMES;
+    ammoCounter.f = HUD_COUNTER_IFRAMES;
   } else {
     ammoCounter.f = 0;
   }

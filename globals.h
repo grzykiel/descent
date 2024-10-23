@@ -83,7 +83,7 @@ extern uint8_t gameState;
 
 extern int16_t cameraOffset;
 
-// extern uint8_t settings = 0x00; // sound | top display
+extern uint8_t settings; 
 
 enum class Direction : uint8_t {
   up,

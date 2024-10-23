@@ -5,8 +5,8 @@
 #include "bitmaps.h"
 
 #define DAMAGE_COUNTER_FRAMES 50
-#define AMMO_COUNTER_FRAMES   60
-#define AMMO_COUNTER_IFRAMES  30
+#define HUD_COUNTER_FRAMES   60
+#define HUD_COUNTER_IFRAMES  30
 
 typedef struct {
   const unsigned char *sprite;
@@ -20,7 +20,7 @@ namespace HUD {
   void update();
   void draw();
 
-  void update(hud_t hud);
+  void update(hud_t *hud);
   void draw(hud_t hud, uint8_t frame);
   void drawTop();
 
