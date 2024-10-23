@@ -22,14 +22,13 @@ namespace HUD {
 
   void update(hud_t hud);
   void draw(hud_t hud, uint8_t frame);
+  void drawTop();
 
   void onDamaged();
   void onShoot();
   void onRecharge();
 
   void onShiftMap();
-
-
 
 }
 

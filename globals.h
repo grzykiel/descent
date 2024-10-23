@@ -13,10 +13,6 @@
 #define STATE_GAMEOVER 3
 #define STATE_SANDBOX 4
 
-//debug movement modes
-#define TOPDOWN 0
-#define PLATFORM 1
-
 #define SCREENLEFT 0
 #define SCREENRIGHT 64
 #define SCREENTOP 128
@@ -86,6 +82,8 @@ extern Sprites sprites;
 extern uint8_t gameState;
 
 extern int16_t cameraOffset;
+
+// extern uint8_t settings = 0x00; // sound | top display
 
 enum class Direction : uint8_t {
   up,
@@ -180,7 +178,9 @@ bool updateAnimation(particle_t *particle, uint8_t *transitions, uint8_t last);
 bool flickering(animation_t *animation);
 bool flickering(int8_t *f);
 
-void printNum(uint8_t x, uint8_t y, uint16_t n, uint8_t length, uint8_t font);
+void printNum(uint8_t x, uint8_t y, uint16_t n, uint8_t length);
+//void printNumLarge(...)
+
 
 }
 

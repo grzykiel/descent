@@ -8,7 +8,7 @@
 #include "hud.h"
 #include "particles.h"
 
-#define MAX_AMMO 5
+#define MAX_AMMO 12
 #define AMMO_INIT 5
 #define BULLET_ACCEL_INIT 26  //20
 #define BULLET_V0_INIT 500    //410

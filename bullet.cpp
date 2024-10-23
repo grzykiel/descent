@@ -289,7 +289,7 @@ void setActiveGun(GunType newType) {
 }
 
 void increaseCap() {
-  bulletCapacity = min(++bulletCapacity, MAX_AMMO);
+  bulletCapacity = min(bulletCapacity+1, MAX_AMMO);
 }
 
 void decreaseFireRate() {

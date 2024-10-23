@@ -265,7 +265,7 @@ void onPickup(uint8_t type) {
   } else if (type == MACHINEGUN) {
     Bullet::setActiveGun(GunType::automatic);
   } else if (type == AMMO_UPGRADE) {
-    // Bullet::increaseCap();
+    Bullet::increaseCap();
   }
 }
 

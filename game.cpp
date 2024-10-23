@@ -47,8 +47,11 @@ void input() {
   //debug & tuning
   if (arduboy.justPressed(B_BUTTON)) {
     // Player::onDamaged();
+    // Player::onPickup(HEART_UPGRADE);
+    // Player::onPickup(HEART);
     // Bullet::increaseCap();
     // Level::autoTile();
+    Player::onPickup(AMMO_UPGRADE);
   }
 
   if (arduboy.justPressed(up_btn)) {
