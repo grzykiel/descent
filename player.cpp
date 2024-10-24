@@ -18,11 +18,12 @@ sprite_t playerJumpSprite = {
   0x01,
   0x68
 };
-player_t player;  //TODO initialise
+player_t player; 
 
-// const int8_t walkSpeed = 1;
-const uint8_t walkAnimDelay = 6;
+constexpr uint8_t walkAnimDelay = 6;
 uint8_t maxHP;
+uint8_t combo;
+uint8_t power;
 
 namespace Player {
 void init() {
@@ -38,6 +39,9 @@ void init() {
   player.animation.dir = Direction::right;
   player.hp = HP_INIT;
   maxHP = HP_INIT;
+
+  combo = 0;
+  power = 0;
 }
 
 
@@ -127,6 +131,7 @@ void checkTileCollisions(position_t *nextPos, velocity_t *nextVel) {
           if (player.state != PlayerState::grounded) {
             Bullet::reload();
             Player::land();
+            combo = 0;
           }
         } else if (type.v == TOP && Level::getMap(i, j) == BLOCK) {
           Level::destroyBlock(i, j);
@@ -158,6 +163,7 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
           Bullet::reload();
           HUD::onRecharge();
           Enemies::kill(&enemy[i], false);
+          combo++;
         }
       } else if (type.v == TOP) {
         nextVel->x = -KICKBACK_V;
@@ -250,6 +256,7 @@ void onDamaged() {
   } else {
     HUD::onDamaged();
   }
+  combo = 0;
 }
 
 void onPickup(uint8_t type) {
@@ -258,6 +265,7 @@ void onPickup(uint8_t type) {
     player.hp = min(++player.hp, maxHP);
   } else if (type == HEART_UPGRADE) {
     maxHP = min(++maxHP, HP_CAP);
+    player.hp = maxHP;
   } else if (type == SHOTGUN) {
     Bullet::setActiveGun(GunType::shot);
   } else if (type == LASER) {
@@ -269,6 +277,18 @@ void onPickup(uint8_t type) {
   }
 }
 
+void increaseCombo() {
+  combo = min(combo + 1, 255);
+}
 
+void resetCombo() {
+  if (combo > 5) {
+    power = (power < 1) ? 1 : power;
+  } else if (combo > 10) {
+    power = (power < 2) ? 2 : power;
+  } else if (combo > 20) {
+    power = (power < 3) ? 3 : power;
+  }
+}
 
 }

@@ -49,6 +49,8 @@ typedef struct {
 } player_t */
 
 extern player_t player;
+extern uint8_t combo;
+extern uint8_t power;
 
 
 #endif
@@ -77,5 +79,8 @@ namespace Player {
 
   void onDamaged(); 
   void onPickup(uint8_t type);
+
+  void resetCombo();
+  void increaseCombo();
 
 }

@@ -80,7 +80,7 @@ void shoot() {
 void fireAuto() {
   if (shootTimer > 0) {
     shootTimer--;
-  } else { // if (shootTimer == 0) {
+  } else { 
     if (bulletsRemaining > 0) {
       Player::thrust(BULLET_THRUST_SCALE);
 
@@ -284,7 +284,7 @@ void onShiftMap() {
 }
 
 void setActiveGun(GunType newType) {
-  init();
+  initBullets();
   activeGun = newType;
 }
 

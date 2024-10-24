@@ -66,11 +66,11 @@ void spawnHeart(uint16_t x, uint8_t y) {
 
 void spawnUpgrade(uint16_t x, uint8_t y) {
   if (!random(0, upgradeProb)) {
-    uint8_t ug = random(3, 6);
+    uint8_t ug = random(1, 6);
     powerup[ug].active = true;
     powerup[ug].pos.x = x;
     powerup[ug].pos.y = y;
-    upgradeProb = min(++upgradeProb, PROB_MAX);
+    upgradeProb = min(upgradeProb + 1, PROB_MAX);
   }
 }
 

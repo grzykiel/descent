@@ -30,15 +30,16 @@ void init() {
 }
 
 void update() {
-  if (settings & 0x0F) return;
-  
+
   if (damageCounter.t > 0) {
-    if (damageCounter.t > DAMAGE_COUNTER_FRAMES) {
+    if (damageCounter.t > 50) {
       damageCounter.pos.x += 128;
       damageCounter.pos.y = player.animation.pos.y;
     }
     damageCounter.t--;
   }
+
+  if (settings & 0x0F) return;
 
   if (HP.t > 0) {
     update(&HP);
@@ -63,13 +64,14 @@ void update(hud_t *hud) {
 }
 
 void draw() {
-  if (settings & 0x0F) {
-    drawTop();
-    return;
-  }
 
   if (damageCounter.t > 0) {
     draw(damageCounter, 0);
+  }
+
+  if (settings & 0x0F) {
+    drawTop();
+    return;
   }
 
   if (HP.t > 0) {
@@ -105,11 +107,22 @@ void drawTop() {
   } else if (bulletsRemaining > 0) {
     Sprites::drawSelfMasked(123, 33 + bulletsRemaining, HUD::ammo, bulletsRemaining);
   }
+
+  Utils::printNum(123, 20, score, 6);
+
+  if (combo > 4) {
+    Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, player.animation.pos.y / PIXEL_SCALE + 2, combo, 1);
+  } else if (combo > 9) {
+    Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, player.animation.pos.y / PIXEL_SCALE, combo, 2);
+  } else if (combo > 99) {
+    Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, player.animation.pos.y / PIXEL_SCALE - 3, combo, 3);
+  }
+
 }
 
 void onDamaged() {
   damageCounter.pos = player.animation.pos;
-  damageCounter.t = DAMAGE_COUNTER_FRAMES;  //60
+  damageCounter.t = DAMAGE_COUNTER_FRAMES + 10;
 
   HP.t = HUD_COUNTER_FRAMES;
   HP.f = 0;

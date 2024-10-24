@@ -18,12 +18,12 @@
 
 #define LASER_TIME 5
 #define LASER_WIDTH_INIT 3
-#define LASER_THRUST_SCALE 17
+#define LASER_THRUST_SCALE 9//17
 
 #define SHOT_ACCEL_INIT 5
 #define SHOT_V0_INIT 96
 #define N_SHOTS 3
-#define SHOT_THRUST_SCALE 17
+#define SHOT_THRUST_SCALE 9//17
 
 
 const uint8_t muzzleFlashTransitions[] PROGMEM = { 5 };

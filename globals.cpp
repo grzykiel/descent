@@ -9,6 +9,8 @@ int16_t cameraOffset = 0;
 
 uint8_t settings = 0xFF; // sound | top display
 
+uint16_t score;
+
 namespace Utils {
 
 int trim(int p, int l, int h) {
@@ -137,6 +139,13 @@ void printNum(uint8_t x, uint8_t y, uint16_t n, uint8_t length) {
     n -= n % 10;
     n /= 10;
     y -= 4;
+  }
+}
+
+void printText(uint8_t x, uint8_t y, uint8_t *text, uint8_t length) {
+  for (uint8_t i = 0; i < length; i++) {
+    Sprites::drawSelfMasked(x, y, Fonts::font_4x4, text[i]);
+    y+= 5;
   }
 }
 

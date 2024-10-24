@@ -437,6 +437,7 @@ bool checkLaserCollisions(Rect laser) {
 }
 
 void kill(enemy_t *enemy, bool shot) {
+  score += enemy->hp*10;
   enemy->animation.active = false;
   if (shot) {
     Particles::spawnExplosion(enemy->animation.pos,
