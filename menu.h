@@ -11,4 +11,6 @@ namespace Menu
   void input();
   void update();
   void draw();
+
+  void gameOver();
 }

@@ -5,8 +5,8 @@ sprite_t muzzleFlashSprite = {
   nullptr,
   0,                       //last frame
   muzzleFlashTransitions,  //frame transitions
-  0x80,                     // offsets
-  0x88                      // dim
+  0x80,                    // offsets
+  0x88                     // dim
 };
 animation_t muzzleFlash;  //TODO make particle_t
 
@@ -77,16 +77,20 @@ void shoot() {
   }
 }
 
+void activateMuzzleFlash() {
+  muzzleFlash.active = true;
+  muzzleFlash.t = 0;
+  muzzleFlash.frame = 0;
+}
+
 void fireAuto() {
   if (shootTimer > 0) {
     shootTimer--;
-  } else { 
+  } else {
     if (bulletsRemaining > 0) {
       Player::thrust(BULLET_THRUST_SCALE);
 
-      muzzleFlash.active = true;
-      muzzleFlash.t = 0;
-      muzzleFlash.frame = 0;
+      activateMuzzleFlash();
 
       bullet[chamber].active = true;
       bullet[chamber].pos.x = player.animation.pos.x;
@@ -114,9 +118,7 @@ void fireLaser() {
     bullet[chamber].t = LASER_TIME;
     Player::thrust(LASER_THRUST_SCALE);
 
-    muzzleFlash.active = true;
-    muzzleFlash.t = 0;
-    muzzleFlash.frame = 0;
+    activateMuzzleFlash();
 
     bulletsRemaining--;
     HUD::onShoot();
@@ -125,11 +127,12 @@ void fireLaser() {
 
 void fireShotgun() {
   if (bulletsRemaining == 0) return;
+  activateMuzzleFlash();
   for (uint8_t i = 0; i < N_SHOTS; i++) {
     bullet[chamber].active = true;
     bullet[chamber].pos.x = player.animation.pos.x;
     bullet[chamber].pos.y = player.animation.pos.y;
-    bullet[chamber].vel.x = (uint8_t)pgm_read_word(&shotVelocitiesX[i]);//SHOT_V0_INIT;
+    bullet[chamber].vel.x = (uint8_t)pgm_read_word(&shotVelocitiesX[i]);  //SHOT_V0_INIT;
     bullet[chamber].vel.y = (int8_t)pgm_read_word(&shotVelocitiesY[i]);
     bullet[chamber].frame = 0;
     bullet[chamber].t = 0;
@@ -236,8 +239,8 @@ void drawLaser() {
   if (bullet[chamber].t == 0) return;
 
   uint8_t x1 = player.animation.pos.x / PIXEL_SCALE;
-  uint8_t y0 = player.animation.pos.y / PIXEL_SCALE + BLOCKSIZE/2 - LASER_WIDTH_INIT/2;
-  uint8_t y1 = y0 + LASER_WIDTH_INIT;
+  uint8_t y0 = player.animation.pos.y / PIXEL_SCALE + BLOCKSIZE / 2 - (LASER_WIDTH_INIT + 2*power) / 2;
+  uint8_t y1 = y0 + (LASER_WIDTH_INIT + 2*power);
   uint8_t x0 = x1 - BLOCKSIZE;
 
   uint8_t i_x = player.animation.pos.x / PIXEL_SCALE / BLOCKSIZE;
@@ -247,7 +250,7 @@ void drawLaser() {
   bool collides = false;
   for (uint8_t i = i_x; i < i_x + 8; i++) {
 
-    
+
     if (Enemies::checkLaserCollisions(laserRect)) {
       x0 += 4;
       Particles::spawnClink(x0, y0, 0, 0);
@@ -289,7 +292,7 @@ void setActiveGun(GunType newType) {
 }
 
 void increaseCap() {
-  bulletCapacity = min(bulletCapacity+1, MAX_AMMO);
+  bulletCapacity = min(bulletCapacity + 1, MAX_AMMO);
 }
 
 void decreaseFireRate() {

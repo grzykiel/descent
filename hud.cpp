@@ -18,6 +18,8 @@ hud_t HP = {
   0,
 };
 
+uint8_t comboTimer = 0;
+
 namespace HUD {
 
 void init() {

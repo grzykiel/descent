@@ -18,7 +18,7 @@ sprite_t playerJumpSprite = {
   0x01,
   0x68
 };
-player_t player; 
+player_t player;
 
 constexpr uint8_t walkAnimDelay = 6;
 uint8_t maxHP;
@@ -219,13 +219,15 @@ void jump() {
 
 void bounce() {
   // player.animation.vel.x = BOUNCE_VELOCITY;
-  player.animation.t = 0;
+  player.animation.t = 30; 
   player.state = PlayerState::bouncing;
   player.animation.sprite = &playerJumpSprite;  //TODO replace with bounce sprite
-  player.animation.frame = 0;
+  player.animation.frame = 3; 
 }
 
 void thrust(uint8_t multiplier) {
+  player.animation.frame = 3;
+  player.animation.t = 30;
   player.animation.vel.x = THRUST * multiplier;
 }
 
@@ -283,12 +285,25 @@ void increaseCombo() {
 
 void resetCombo() {
   if (combo > 5) {
-    power = (power < 1) ? 1 : power;
+    increasePower(1);
   } else if (combo > 10) {
-    power = (power < 2) ? 2 : power;
+    increasePower(2);
   } else if (combo > 20) {
-    power = (power < 3) ? 3 : power;
+    increasePower(3);
   }
+}
+
+void increasePower(uint8_t p) {
+  if (p == 0) {
+    power = min(power + 1, 3);
+  } else {
+    power = (power < p) ? p : power;
+    power = min(power, 3);
+  }
+}
+
+void resetPower() {
+  power = 0;
 }
 
 }

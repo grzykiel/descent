@@ -8,6 +8,8 @@
 #define HUD_COUNTER_FRAMES   60
 #define HUD_COUNTER_IFRAMES  30
 
+// uint8_t comboTimer;
+
 typedef struct {
   const unsigned char *sprite;
   uint8_t t;

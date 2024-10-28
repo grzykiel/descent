@@ -83,4 +83,7 @@ namespace Player {
   void resetCombo();
   void increaseCombo();
 
+  void increasePower(uint8_t p);
+  void resetPower();
+
 }
