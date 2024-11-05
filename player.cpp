@@ -42,6 +42,7 @@ void init() {
 
   combo = 0;
   power = 0;
+  score = 0;
 }
 
 
@@ -57,7 +58,7 @@ void update() {
       fall();
     }
   }
-  nextVel.x = max(nextVel.x, -8 * PIXEL_SCALE);  // TODO re#define terminal velocity
+  nextVel.x = max(nextVel.x, -2 * PIXEL_SCALE);  // TODO re#define terminal velocity
 
   nextPos.x += nextVel.x;
   nextPos.y += nextVel.y;
@@ -219,10 +220,10 @@ void jump() {
 
 void bounce() {
   // player.animation.vel.x = BOUNCE_VELOCITY;
-  player.animation.t = 30; 
+  player.animation.t = 30;
   player.state = PlayerState::bouncing;
   player.animation.sprite = &playerJumpSprite;  //TODO replace with bounce sprite
-  player.animation.frame = 3; 
+  player.animation.frame = 3;
 }
 
 void thrust(uint8_t multiplier) {
@@ -259,6 +260,7 @@ void onDamaged() {
     HUD::onDamaged();
   }
   combo = 0;
+  resetPower();
 }
 
 void onPickup(uint8_t type) {

@@ -48,8 +48,6 @@ void gameOver() {
   Sprites::drawSelfMasked(96, 18, Fonts::GameOver, 0);
   Sprites::drawSelfMasked(89, 18, Fonts::GameOver, 1);
 
-  Utils::printNum(83, 19, score, 7);
-
-  
+  Utils::printNum(83, 19, score, 7); 
 }
 }

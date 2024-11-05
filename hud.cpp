@@ -18,7 +18,7 @@ hud_t HP = {
   0,
 };
 
-uint8_t comboTimer = 0;
+uint8_t comboTimer;
 
 namespace HUD {
 
@@ -29,16 +29,25 @@ void init() {
   ammoCounter.f = 0;
   HP.t = 0;
   HP.f = 0;
+
+  comboTimer = 0;
 }
 
 void update() {
 
   if (damageCounter.t > 0) {
+    damageCounter.t--;
     if (damageCounter.t > 50) {
       damageCounter.pos.x += 128;
       damageCounter.pos.y = player.animation.pos.y;
     }
-    damageCounter.t--;
+  }
+
+  if (comboTimer > 0) {
+    comboTimer--;
+    if (comboTimer == 0) {
+      combo = 0;
+    }
   }
 
   if (settings & 0x0F) return;
@@ -70,7 +79,7 @@ void draw() {
   if (damageCounter.t > 0) {
     draw(damageCounter, 0);
   }
-
+  
   if (settings & 0x0F) {
     drawTop();
     return;
@@ -112,14 +121,13 @@ void drawTop() {
 
   Utils::printNum(123, 20, score, 6);
 
-  if (combo > 4) {
+  if (combo > 2) {
     Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, player.animation.pos.y / PIXEL_SCALE + 2, combo, 1);
   } else if (combo > 9) {
     Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, player.animation.pos.y / PIXEL_SCALE, combo, 2);
   } else if (combo > 99) {
     Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, player.animation.pos.y / PIXEL_SCALE - 3, combo, 3);
   }
-
 }
 
 void onDamaged() {

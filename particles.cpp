@@ -128,7 +128,7 @@ void initSmoke() {
 void spawnSmoke() {
   if (smoke.active) return;
   initSmoke();
-  smoke.pos.x = player.animation.pos.x / PIXEL_SCALE - 16;
+  smoke.pos.x = player.animation.pos.x / PIXEL_SCALE - 24;
   smoke.pos.y = player.animation.pos.y / PIXEL_SCALE - 4;
   smoke.active = true;
 }

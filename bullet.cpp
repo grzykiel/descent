@@ -28,11 +28,11 @@ uint8_t bulletCapacity;
 uint8_t bulletsRemaining;
 uint8_t chamber = 0;
 
-uint8_t bulletAccel;
-uint16_t bulletV0;
+// uint8_t bulletAccel;
+// uint16_t bulletV0;
 uint8_t fireRate;
 
-GunType activeGun = GunType::automatic;
+GunType activeGun;
 
 namespace Bullet {
 void init() {
@@ -44,9 +44,9 @@ void init() {
   bulletCapacity = AMMO_INIT;
   bulletsRemaining = AMMO_INIT;
 
-  bulletAccel = BULLET_ACCEL_INIT;
-  bulletV0 = BULLET_V0_INIT;
   fireRate = FIRE_RATE_INIT;
+
+  activeGun = GunType::shot;  //automatic;
 }
 
 void update() {
@@ -95,7 +95,7 @@ void fireAuto() {
       bullet[chamber].active = true;
       bullet[chamber].pos.x = player.animation.pos.x;
       bullet[chamber].pos.y = player.animation.pos.y;
-      bullet[chamber].vel.x = bulletV0;
+      bullet[chamber].vel.x = BULLET_V0 + 99 * power;
       bullet[chamber].vel.y = player.animation.vel.y;
       bullet[chamber].frame = 0;
       bullet[chamber].t = 0;
@@ -104,7 +104,7 @@ void fireAuto() {
       bulletsRemaining--;
       HUD::onShoot();
 
-      shootTimer = fireRate;
+      shootTimer = FIRE_RATE_INIT - 4 * power;  //fireRate;
     } else {
       Particles::spawnSmoke();
     }
@@ -113,33 +113,44 @@ void fireAuto() {
 
 void fireLaser() {
   if (bullet[chamber].active) return;
-  if (bulletsRemaining > 0) {
+  if (bulletsRemaining >= (power + LASER_CHARGES)) {
     bullet[chamber].active = true;
     bullet[chamber].t = LASER_TIME;
     Player::thrust(LASER_THRUST_SCALE);
 
     activateMuzzleFlash();
 
-    bulletsRemaining--;
+    bulletsRemaining -= (power + LASER_CHARGES); 
     HUD::onShoot();
   }
 }
 
 void fireShotgun() {
-  if (bulletsRemaining == 0) return;
+  if (bulletsRemaining < N_SHOTS) return;
   activateMuzzleFlash();
   for (uint8_t i = 0; i < N_SHOTS; i++) {
     bullet[chamber].active = true;
     bullet[chamber].pos.x = player.animation.pos.x;
     bullet[chamber].pos.y = player.animation.pos.y;
-    bullet[chamber].vel.x = (uint8_t)pgm_read_word(&shotVelocitiesX[i]);  //SHOT_V0_INIT;
-    bullet[chamber].vel.y = (int8_t)pgm_read_word(&shotVelocitiesY[i]);
+
+    if (i < 3) {
+      bullet[chamber].vel.x = (uint16_t)pgm_read_word(&shotVelocitiesX[i]) + 51 * power;
+      if (i == 0) {
+        bullet[chamber].vel.y = 0;
+      } else {
+        bullet[chamber].vel.y = (uint16_t)pgm_read_word(&shotVelocitiesY[i]) + 10 * power;
+      }
+    } else {
+      bullet[chamber].vel.x = (uint16_t)pgm_read_word(&shotVelocitiesX[i - 2]) + 51 * power;
+      bullet[chamber].vel.y = -(uint16_t)pgm_read_word(&shotVelocitiesY[i - 2]) - 10 * power;
+    }
+
     bullet[chamber].frame = 0;
     bullet[chamber].t = 0;
     chamber = (chamber + 1) % MAX_AMMO;
   }
   Player::thrust(SHOT_THRUST_SCALE);
-  bulletsRemaining--;
+  bulletsRemaining -= N_SHOTS;
   HUD::onShoot();
 }
 
@@ -180,9 +191,9 @@ void updateBullets() {
       bullet[i].pos.x -= bullet[i].vel.x;
       if (activeGun == GunType::shot) {
         bullet[i].pos.y -= bullet[i].vel.y;
-        bullet[i].vel.x -= SHOT_ACCEL_INIT;
+        bullet[i].vel.x -= (10 + 3 * power);  
       } else {
-        bullet[i].vel.x -= bulletAccel;
+        bullet[i].vel.x -= (26 + 5 * power); 
       }
       bullet[i].active = Utils::updateAnimation(&bullet[i]);
     }
@@ -239,8 +250,8 @@ void drawLaser() {
   if (bullet[chamber].t == 0) return;
 
   uint8_t x1 = player.animation.pos.x / PIXEL_SCALE;
-  uint8_t y0 = player.animation.pos.y / PIXEL_SCALE + BLOCKSIZE / 2 - (LASER_WIDTH_INIT + 2*power) / 2;
-  uint8_t y1 = y0 + (LASER_WIDTH_INIT + 2*power);
+  uint8_t y0 = player.animation.pos.y / PIXEL_SCALE + BLOCKSIZE / 2 - (LASER_WIDTH_INIT + 2 * power) / 2;
+  uint8_t y1 = y0 + (LASER_WIDTH_INIT + 2 * power);
   uint8_t x0 = x1 - BLOCKSIZE;
 
   uint8_t i_x = player.animation.pos.x / PIXEL_SCALE / BLOCKSIZE;
@@ -288,18 +299,23 @@ void onShiftMap() {
 
 void setActiveGun(GunType newType) {
   initBullets();
-  activeGun = newType;
+  if (activeGun == newType) {
+    Player::increasePower(0);
+  } else {
+    activeGun = newType;
+  }
 }
 
 void increaseCap() {
   bulletCapacity = min(bulletCapacity + 1, MAX_AMMO);
 }
 
+// DEBUG
 void decreaseFireRate() {
   fireRate = max(fireRate - 1, FIRE_RATE_MIN);
 }
 
-// DEBUG
+
 void increaseFireRate() {
   fireRate = min(fireRate + 1, 30);
 }
