@@ -113,20 +113,28 @@ void fireAuto() {
 
 void fireLaser() {
   if (bullet[chamber].active) return;
-  if (bulletsRemaining >= (power + LASER_CHARGES)) {
-    bullet[chamber].active = true;
-    bullet[chamber].t = LASER_TIME;
-    Player::thrust(LASER_THRUST_SCALE);
 
-    activateMuzzleFlash();
-
-    bulletsRemaining -= (power + LASER_CHARGES); 
-    HUD::onShoot();
+  if (bulletsRemaining < (power + LASER_CHARGES)) {
+    Particles::spawnSmoke();
+    return;
   }
+
+  bullet[chamber].active = true;
+  bullet[chamber].t = LASER_TIME;
+  Player::thrust(LASER_THRUST_SCALE);
+
+  activateMuzzleFlash();
+
+  bulletsRemaining -= (power + LASER_CHARGES);
+  HUD::onShoot();
 }
 
 void fireShotgun() {
-  if (bulletsRemaining < N_SHOTS) return;
+  if (bulletsRemaining < N_SHOTS) {
+    Particles::spawnSmoke();
+    return;
+  }
+
   activateMuzzleFlash();
   for (uint8_t i = 0; i < N_SHOTS; i++) {
     bullet[chamber].active = true;
@@ -134,15 +142,15 @@ void fireShotgun() {
     bullet[chamber].pos.y = player.animation.pos.y;
 
     if (i < 3) {
-      bullet[chamber].vel.x = (uint16_t)pgm_read_word(&shotVelocitiesX[i]) + 51 * power;
+      bullet[chamber].vel.x = (int16_t)pgm_read_word(&shotVelocitiesX[i]) + 51 * power;
       if (i == 0) {
         bullet[chamber].vel.y = 0;
       } else {
-        bullet[chamber].vel.y = (uint16_t)pgm_read_word(&shotVelocitiesY[i]) + 10 * power;
+        bullet[chamber].vel.y = (int8_t)pgm_read_word(&shotVelocitiesY[i]) + 10 * power;
       }
     } else {
-      bullet[chamber].vel.x = (uint16_t)pgm_read_word(&shotVelocitiesX[i - 2]) + 51 * power;
-      bullet[chamber].vel.y = -(uint16_t)pgm_read_word(&shotVelocitiesY[i - 2]) - 10 * power;
+      bullet[chamber].vel.x = (int16_t)pgm_read_word(&shotVelocitiesX[i - 2]) + 51 * power;
+      bullet[chamber].vel.y = -(int8_t)pgm_read_word(&shotVelocitiesY[i - 2]) - 10 * power;
     }
 
     bullet[chamber].frame = 0;
@@ -191,9 +199,9 @@ void updateBullets() {
       bullet[i].pos.x -= bullet[i].vel.x;
       if (activeGun == GunType::shot) {
         bullet[i].pos.y -= bullet[i].vel.y;
-        bullet[i].vel.x -= (10 + 3 * power);  
+        bullet[i].vel.x -= (10 + 3 * power);
       } else {
-        bullet[i].vel.x -= (26 + 5 * power); 
+        bullet[i].vel.x -= (26 + 5 * power);
       }
       bullet[i].active = Utils::updateAnimation(&bullet[i]);
     }
@@ -227,6 +235,7 @@ void collisionCheck() {
             bullet[b].pos.x = blockRect.x * PIXEL_SCALE;
             if (Level::getMap(i, j) == BLOCK) {
               Level::destroyBlock(i, j);
+              if (activeGun == GunType::shot) bullet[b].active = true;
             } else {
               Particles::spawnClink(bullet[b].pos, 8, 2);
             }

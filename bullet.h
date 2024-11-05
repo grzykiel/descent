@@ -36,7 +36,7 @@ extern GunType activeGun;
 
 constexpr uint8_t bulletTransitions[] PROGMEM = { 2, 3, 5, 8, 11, 15, 20 };  //{ 1, 2, 3, 5, 8, 11, 15 };
 constexpr int16_t shotVelocitiesX[] PROGMEM = {205, 198, 152}; 
-constexpr int16_t shotVelocitiesY[] PROGMEM = {0, 53, 20}; 
+constexpr int8_t shotVelocitiesY[] PROGMEM = {0, 53, 20}; 
 
 
 namespace Bullet {
