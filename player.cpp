@@ -61,6 +61,9 @@ void update() {
   nextVel.x = max(nextVel.x, -2 * PIXEL_SCALE);  // TODO re#define terminal velocity
 
   nextPos.x += nextVel.x;
+
+  nextPos.x = min(nextPos.x, CEILING);
+  
   nextPos.y += nextVel.y;
 
   //adjust for collisions
@@ -275,7 +278,7 @@ void onPickup(uint8_t type) {
   } else if (type == LASER) {
     Bullet::setActiveGun(GunType::laser);
   } else if (type == MACHINEGUN) {
-    Bullet::setActiveGun(GunType::automatic);
+    Bullet::setActiveGun(GunType::machine);
   } else if (type == AMMO_UPGRADE) {
     Bullet::increaseCap();
   }

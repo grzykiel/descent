@@ -25,11 +25,6 @@ void init() {
     levelMap[44 * 4 + i] = startRoom[i];
   }
 
-  // for (uint8_t i = 0; i < 24; i++) {
-  //   levelMap[40*4+i] = startRoom[i];
-  // }
-
-  // Enemies::spawn(EnemyType::crawler, 6 * BLOCKSIZE, 3 * BLOCKSIZE);
 }
 
 void draw() {

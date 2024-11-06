@@ -18,6 +18,7 @@
 #define SCREENTOP 128
 #define SCREENBOTTOM 0
 #define SCREENMID 64
+#define CEILING 370*128
 
 #define OFFSCREEN 32768
 
@@ -102,7 +103,6 @@ enum class PlayerState : uint8_t {
 };
 
 enum class GunType : uint8_t {
-  automatic,
   machine,
   shot,
   laser

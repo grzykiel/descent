@@ -46,11 +46,11 @@ void init() {
 
   fireRate = FIRE_RATE_INIT;
 
-  activeGun = GunType::shot;  //automatic;
+  activeGun = GunType::machine;
 }
 
 void update() {
-  if (activeGun == GunType::automatic || activeGun == GunType::shot) {
+  if (activeGun == GunType::machine || activeGun == GunType::shot) {
     updateBullets();
   } else if (activeGun == GunType::laser) {
     updateLaser();
@@ -59,7 +59,7 @@ void update() {
 
 
 void draw() {
-  if (activeGun == GunType::automatic || activeGun == GunType::shot) {
+  if (activeGun == GunType::machine || activeGun == GunType::shot) {
     drawBullets();
   } else if (activeGun == GunType::laser) {
     drawLaser();
@@ -68,7 +68,7 @@ void draw() {
 }
 
 void shoot() {
-  if (activeGun == GunType::automatic) {
+  if (activeGun == GunType::machine) {
     fireAuto();
   } else if (activeGun == GunType::laser) {
     fireLaser();
@@ -319,13 +319,4 @@ void increaseCap() {
   bulletCapacity = min(bulletCapacity + 1, MAX_AMMO);
 }
 
-// DEBUG
-void decreaseFireRate() {
-  fireRate = max(fireRate - 1, FIRE_RATE_MIN);
-}
-
-
-void increaseFireRate() {
-  fireRate = min(fireRate + 1, 30);
-}
 }

@@ -8,11 +8,11 @@
 #include "hud.h"
 #include "particles.h"
 
-#define MAX_AMMO 20
+#define MAX_AMMO 24
 #define AMMO_INIT 8
-#define BULLET_ACCEL_INIT 26  //20
-#define BULLET_V0 500    //410
-#define FIRE_RATE_INIT 16 //15
+#define BULLET_ACCEL_INIT 26  
+#define BULLET_V0 500
+#define FIRE_RATE_INIT 16
 #define FIRE_RATE_MIN 5
 #define BULLET_THRUST_SCALE 1
 
@@ -25,7 +25,7 @@
 #define SHOT_THRUST_SCALE 17
 
 
-const uint8_t muzzleFlashTransitions[] PROGMEM = { 5 };
+constexpr uint8_t muzzleFlashTransitions[] PROGMEM = { 5 };
 extern uint8_t shootTimer;
 extern bool triggerReleased;
 
