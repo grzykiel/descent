@@ -135,7 +135,6 @@ void checkTileCollisions(position_t *nextPos, velocity_t *nextVel) {
           if (player.state != PlayerState::grounded) {
             Bullet::reload();
             Player::land();
-            combo = 0;
           }
         } else if (type.v == TOP && Level::getMap(i, j) == BLOCK) {
           Level::destroyBlock(i, j);
@@ -248,6 +247,9 @@ void land() {
   player.state = PlayerState::grounded;
   player.animation.sprite = &playerRunSprite;
   triggerReleased = false;
+
+  Player::onComboEnd();
+  HUD::onComboEnd();
 }
 
 void flicker() {
@@ -262,7 +264,7 @@ void onDamaged() {
   } else {
     HUD::onDamaged();
   }
-  combo = 0;
+  resetCombo();
   resetPower();
 }
 
@@ -288,7 +290,7 @@ void increaseCombo() {
   combo = min(combo + 1, 255);
 }
 
-void resetCombo() {
+void onComboEnd() {
   if (combo > 5) {
     increasePower(1);
   } else if (combo > 10) {
@@ -298,6 +300,9 @@ void resetCombo() {
   }
 }
 
+void resetCombo() {
+  combo = 0;
+}
 void increasePower(uint8_t p) {
   if (p == 0) {
     power = min(power + 1, 3);

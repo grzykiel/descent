@@ -43,13 +43,6 @@ void update() {
     }
   }
 
-  if (comboTimer > 0) {
-    comboTimer--;
-    if (comboTimer == 0) {
-      combo = 0;
-    }
-  }
-
   if (settings & 0x0F) return;
 
   if (HP.t > 0) {
@@ -78,6 +71,20 @@ void draw() {
 
   if (damageCounter.t > 0) {
     draw(damageCounter, 0);
+  }
+  
+  // if (Utils::flickering(&comboTimer)) {
+  //   drawCombo();
+  // } else if (comboTimer == 0) {
+  //   Player::resetCombo();
+  // }
+  if (comboTimer != 0) {
+    if (Utils::flickering(&comboTimer)) {
+      drawCombo();
+    }
+    if (comboTimer == 0) {
+      Player::resetCombo();
+    }
   }
   
   if (settings & 0x0F) {
@@ -121,6 +128,10 @@ void drawTop() {
 
   Utils::printNum(123, 20, score, 6);
 
+  if (comboTimer == 0) drawCombo();
+}
+
+void drawCombo() {
   if (combo > 2) {
     Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, player.animation.pos.y / PIXEL_SCALE + 2, combo, 1);
   } else if (combo > 9) {
@@ -128,6 +139,10 @@ void drawTop() {
   } else if (combo > 99) {
     Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, player.animation.pos.y / PIXEL_SCALE - 3, combo, 3);
   }
+}
+
+void onComboEnd() {
+  comboTimer = 60;
 }
 
 void onDamaged() {

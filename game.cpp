@@ -52,14 +52,17 @@ void input() {
     // Bullet::increaseCap();
     // Level::autoTile();
     // Player::onPickup(AMMO_UPGRADE);
-    if (power < 3) {
-      Player::increasePower(0);
-    } else {
-      Player::resetPower();
-    }
-  }
+    // if (power < 3) {
+    //   Player::increasePower(0);
+    // } else {
+    //   Player::resetPower();
+    // }
+
+    HUD::onComboEnd();
+  } 
 
   if (arduboy.justPressed(up_btn)) {
+    Player::increaseCombo();
   } else if (arduboy.justPressed(down_btn)) {
   }
 }
