@@ -17,7 +17,7 @@ const uint8_t popTransitions[] PROGMEM = { 2, 4, 6 };  //{ 2, 4, 6, 8, 10, 12, 1
 uint8_t popIndex = 0;
 
 particle_t rechargeAnimation;
-const uint8_t rechargeTransitions[] PROGMEM = { 1, 2, 3, 4, 5, 6, 7 };
+const uint8_t rechargeTransitions[] PROGMEM = { 4, 8, 12, 16, 20 }; //{ 1, 2, 3, 4, 5, 6, 7 };
 
 particle_t smoke;
 const uint8_t smokeTransitions[] PROGMEM = { 5, 11, 17, 23 };
@@ -128,7 +128,7 @@ void initSmoke() {
 void spawnSmoke() {
   if (smoke.active) return;
   initSmoke();
-  smoke.pos.x = player.animation.pos.x / PIXEL_SCALE - 16; //24;
+  smoke.pos.x = player.animation.pos.x / PIXEL_SCALE - 16;  //24;
   smoke.pos.y = player.animation.pos.y / PIXEL_SCALE - 4;
   smoke.active = true;
 }
@@ -185,7 +185,11 @@ void draw() {
   }
 
   if (rechargeAnimation.active) {
-    Sprites::drawSelfMasked(rechargeAnimation.pos.x - cameraOffset, rechargeAnimation.pos.y, Particles::recharge, rechargeAnimation.frame);
+    if (combo > 4) {
+      Sprites::drawSelfMasked(rechargeAnimation.pos.x - cameraOffset, rechargeAnimation.pos.y + 2, Particles::flame, rechargeAnimation.frame);
+    } else {
+      Sprites::drawSelfMasked(rechargeAnimation.pos.x - cameraOffset, rechargeAnimation.pos.y, Particles::recharge, rechargeAnimation.frame);
+    }
     rechargeAnimation.active = Utils::updateAnimation(&rechargeAnimation, rechargeTransitions, RECHARGE_TRANSITIONS);
   }
 }

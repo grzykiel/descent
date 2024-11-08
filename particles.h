@@ -15,7 +15,7 @@
 #define CLINK_TRANSITIONS     3
 #define POP_TRANSITIONS       2 //7
 #define SMOKE_TRANSITIONS     3
-#define RECHARGE_TRANSITIONS  6
+#define RECHARGE_TRANSITIONS  4
 
 namespace Particles {
 void init();

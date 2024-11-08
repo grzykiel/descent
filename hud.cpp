@@ -171,7 +171,6 @@ void onShoot() {
   }
 }
 
-
 void draw(hud_t hud, uint8_t frame) {
   sprites.drawSelfMasked(hud.pos.x / PIXEL_SCALE - cameraOffset, hud.pos.y / PIXEL_SCALE, hud.sprite, frame);
 }

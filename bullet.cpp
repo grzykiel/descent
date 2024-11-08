@@ -167,6 +167,8 @@ void reload() {
     bulletsRemaining = bulletCapacity;
     Particles::activateRecharge();
     HUD::onRecharge();
+  } else if (combo > 4) {
+    Particles::activateRecharge();
   }
 }
 
