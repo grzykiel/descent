@@ -35,7 +35,7 @@ namespace Level
   void autoTile();
   
   void generateDashes();
-  void placeDashes(uint8_t row, uint8_t cs, uint8_t ce);
+  bool clearPath(uint8_t x, uint8_t y1, uint8_t y2);
 
   void generateBlocks();
 

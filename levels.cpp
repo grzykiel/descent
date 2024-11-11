@@ -86,7 +86,10 @@ void shiftMap() {
   generateWall(false, MAPWIDTH - w - c);
 
   autoTile();
-  generateDashes();
+  uint8_t d = random(0, 6);
+  for (int i = 0; i < d; i++) {
+    generateDashes();
+  }
   generateBlocks();
   generateEnemies();
   copyRoom(nextRoom, 0, levelMap, 32 * 4);
@@ -152,51 +155,64 @@ void generateWall(bool left, uint8_t edge) {
 }
 
 void generateDashes() {
-  uint8_t i = random(1, SCREENHEIGHT / 2);
-  while (i < SCREENHEIGHT - BOTTOM_MARGIN) {
-    uint8_t cs = 0;
-    while (getRoom(nextRoom, i, cs) && (cs < SCREENWIDTH)) {
-      cs++;
-    }
+  uint8_t x = random(1, SCREENHEIGHT - 1);
+  uint8_t y1 = random(0, SCREENWIDTH - 2);
+  uint8_t y2 = random(0, 3) ? y1 + 2 : y1 + 1;
+  uint8_t attempts = 0;
 
-    uint8_t ce = cs + 1;
-    while ((getRoom(nextRoom, i, ce) == 0) && (ce < SCREENWIDTH)) {
-      ce++;
-    }
+  while (!clearPath(x, y1, y2) && (attempts < 16 * 8)) {  //TODO #define MAX_ATTEMPTS
+    x = random(1, SCREENHEIGHT - 1);
+    y1 = random(0, SCREENHEIGHT - 2);
+    y2 = random(0, 3) ? y1 + 2 : y1 + 1;
+    attempts++;
+  }
 
-    placeDashes(i, cs, ce);
-
-    if (i + 2 >= SCREENHEIGHT - BOTTOM_MARGIN) break;
-    i = random(i + 2, SCREENHEIGHT - BOTTOM_MARGIN);
+  for (uint8_t i = y1; i < y2; i++) {
+    if (!getRoom(nextRoom, x, i)) writeRoom(nextRoom, x, i, DASH);
   }
 }
 
-void placeDashes(uint8_t row, uint8_t cs, uint8_t ce) {
-  uint8_t gap = ce - cs;
-  uint8_t w = 0;
-  uint8_t c;
+bool clearPath(uint8_t x, uint8_t y1, uint8_t y2) {
+  bool lc = true;
+  bool rc = true;
+  bool mc = true;
 
-  if (gap >= 5) {
-    w = random(DASH_WIDTH_MIN, DASH_WIDTH_MAX);
-    if (w == 3) {
-      c = (random(0, 2) == 1) ? 0 : ce - w;
-    } else if (w == 2) {
-      c = random(cs, ce - w);
+  if (y1 > 2) {
+    for (uint8_t i = x - 2; i < x + 2; i++) {
+      for (uint8_t j = y1 - 2; j < y1; j++) {
+        if (getRoom(nextRoom, i, j)) {
+          lc = false;
+        }
+      }
     }
-  } else if (gap == 4) {
-    w = DASH_WIDTH_MIN;
   } else {
-    return;
+    lc = false;
   }
 
-  for (int i = c; i < (c + w); i++) {
-    if (!getRoom(nextRoom, row - 1, i) && !getRoom(nextRoom, row + 1, i)
-        && !getRoom(nextRoom, row - 1, max(0, i - 1)) && !getRoom(nextRoom, row - 1, min(MAPWIDTH, i + 1))
-        && !getRoom(nextRoom, row + 1, max(0, i - 1)) && !getRoom(nextRoom, row + 1, min(MAPWIDTH, i + 1))) {
-      writeRoom(nextRoom, row, i, DASH);
+  if (y2 < SCREENWIDTH - 2) {
+    for (uint8_t i = x - 2; i < x + 2; i++) {
+      for (uint8_t j = y2; j < y2 + 2; j++) {
+        if (getRoom(nextRoom, i, j)) {
+          rc = false;
+        }
+      }
+    }
+  } else {
+    rc = false;
+  }
+
+  for (uint8_t i = x - 1; i < x; i++) {
+    for (uint8_t j = y1; j < y2; j++) {
+      if (getRoom(nextRoom, i, j)) {
+        mc = false;
+      }
     }
   }
+
+  return (lc || rc || mc);
 }
+
+
 
 void generateBlocks() {
   uint8_t rs = random(TOP_MARGIN, SCREENHEIGHT / 2);
