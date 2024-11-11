@@ -13,11 +13,11 @@ const uint8_t clinkTransitions[] PROGMEM = { 2, 4, 7, 10 };
 uint8_t clinkIndex = 0;
 
 particle_t pop[MAX_POPS];
-const uint8_t popTransitions[] PROGMEM = { 2, 4, 6 };  //{ 2, 4, 6, 8, 10, 12, 14, 16 };
+const uint8_t popTransitions[] PROGMEM = { 2, 4, 6 };
 uint8_t popIndex = 0;
 
 particle_t rechargeAnimation;
-const uint8_t rechargeTransitions[] PROGMEM = { 4, 8, 12, 16, 20 }; //{ 1, 2, 3, 4, 5, 6, 7 };
+const uint8_t rechargeTransitions[] PROGMEM = { 4, 8, 12, 16, 20 };
 
 particle_t smoke;
 const uint8_t smokeTransitions[] PROGMEM = { 5, 11, 17, 23 };

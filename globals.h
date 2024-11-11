@@ -77,6 +77,9 @@
 
 #define PIXEL_SCALE 128
 
+#define leftByte(x) (x >> 4)
+#define rightByte(x) (x & 0x0F)
+
 extern Arduboy2Base arduboy;
 extern Sprites sprites;
 

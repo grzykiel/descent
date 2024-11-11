@@ -9,10 +9,13 @@ constexpr uint8_t startRoom[SCREENWIDTH] = {
   // 0x00, 0x11, 0x11, 0x00,
   // 0x00, 0x10, 0x01, 0x00,
   // 0x00, 0x00, 0x00, 0x00,
-  
+
   0xE8, 0x11, 0x11, 0x2E,
   0x90, 0x00, 0x00, 0x03
 };
+
+uint8_t passage;
+
 
 namespace Level {
 
@@ -25,6 +28,7 @@ void init() {
     levelMap[44 * 4 + i] = startRoom[i];
   }
 
+  passage = 0x38;
 }
 
 void draw() {
@@ -74,8 +78,13 @@ void shiftMap() {
   copyRoom(levelMap, 16 * 4, levelMap, 0);
   copyRoom(levelMap, 32 * 4, levelMap, 16 * 4);
   eraseRoom();
-  generateWalls(true);
-  generateWalls(false);
+
+  uint8_t w = random(passage >> 4, passage & 0x0F);
+  uint8_t c = random(0, MAPWIDTH - w + 1);
+
+  generateWall(true, c);
+  generateWall(false, MAPWIDTH - w - c);
+
   autoTile();
   generateDashes();
   generateBlocks();
@@ -92,17 +101,6 @@ void copyRoom(uint8_t from[], uint8_t f, uint8_t to[], uint8_t t) {
 }
 
 void autoTile() {
-  /*for (int i = 0; i < SCREENHEIGHT; i++) {
-    for (int j = 0; j < SCREENWIDTH; j++) {
-      if (getRoom(nextRoom, i, j)) {
-        uint8_t a = (i == 0) ? 1 : (getRoom(nextRoom, i - 1, j) > 0) * 1;
-        uint8_t b = (j == SCREENWIDTH - 1) ? 2 : (getRoom(nextRoom, i, j + 1) > 0) * 2;
-        uint8_t c = (i == SCREENHEIGHT - 1) ? 4 : (getRoom(nextRoom, i + 1, j) > 0) * 4;
-        uint8_t d = (j == 0) ? 8 : (getRoom(nextRoom, i, j - 1) > 0) * 8;
-        writeRoom(nextRoom, i, j, a + b + c + d);
-      }
-    }
-  }*/
   for (uint8_t i = 1; i < SCREENHEIGHT - 1; i++) {
     for (uint8_t j = 0; j < SCREENWIDTH; j++) {
       if (getRoom(nextRoom, i, j) == 0) continue;
@@ -124,30 +122,30 @@ void autoTile() {
   }
 }
 
-void generateWalls(bool left) {
-  uint8_t p = random(TOP_MARGIN, SCREENHEIGHT / 2);
-  uint8_t r = random(p, SCREENHEIGHT - BOTTOM_MARGIN);
-  uint8_t q = random(p, r);
-  uint8_t w = 0;
+void generateWall(bool left, uint8_t edge) {
+  uint8_t t = random(1, 5);
+  uint8_t b = random(9, 16);
+  uint8_t m = random(t, b);
+  int8_t w = edge;
 
-  for (uint8_t i = p; i < q; i++) {
-    w = random(w, WALL_WIDTH_MAX);
+  for (uint8_t i = m; i > t; i--) {
     for (uint8_t j = 0; j < w; j++) {
       if (left) {
         writeRoom(nextRoom, i, j, 1);
       } else {
-        writeRoom(nextRoom, i, SCREENWIDTH - 1 - j, 1);
+        writeRoom(nextRoom, i, MAPWIDTH - 1 - j, 1);
       }
     }
+    w = random(0, w + 1);
   }
 
-  for (uint8_t i = q; i < r; i++) {
-    w = random(1, w + 1);
+  w = random(0, edge);
+  for (uint8_t i = m + 1; i < b; i++) {
     for (uint8_t j = 0; j < w; j++) {
       if (left) {
         writeRoom(nextRoom, i, j, 1);
       } else {
-        writeRoom(nextRoom, i, SCREENWIDTH - 1 - j, 1);
+        writeRoom(nextRoom, i, MAPWIDTH - 1 - j, 1);
       }
     }
   }
@@ -276,14 +274,14 @@ uint8_t getMap(int16_t i, uint8_t j) {
   if (j % 2 != 0) {
     return levelMap[i * 4 + j / 2] & 0x0F;
   }
-  return (levelMap[i * 4 + j / 2] >> 4);  //& 0xFF) >> 4;
+  return (levelMap[i * 4 + j / 2] >> 4);
 }
 
 uint8_t getRoom(uint8_t room[], int16_t i, uint8_t j) {
   if (j % 2 != 0) {
     return room[i * 4 + j / 2] & 0x0F;
   }
-  return (room[i * 4 + j / 2] >> 4);  //& 0xFF) >> 4;
+  return (room[i * 4 + j / 2] >> 4);
 }
 
 void writeMap(int16_t i, uint8_t j, uint8_t tile) {

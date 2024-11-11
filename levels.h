@@ -14,6 +14,9 @@
 #define DASH_WIDTH_MAX 4
 #define MIN_GAP 2
 
+#define PASSAGE_MAX 8
+#define PASSAGE_MIN 2
+
 #define TOP_MARGIN    1
 #define BOTTOM_MARGIN 2
 
@@ -27,7 +30,7 @@ namespace Level
   void copyRoom(uint8_t from[], uint8_t f, uint8_t toMap[], uint8_t t);
   void eraseRoom();
 
-  void generateWalls(bool left);
+  void generateWall(bool left, uint8_t edge);
   
   void autoTile();
   
