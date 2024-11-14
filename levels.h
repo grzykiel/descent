@@ -9,16 +9,22 @@
 #include "particles.h"
 #include "powerups.h"
 
-#define WALL_WIDTH_MAX 4
-#define DASH_WIDTH_MIN 2
-#define DASH_WIDTH_MAX 4
-#define MIN_GAP 2
-
-#define PASSAGE_MAX 8
 #define PASSAGE_MIN 2
+#define DASH_MIN 0
+#define DASH_MAX 8
+#define BLOCKS_MAX 4
+#define NARROW_INTERVAL 16
+
+#define PBAT_MAX 50
+#define PCRAWLER_MAX 50
+#define MIN_ENEMIES_PER_ROOM 1
+#define MAX_ENEMIES_PER_ROOM 3
 
 #define TOP_MARGIN    1
 #define BOTTOM_MARGIN 2
+
+extern uint8_t pbat;
+extern uint8_t pcrawler;
 
 namespace Level 
 {
@@ -40,6 +46,9 @@ namespace Level
   void generateBlocks();
 
   void generateEnemies();
+  void generateFlying();
+  void generateCrawling();
+  void generateCrawler();
 
   void destroyBlock(int16_t i, uint8_t j);
 

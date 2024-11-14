@@ -63,7 +63,7 @@ void update() {
   nextPos.x += nextVel.x;
 
   nextPos.x = min(nextPos.x, CEILING);
-  
+
   nextPos.y += nextVel.y;
 
   //adjust for collisions
@@ -151,36 +151,35 @@ void checkTileCollisions(position_t *nextPos, velocity_t *nextVel) {
 void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
   if (player.animation.iframe != 0) return;
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
-    if (enemy[i].animation.active) {
-      Rect enemyRect = Rect(enemy[i].animation.pos.x / PIXEL_SCALE + ((enemy[i].animation.sprite->offset & 0xF0) >> 4), enemy[i].animation.pos.y / PIXEL_SCALE + (enemy[i].animation.sprite->offset & 0x0F), enemy[i].animation.sprite->dim & 0x0F, (enemy[i].animation.sprite->dim & 0xF0) >> 4);
-      // arduboy.drawRect(enemy[i].animation.pos.x/PIXEL_SCALE + enemy[i].animation.sprite->dx - cameraOffset, enemy[i].animation.pos.y/PIXEL_SCALE + enemy[i].animation.sprite->dy, enemy[i].animation.sprite->h, enemy[i].animation.sprite->w);
-      collision_t type = Utils::collisionCorrect(player.animation, nextPos, enemyRect, true, true);
+    if (!enemy[i].animation.active) continue;
+    Rect enemyRect = Rect(enemy[i].animation.pos.x / PIXEL_SCALE + ((enemy[i].animation.sprite->offset & 0xF0) >> 4), enemy[i].animation.pos.y / PIXEL_SCALE + (enemy[i].animation.sprite->offset & 0x0F), enemy[i].animation.sprite->dim & 0x0F, (enemy[i].animation.sprite->dim & 0xF0) >> 4);
+    // arduboy.drawRect(enemyRect.x - cameraOffset, enemyRect.y, enemyRect.width, enemyRect.height);
+    collision_t type = Utils::collisionCorrect(player.animation, nextPos, enemyRect, true, true);
 
-      if (type.v == BOTTOM) {
-        if (enemy[i].type == EnemyType::crawler || enemy[i].type == EnemyType::fallingCrawler) {
-          nextVel->x = KICKBACK_V;
-          onDamaged();
-        } else {
-          bounce();
-          nextVel->x = BOUNCE_VELOCITY;
-          Bullet::reload();
-          HUD::onRecharge();
-          Enemies::kill(&enemy[i], false);
-          combo++;
-        }
-      } else if (type.v == TOP) {
-        nextVel->x = -KICKBACK_V;
+    if (type.v == BOTTOM) {
+      if (enemy[i].type == EnemyType::crawler || enemy[i].type == EnemyType::fallingCrawler) {
+        nextVel->x = KICKBACK_V;
         onDamaged();
+      } else {
+        bounce();
+        nextVel->x = BOUNCE_VELOCITY;
+        Bullet::reload();
+        HUD::onRecharge();
+        Enemies::kill(&enemy[i], false);
+        combo++;
       }
+    } else if (type.v == TOP) {
+      nextVel->x = -KICKBACK_V;
+      onDamaged();
+    }
 
-      if (type.h > NONE) {
-        if (type.h == LEFT) {
-          nextVel->y = KICKBACK_H;
-        } else if (type.h == RIGHT) {
-          nextVel->y = -KICKBACK_H;
-        }
-        onDamaged();
+    if (type.h > NONE) {
+      if (type.h == LEFT) {
+        nextVel->y = KICKBACK_H;
+      } else if (type.h == RIGHT) {
+        nextVel->y = -KICKBACK_H;
       }
+      onDamaged();
     }
   }
 }

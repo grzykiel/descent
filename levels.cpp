@@ -14,7 +14,12 @@ constexpr uint8_t startRoom[SCREENWIDTH] = {
   0x90, 0x00, 0x00, 0x03
 };
 
-uint8_t passage;
+uint8_t passageMin;
+uint8_t passageMax;
+uint8_t dashes;
+uint8_t roomsGenerated;
+uint8_t pbat;
+uint8_t pcrawler;
 
 
 namespace Level {
@@ -28,7 +33,13 @@ void init() {
     levelMap[44 * 4 + i] = startRoom[i];
   }
 
-  passage = 0x38;
+  passageMin = 5;
+  passageMax = 8;
+  dashes = 0x02;
+  pbat = 0;
+  pcrawler = 0;
+
+  roomsGenerated = 0;
 }
 
 void draw() {
@@ -79,20 +90,34 @@ void shiftMap() {
   copyRoom(levelMap, 32 * 4, levelMap, 16 * 4);
   eraseRoom();
 
-  uint8_t w = random(passage >> 4, passage & 0x0F);
+  uint8_t w = random(passageMin, passageMax);
   uint8_t c = random(0, MAPWIDTH - w + 1);
 
   generateWall(true, c);
   generateWall(false, MAPWIDTH - w - c);
 
   autoTile();
-  uint8_t d = random(0, 6);
-  for (int i = 0; i < d; i++) {
+  uint8_t n = random(dashes >> 4, (dashes & 0x0F) + 1);
+  for (uint8_t i = 0; i < n; i++) {
     generateDashes();
   }
-  generateBlocks();
+
+  n = random(0, BLOCKS_MAX);
+  for (uint8_t i = 0; i < n; i++) {
+    generateBlocks();
+  }
   generateEnemies();
   copyRoom(nextRoom, 0, levelMap, 32 * 4);
+
+  roomsGenerated++;
+  if (roomsGenerated % NARROW_INTERVAL == 0) {
+    roomsGenerated = 0;
+    if (random(0, 1)) {
+      passageMax = max(passageMax - 1, passageMin + 1);
+    } else {
+      passageMin = max(PASSAGE_MIN, passageMin - 1);
+    }
+  }
 }
 
 
@@ -201,7 +226,7 @@ bool clearPath(uint8_t x, uint8_t y1, uint8_t y2) {
     rc = false;
   }
 
-  for (uint8_t i = x - 1; i < x; i++) {
+  for (uint8_t i = x - 2; i < x + 2; i++) {
     for (uint8_t j = y1; j < y2; j++) {
       if (getRoom(nextRoom, i, j)) {
         mc = false;
@@ -209,27 +234,21 @@ bool clearPath(uint8_t x, uint8_t y1, uint8_t y2) {
     }
   }
 
-  return (lc || rc || mc);
+  return (lc || rc) && mc;
 }
 
-
-
 void generateBlocks() {
-  uint8_t rs = random(TOP_MARGIN, SCREENHEIGHT / 2);
-  while (rs + 2 < SCREENHEIGHT - BOTTOM_MARGIN) {
-    uint8_t re = random(rs + 1, SCREENHEIGHT - BOTTOM_MARGIN);
-    re = min(re, SCREENHEIGHT - BOTTOM_MARGIN);
-    uint8_t cs = random(0, SCREENWIDTH);
-    uint8_t ce = random(cs + 1, SCREENWIDTH);
+  uint8_t w = random(0, SCREENWIDTH);
+  uint8_t c = random(0, SCREENWIDTH - w);
+  uint8_t r1 = random(1, SCREENHEIGHT - 1);
+  uint8_t r2 = random(r1, min(r1 + w, SCREENHEIGHT - 1));
 
-    for (int i = rs; i < re; i++) {
-      for (int j = cs; j < ce; j++) {
-        if (!getRoom(nextRoom, i, j) && !getRoom(nextRoom, i - 1, j) && random(0, 4) > 1) writeRoom(nextRoom, i, j, BLOCK);
+  for (uint8_t i = r1; i < r2; i++) {
+    for (uint8_t j = c; j < c + w; j++) {
+      if (!getRoom(nextRoom, i, j)) {
+        if (random(0, 4)) writeRoom(nextRoom, i, j, BLOCK);
       }
     }
-
-    if (re + 1 >= SCREENHEIGHT - BOTTOM_MARGIN) break;
-    rs = random(re + 1, SCREENHEIGHT - BOTTOM_MARGIN);
   }
 }
 
@@ -240,43 +259,60 @@ void eraseRoom() {
 }
 
 void generateEnemies() {
+  // uint8_t n = random(MIN_ENEMIES, MAX_ENEMIES+1);
+  // for (uint8_t i = 0; i < n; i++) {
+  // if (random(0, 2)) {
+  generateFlying();
+  // } else {
+  //   generateCrawling();
+  // }
+  // }
+}
+
+void generateFlying() {
   uint8_t i = random(1, SCREENHEIGHT - 1);
   uint8_t j = random(0, SCREENWIDTH);
+  uint8_t n = 0;
 
-
-  if (random(0, 2) > 0) {
-    // BLOB
-    while (getRoom(nextRoom, i, j)) {
-      i = random(0, SCREENHEIGHT);
-      j = random(0, SCREENWIDTH);
-    }
-    Enemies::spawn(EnemyType::blob, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
-  } else {
-    // BAT
-    while (getRoom(nextRoom, i, j) || !getRoom(nextRoom, i - 1, j) || getRoom(nextRoom, i - 1, j) == DASH) {
+  if (random(0, 100) < pbat) {
+    n = 0;
+    while ((getRoom(nextRoom, i, j) || !getRoom(nextRoom, i - 1, j) || getRoom(nextRoom, i - 1, j) == DASH) && (n < 100)) {
       i = random(1, SCREENHEIGHT - 1);
       j = random(0, SCREENWIDTH);
+      n++;
     }
-    Enemies::spawn(EnemyType::hangingBat, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+    if (n < 100) Enemies::spawn(EnemyType::hangingBat, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+  } else {
+    n = 0;
+    while ((getRoom(nextRoom, i, j)) && (n < 100)) {
+      i = random(0, SCREENHEIGHT);
+      j = random(0, SCREENWIDTH);
+      n++;
+    }
+    if (n < 100) Enemies::spawn(EnemyType::blob, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
   }
+}
 
-  //WORM / TORTOISE
-  while (getRoom(nextRoom, i, j) || !getRoom(nextRoom, i + 1, j)) {
+void generateCrawling() {
+  uint8_t i = random(0, SCREENHEIGHT);
+  uint8_t j = random(0, SCREENWIDTH);
+  uint8_t n = 0;
+  n = 0;
+  while ((getRoom(nextRoom, i, j) || !getRoom(nextRoom, i + 1, j)) && (n < 0)) {
     i = random(0, SCREENHEIGHT);
     j = random(0, SCREENWIDTH);
+    n++;
   }
-  if (random(0, 3) < 2) {
-    if (random(0, 2)) {
-      Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+  if (n < 100) {
+    if (random(0, 100) < pcrawler) {
+      Enemies::spawn(EnemyType::crawler, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
     } else {
-      Enemies::spawn(EnemyType::tortoise, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+      if (random(0, 2)) {
+        Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+      } else {
+        Enemies::spawn(EnemyType::tortoise, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+      }
     }
-  } else {
-    while (getRoom(nextRoom, i, j) || !getRoom(nextRoom, i + 1, j)) {
-      i = random(0, SCREENHEIGHT);
-      i = random(0, SCREENWIDTH);
-    }
-    Enemies::spawn(EnemyType::crawler, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
   }
 }
 

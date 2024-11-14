@@ -450,6 +450,12 @@ void kill(enemy_t *enemy, bool shot) {
                         ((enemy->animation.sprite->offset & 0xF0) >> 4) + (enemy->animation.sprite->dim & 0x0F) / 2,
                         (enemy->animation.sprite->offset & 0x0F) + ((enemy->animation.sprite->dim & 0xFF) >> 4) / 2);
   }
+
+  // if (enemy->type == EnemyType::bat) {
+  //   pbat = min(pbat+1, PBAT_MAX);
+  // } else if (enemy->type == EnemyType::tortoise || enemy->type == EnemyType::worm) {
+  //   pcrawler = min(pcrawler + 1, PCRAWLER_MAX);
+  // }
 }
 
 bool updateSprite(enemy_t *enemy) {

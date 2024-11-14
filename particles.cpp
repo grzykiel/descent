@@ -17,7 +17,7 @@ const uint8_t popTransitions[] PROGMEM = { 2, 4, 6 };
 uint8_t popIndex = 0;
 
 particle_t rechargeAnimation;
-const uint8_t rechargeTransitions[] PROGMEM = { 4, 8, 12, 16, 20 };
+const uint8_t rechargeTransitions[] PROGMEM = { 3, 6, 9, 12, 15 };
 
 particle_t smoke;
 const uint8_t smokeTransitions[] PROGMEM = { 5, 11, 17, 23 };
