@@ -52,7 +52,6 @@ extern player_t player;
 extern uint8_t combo;
 extern uint8_t power;
 
-
 #endif
 
 

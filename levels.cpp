@@ -259,13 +259,13 @@ void eraseRoom() {
 }
 
 void generateEnemies() {
-  // uint8_t n = random(MIN_ENEMIES, MAX_ENEMIES+1);
+  // uint8_t n = random(MIN_ENEMIES_PER_ROOM, MAX_ENEMIES_PER_ROOM+1);
   // for (uint8_t i = 0; i < n; i++) {
-  // if (random(0, 2)) {
-  generateFlying();
-  // } else {
-  //   generateCrawling();
-  // }
+  if (random(0, 2)) {
+    generateFlying();
+  } else {
+    generateCrawling();
+  }
   // }
 }
 
@@ -298,7 +298,7 @@ void generateCrawling() {
   uint8_t j = random(0, SCREENWIDTH);
   uint8_t n = 0;
   n = 0;
-  while ((getRoom(nextRoom, i, j) || !getRoom(nextRoom, i + 1, j)) && (n < 0)) {
+  while ((getRoom(nextRoom, i, j) || !getRoom(nextRoom, i + 1, j)) && (n < 100)) { //TODO CHECK FLOOR
     i = random(0, SCREENHEIGHT);
     j = random(0, SCREENWIDTH);
     n++;

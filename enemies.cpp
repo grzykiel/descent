@@ -437,7 +437,7 @@ bool checkLaserCollisions(Rect laser) {
 }
 
 void kill(enemy_t *enemy, bool shot) {
-  score += enemy->hp*10;
+  score += enemy->hp * 10;
   enemy->animation.active = false;
   if (shot) {
     Particles::spawnExplosion(enemy->animation.pos,
@@ -451,11 +451,11 @@ void kill(enemy_t *enemy, bool shot) {
                         (enemy->animation.sprite->offset & 0x0F) + ((enemy->animation.sprite->dim & 0xFF) >> 4) / 2);
   }
 
-  // if (enemy->type == EnemyType::bat) {
-  //   pbat = min(pbat+1, PBAT_MAX);
-  // } else if (enemy->type == EnemyType::tortoise || enemy->type == EnemyType::worm) {
-  //   pcrawler = min(pcrawler + 1, PCRAWLER_MAX);
-  // }
+  if (enemy->type == EnemyType::blob) {
+    pbat = min(pbat + 1, PBAT_MAX);
+  } else if (enemy->type == EnemyType::tortoise || enemy->type == EnemyType::worm) {
+    pcrawler = min(pcrawler + 1, PCRAWLER_MAX);
+  }
 }
 
 bool updateSprite(enemy_t *enemy) {
@@ -471,6 +471,10 @@ bool updateSprite(enemy_t *enemy) {
 
 void draw() {
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
+    // Utils::printNum(enemy[i].animation.pos.x / PIXEL_SCALE - cameraOffset + 10, enemy[i].animation.pos.y / PIXEL_SCALE, i, 1);
+    // Utils::printNum(enemy[i].animation.pos.x / PIXEL_SCALE - cameraOffset + 10, enemy[i].animation.pos.y / PIXEL_SCALE + 6, enemy[i].animation.active, 1);
+    // Utils::printNum(enemy[i].animation.pos.x / PIXEL_SCALE - cameraOffset + 10, enemy[i].animation.pos.y / PIXEL_SCALE, enemy[i].animation.pos.x/PIXEL_SCALE, 3);
+
     if (enemy[i].animation.active & !Utils::flickering(&enemy[i].animation)) {
       if (enemy[i].animation.dir == Direction::left) {
         Sprites::drawSelfMasked((enemy[i].animation.pos.x / PIXEL_SCALE) - cameraOffset, enemy[i].animation.pos.y / PIXEL_SCALE, enemy[i].animation.sprite->spriteL, enemy[i].animation.frame);

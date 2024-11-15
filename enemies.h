@@ -15,7 +15,6 @@
 #define WORM_VEL        1 //pixels moved on animation update
 #define TORTOISE_VEL    2 // """
 
-
 #define BLOB_HP     3
 #define BAT_HP      2
 #define WORM_HP     1

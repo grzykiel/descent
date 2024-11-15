@@ -26,7 +26,6 @@ void input() {
 }
 
 void update() {
-  // arduboy.setCursor(16, 16);
 }
 
 void draw() {

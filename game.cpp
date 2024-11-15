@@ -46,19 +46,9 @@ void input() {
 
   //debug & tuning
   if (arduboy.justPressed(B_BUTTON)) {
-    // Player::onDamaged();
-    // Player::onPickup(HEART_UPGRADE);
-    // Player::onPickup(HEART);
-    // Bullet::increaseCap();
-    // Level::autoTile();
-    // Player::onPickup(AMMO_UPGRADE);
-    // if (power < 3) {
-    //   Player::increasePower(0);
-    // } else {
-    //   Player::resetPower();
-    // }
+    Bullet::setActiveGun(GunType::machine);
 
-    HUD::onComboEnd();
+    // HUD::onComboEnd();
   } 
 
   if (arduboy.justPressed(up_btn)) {

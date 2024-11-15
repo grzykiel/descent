@@ -28,8 +28,6 @@ uint8_t bulletCapacity;
 uint8_t bulletsRemaining;
 uint8_t chamber = 0;
 
-// uint8_t bulletAccel;
-// uint16_t bulletV0;
 uint8_t fireRate;
 
 GunType activeGun;

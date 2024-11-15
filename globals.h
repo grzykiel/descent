@@ -20,7 +20,7 @@
 #define SCREENMID 64
 #define CEILING 370*128
 
-#define OFFSCREEN 32768
+#define OFFSCREEN 128*128 //32768
 
 #define MAPWIDTH 8
 #define MAPHEIGHT 48
@@ -77,9 +77,6 @@
 
 #define PIXEL_SCALE 128
 
-#define leftByte(x) (x >> 4)
-#define rightByte(x) (x & 0x0F)
-
 extern Arduboy2Base arduboy;
 extern Sprites sprites;
 
@@ -117,7 +114,7 @@ typedef struct {
 } collision_t;
 
 typedef struct {
-  uint16_t x;
+  uint16_t x; 
   int16_t y;
 } position_t;
 
