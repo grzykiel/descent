@@ -13,7 +13,7 @@
 #define DASH_MIN 0
 #define DASH_MAX 8
 #define BLOCKS_MAX 4
-#define NARROW_INTERVAL 16
+#define NARROW_INTERVAL 8
 
 #define PBAT_MAX 50
 #define PCRAWLER_MAX 50
@@ -25,6 +25,7 @@
 
 extern uint8_t pbat;
 extern uint8_t pcrawler;
+extern uint16_t kills;
 
 namespace Level 
 {

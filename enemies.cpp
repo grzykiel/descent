@@ -456,6 +456,8 @@ void kill(enemy_t *enemy, bool shot) {
   } else if (enemy->type == EnemyType::tortoise || enemy->type == EnemyType::worm) {
     pcrawler = min(pcrawler + 1, PCRAWLER_MAX);
   }
+
+  kills++;
 }
 
 bool updateSprite(enemy_t *enemy) {

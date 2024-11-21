@@ -20,6 +20,7 @@ uint8_t dashes;
 uint8_t roomsGenerated;
 uint8_t pbat;
 uint8_t pcrawler;
+uint16_t kills;
 
 
 namespace Level {
@@ -38,6 +39,7 @@ void init() {
   dashes = 0x02;
   pbat = 0;
   pcrawler = 0;
+  kills = 0;
 
   roomsGenerated = 0;
 }
@@ -259,9 +261,9 @@ void eraseRoom() {
 }
 
 void generateEnemies() {
-  // uint8_t n = random(MIN_ENEMIES_PER_ROOM, MAX_ENEMIES_PER_ROOM+1);
+  // uint8_t n = random(MIN_ENEMIES_PER_ROOM, MAX_ENEMIES_PER_ROOM);
   // for (uint8_t i = 0; i < n; i++) {
-  if (random(0, 2)) {
+  if (random(0, 2) && kills > 5) {
     generateFlying();
   } else {
     generateCrawling();
