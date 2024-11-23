@@ -101,6 +101,7 @@ void fireAuto() {
 
       bulletsRemaining--;
       HUD::onShoot();
+      Sound::playTone(220, 3);
 
       shootTimer = FIRE_RATE_INIT - 4 * power;  //fireRate;
     } else {
@@ -125,6 +126,7 @@ void fireLaser() {
 
   bulletsRemaining -= (power + LASER_CHARGES);
   HUD::onShoot();
+  Sound::playSweep(2400, 40, 15);
 }
 
 void fireShotgun() {
@@ -158,6 +160,7 @@ void fireShotgun() {
   Player::thrust(SHOT_THRUST_SCALE);
   bulletsRemaining -= N_SHOTS;
   HUD::onShoot();
+  Sound::playNoise(200, 1600, 15);
 }
 
 void reload() {
@@ -238,6 +241,7 @@ void collisionCheck() {
               if (activeGun == GunType::shot) bullet[b].active = true;
             } else {
               Particles::spawnClink(bullet[b].pos, 8, 2);
+              Sound::playTone(8800, 5);
             }
           }
         }

@@ -79,6 +79,8 @@
 
 extern Arduboy2Base arduboy;
 extern Sprites sprites;
+extern BeepPin1 beep1;
+extern BeepPin2 beep2;
 
 extern uint8_t gameState;
 

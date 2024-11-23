@@ -3,11 +3,11 @@
 #include "levels.h"
 #include "globals.h"
 #include "hud.h"
-
 #include "game.h"
 #include "bitmaps.h"
 #include "enemies.h"
 #include "bullet.h"
+#include "sound.h"
 
 #define HP_CAP 5
 #define HP_INIT 3

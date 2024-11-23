@@ -7,6 +7,7 @@
 #include "levels.h"
 #include "hud.h"
 #include "particles.h"
+#include "sound.h"
 
 #define MAX_AMMO 24
 #define AMMO_INIT 8

@@ -166,6 +166,7 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
         Bullet::reload();
         HUD::onRecharge();
         Enemies::kill(&enemy[i], false);
+        Sound::playNoise(220, 1020, 6);
         combo++;
       }
     } else if (type.v == TOP) {
@@ -269,6 +270,7 @@ void onDamaged() {
 
 void onPickup(uint8_t type) {
   Powerups::collect(type);
+  Sound::playSweep(4700, 8800, 15);
   if (type == HEART) {
     player.hp = min(++player.hp, maxHP);
   } else if (type == HEART_UPGRADE) {
