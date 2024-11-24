@@ -37,7 +37,7 @@ void init() {
   passageMin = 5;
   passageMax = 8;
   dashes = 0x02;
-  pbat = 0;
+  pbat = 20;
   pcrawler = 0;
   kills = 0;
 

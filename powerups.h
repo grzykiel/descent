@@ -16,7 +16,7 @@
 #define MACHINEGUN 5
 
 #define HEART_PROB_INIT 10
-#define UPGRADE_PROB_INIT 20
+#define UPGRADE_PROB_INIT 10
 #define PROB_MAX 127
 
 extern powerup_t powerup[N_POWERUPS];

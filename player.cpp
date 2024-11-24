@@ -218,6 +218,7 @@ void jump() {
   player.state = PlayerState::jumping;
   player.animation.sprite = &playerJumpSprite;
   player.animation.frame = 0;
+  Sound::playSweep(200, 1500, 15);
 }
 
 void bounce() {
@@ -266,11 +267,13 @@ void onDamaged() {
   }
   resetCombo();
   resetPower();
+  Sound::playNoise(2000, 4000, 10);
+
 }
 
 void onPickup(uint8_t type) {
   Powerups::collect(type);
-  Sound::playSweep(4700, 8800, 15);
+  Sound::playSweep(4800, 8800, 15);
   if (type == HEART) {
     player.hp = min(++player.hp, maxHP);
   } else if (type == HEART_UPGRADE) {
@@ -305,6 +308,7 @@ void resetCombo() {
   combo = 0;
 }
 void increasePower(uint8_t p) {
+  Sound::playSweep(4800, 8800, 15);
   if (p == 0) {
     power = min(power + 1, 3);
   } else {

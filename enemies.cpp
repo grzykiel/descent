@@ -409,6 +409,7 @@ void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
       bullet[i].active = false;
       if (enemy->type == EnemyType::tortoise) {
         Particles::spawnClink(enemy->animation.pos, 4, 2);
+        Sound::playTone(8800, 5);
         return;
       }
       enemy->hp--;

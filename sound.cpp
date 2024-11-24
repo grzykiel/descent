@@ -15,7 +15,7 @@ namespace Sound {
     if (framesLeft == 0) return;
     
     framesLeft--;
-    if (!framesLeft) {
+    if (framesLeft == 0) {
       stop();
       return;
     }

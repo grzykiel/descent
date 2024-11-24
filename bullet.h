@@ -22,7 +22,8 @@
 #define LASER_THRUST_SCALE 17
 #define LASER_CHARGES 2
 #define SHOT_ACCEL_INIT 5
-#define N_SHOTS 3
+#define N_SHOTS 5
+#define SHOT_CHARGES 3
 #define SHOT_THRUST_SCALE 17
 
 

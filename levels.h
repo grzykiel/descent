@@ -13,7 +13,7 @@
 #define DASH_MIN 0
 #define DASH_MAX 8
 #define BLOCKS_MAX 4
-#define NARROW_INTERVAL 8
+#define NARROW_INTERVAL 4
 
 #define PBAT_MAX 50
 #define PCRAWLER_MAX 50

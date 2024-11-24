@@ -183,8 +183,9 @@ bool flickering(animation_t *animation);
 bool flickering(int8_t *f);
 
 void printNum(uint8_t x, uint8_t y, uint16_t n, uint8_t length);
+//void printNum(...)
 void printText(uint8_t x, uint8_t y, uint8_t *text, uint8_t length);
-//void printNumLarge(...)
+// void printLargeText(uint8_t x, uint8_t y, uint8_t *text, uint8_t length);
 
 
 }

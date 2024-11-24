@@ -46,13 +46,9 @@ void input() {
 
   //debug & tuning
   if (arduboy.justPressed(B_BUTTON)) {
-    Bullet::setActiveGun(GunType::machine);
-
-    // HUD::onComboEnd();
   } 
 
   if (arduboy.justPressed(up_btn)) {
-    Player::increaseCombo();
   } else if (arduboy.justPressed(down_btn)) {
   }
 }
@@ -72,6 +68,7 @@ void update() {
   HUD::update();
   Level::update();
   updateCamera();
+  Sound::update();
 }
 
 void updateCamera() {
@@ -89,6 +86,7 @@ void draw() {
 }
 
 void onDie() {
+  Sound::stop();
   arduboy.setFrameRate(15);
   gameState = STATE_DEATH;
   deathTimer = 45;
