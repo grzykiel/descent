@@ -10,7 +10,6 @@ const uint8_t blocksHeight[] PROGMEM = { 3, 3, 6, 6, 12, 6, 3, 3, 6, 9 };
 
 const uint8_t startText[] PROGMEM = {10, 36, 28, 29, 10, 27, 29};
 const uint8_t soundText[] PROGMEM = {11, 36, 28, 24, 30, 23, 13};
-const uint8_t onText[] PROGMEM = {24, 23};
 
 void loop() {
   if (gameState == STATE_GAMEOVER) {
@@ -43,10 +42,10 @@ void draw() {
     arduboy.fillRect((uint8_t)pgm_read_word(&blocksX[i]), (uint8_t)pgm_read_word(&blocksY[i]), (uint8_t)pgm_read_word(&blocksWidth[i]), (uint8_t)pgm_read_word(&blocksHeight[i]));
   }
 
-  Utils::printText(15, 15, startText, 7);
-  Utils::printText(10, 15, soundText, 7);
+  Utils::printText(8, 10, startText, 7);
+  Utils::printText(1, 10, soundText, 7);
   if (arduboy.audio.enabled()) {
-    Utils::printText(5, 28, onText, 2);
+    sprites.drawSelfMasked(1, 46, Fonts::font_5x4, 10);
   }
 }
 

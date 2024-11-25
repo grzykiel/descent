@@ -1,4 +1,4 @@
-#define ROTATE_DPAD
+// #define ROTATE_DPAD
 
 #ifdef ROTATE_DPAD
   #define left_btn LEFT_BUTTON

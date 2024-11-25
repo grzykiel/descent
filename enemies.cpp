@@ -2,7 +2,7 @@
 
 const uint8_t blobTransitions[2] PROGMEM = { 45, 90 };
 const uint8_t batTransitions[2] PROGMEM = { 15, 30 };
-const uint8_t wormTransitions[2] PROGMEM = { 15, 30 };  //{ 45, 90 };
+const uint8_t wormTransitions[2] PROGMEM = { 10, 20 };
 const uint8_t tortoiseTransitions[2] PROGMEM = { 60, 120 };
 
 sprite_t blobSprite = {
