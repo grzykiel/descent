@@ -261,14 +261,14 @@ void eraseRoom() {
 }
 
 void generateEnemies() {
-  // uint8_t n = random(MIN_ENEMIES_PER_ROOM, MAX_ENEMIES_PER_ROOM);
-  // for (uint8_t i = 0; i < n; i++) {
-  if (random(0, 2) || kills < 5) {
-    generateFlying();
-  } else {
-    generateCrawling();
+  uint8_t n = random(MIN_ENEMIES_PER_ROOM, MAX_ENEMIES_PER_ROOM);
+  for (uint8_t i = 0; i < n; i++) {
+    if (random(0, 2) || kills < 5) {
+      generateFlying();
+    } else {
+      generateCrawling();
+    }
   }
-  // }
 }
 
 void generateFlying() {
@@ -300,7 +300,7 @@ void generateCrawling() {
   uint8_t j = random(0, SCREENWIDTH);
   uint8_t n = 0;
   n = 0;
-  while ((getRoom(nextRoom, i, j) || !getRoom(nextRoom, i + 1, j)) && (n < 100)) { //TODO CHECK FLOOR
+  while ((getRoom(nextRoom, i, j) || !getRoom(nextRoom, i + 1, j)) && (n < 100)) {  //TODO CHECK FLOOR
     i = random(0, SCREENHEIGHT);
     j = random(0, SCREENWIDTH);
     n++;
@@ -316,6 +316,14 @@ void generateCrawling() {
       }
     }
   }
+}
+
+void increaseBatProbability() {
+  pbat = min(++pbat, PBAT_MAX);
+}
+
+void increaseCrawlerProbability() {
+  pcrawler = min(++pcrawler, PCRAWLER_MAX);
 }
 
 void destroyBlock(int16_t i, uint8_t j) {

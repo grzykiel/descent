@@ -5,7 +5,6 @@
 #include "bullet.h"
 #include "controls.h"
 #include "hud.h"
-
 #include "levels.h"
 #include "player.h"
 #include "enemies.h"
@@ -21,7 +20,6 @@ namespace Game {
   void draw();
   void updateCamera();
   void onDie();
-  
 }
 
 #endif

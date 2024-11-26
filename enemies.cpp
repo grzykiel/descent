@@ -1,9 +1,9 @@
 #include "enemies.h"
 
-const uint8_t blobTransitions[2] PROGMEM = { 45, 90 };
-const uint8_t batTransitions[2] PROGMEM = { 15, 30 };
-const uint8_t wormTransitions[2] PROGMEM = { 10, 20 };
-const uint8_t tortoiseTransitions[2] PROGMEM = { 60, 120 };
+constexpr uint8_t blobTransitions[2] PROGMEM = { 45, 90 };
+constexpr uint8_t batTransitions[2] PROGMEM = { 15, 30 };
+constexpr uint8_t wormTransitions[2] PROGMEM = { 10, 20 };
+constexpr uint8_t tortoiseTransitions[2] PROGMEM = { 60, 120 };
 
 sprite_t blobSprite = {
   Enemies::blob,
@@ -453,9 +453,9 @@ void kill(enemy_t *enemy, bool shot) {
   }
 
   if (enemy->type == EnemyType::blob) {
-    pbat = min(pbat + 1, PBAT_MAX);
+    Level::increaseBatProbability();
   } else if (enemy->type == EnemyType::tortoise || enemy->type == EnemyType::worm) {
-    pcrawler = min(pcrawler + 1, PCRAWLER_MAX);
+    Level::increaseCrawlerProbability();
   }
 
   kills++;

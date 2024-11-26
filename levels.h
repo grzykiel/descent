@@ -18,13 +18,11 @@
 #define PBAT_MAX 50
 #define PCRAWLER_MAX 50
 #define MIN_ENEMIES_PER_ROOM 1
-#define MAX_ENEMIES_PER_ROOM 3
+#define MAX_ENEMIES_PER_ROOM 4
 
 #define TOP_MARGIN    1
 #define BOTTOM_MARGIN 2
 
-extern uint8_t pbat;
-extern uint8_t pcrawler;
 extern uint16_t kills;
 
 namespace Level 
@@ -60,6 +58,9 @@ namespace Level
 
   void writeMap(int16_t i, uint8_t j, uint8_t tile);
   void writeRoom(uint8_t room[], int16_t i, uint8_t j, uint8_t tile);
+
+  void increaseBatProbability();
+  void increaseCrawlerProbability();
 
 }
 

@@ -6,7 +6,7 @@
 #include "bullet.h"
 #include "powerups.h"
 
-#define MAX_ENEMIES   5
+#define MAX_ENEMIES   8
 
 #define BLOB_MAX_VEL    8
 #define BLOB_RECOIL_VEL -96

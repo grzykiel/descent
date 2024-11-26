@@ -149,7 +149,7 @@ typedef struct {
 
 typedef struct {
   bool active;
-  int8_t t;
+  uint8_t t;
   uint8_t frame;
   position_t pos;
 } particle_t;

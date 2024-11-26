@@ -9,7 +9,7 @@
 #include "particles.h"
 #include "sound.h"
 
-#define MAX_AMMO 24
+#define MAX_AMMO 16
 #define AMMO_INIT 8
 #define BULLET_ACCEL_INIT 26  
 #define BULLET_V0 500
