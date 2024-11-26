@@ -19,11 +19,10 @@ sprite_t bulletSprite = {
   0x44
 };
 
-animation_t bullet[MAX_AMMO];
+bullet_t bullet[MAX_AMMO];
 uint8_t shootTimer;
 bool triggerReleased;
 
-animation_t bulletAnim;
 uint8_t bulletCapacity;
 uint8_t bulletsRemaining;
 uint8_t chamber = 0;
@@ -189,9 +188,21 @@ void drawMuzzleFlash() {
   }
 }
 
+bool updateBulletAnimation(bullet_t *bullet) {
+  bullet->t++;
+  if (bullet->t == (uint8_t)pgm_read_word(&bulletSprite.transitions[bullet->frame])) {
+    if (bullet->frame < 6) {
+      bullet->frame++;
+    } else {
+      return false;
+    }
+  }
+  return true;
+}
+
 void initBullets() {
   for (int i = 0; i < MAX_AMMO; i++) {
-    bullet[i].sprite = &bulletSprite;
+    // bullet[i].sprite = &bulletSprite;
     bullet[i].active = false;
     bullet[i].frame = 0;
     bullet[i].t = 0;
@@ -208,7 +219,7 @@ void updateBullets() {
       } else {
         bullet[i].vel.x -= (26 + 5 * power);
       }
-      bullet[i].active = Utils::updateAnimation(&bullet[i]);
+      bullet[i].active = updateBulletAnimation(&bullet[i]); //Utils::updateAnimation(&bullet[i]);
     }
   }
   collisionCheck();
@@ -235,7 +246,9 @@ void collisionCheck() {
         if (Level::getMap(i, j) == 0) continue;
         if (Level::getMap(i, j) != DASH) {
           Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
-          if (Utils::collides(bullet[b], blockRect)) {
+          Rect bulletRect = Rect(bullet[b].pos.x / PIXEL_SCALE + ((bulletSprite.offset & 0xF0) >> 4), bullet[b].pos.y / PIXEL_SCALE + (bulletSprite.offset & 0x0F), bulletSprite.dim & 0x0F, (bulletSprite.dim & 0xF0) >> 4);
+
+          if (arduboy.collide(bulletRect, blockRect)) {
             bullet[b].active = false;
             bullet[b].pos.x = blockRect.x * PIXEL_SCALE;
             if (Level::getMap(i, j) == BLOCK) {
@@ -255,7 +268,7 @@ void collisionCheck() {
 void drawBullets() {
   for (uint8_t i = 0; i < MAX_AMMO; i++) {
     if (bullet[i].active) {
-      Sprites::drawSelfMasked(bullet[i].pos.x / PIXEL_SCALE - cameraOffset, bullet[i].pos.y / PIXEL_SCALE, bullet[i].sprite->spriteR, bullet[i].frame);
+      Sprites::drawSelfMasked(bullet[i].pos.x / PIXEL_SCALE - cameraOffset, bullet[i].pos.y / PIXEL_SCALE, bulletSprite.spriteR, bullet[i].frame);
     }
   }
 }

@@ -140,12 +140,19 @@ typedef struct {
   uint8_t frame = 0;
   uint8_t t = 0;
   int8_t iframe = 0;
-
   position_t pos;
   velocity_t vel;
   sprite_t *sprite;
   Direction dir;
 } animation_t;
+
+typedef struct {
+  bool active;
+  uint8_t frame = 0;
+  uint8_t t = 0;
+  position_t pos;
+  velocity_t vel;
+} bullet_t;
 
 typedef struct {
   bool active;

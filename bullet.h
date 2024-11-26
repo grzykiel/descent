@@ -31,12 +31,13 @@ constexpr uint8_t muzzleFlashTransitions[] PROGMEM = { 5 };
 extern uint8_t shootTimer;
 extern bool triggerReleased;
 
-extern animation_t bullet[MAX_AMMO];
+extern bullet_t bullet[MAX_AMMO];
+extern sprite_t bulletSprite;
 extern uint8_t bulletsRemaining;
 extern uint8_t fireRate;
 extern GunType activeGun;
 
-constexpr uint8_t bulletTransitions[] PROGMEM = { 2, 3, 5, 8, 11, 15, 20 };  //{ 1, 2, 3, 5, 8, 11, 15 };
+constexpr uint8_t bulletTransitions[] PROGMEM = { 2, 3, 5, 8, 11, 15, 20 }; 
 constexpr int16_t shotVelocitiesX[] PROGMEM = {205, 198, 152}; 
 constexpr int8_t shotVelocitiesY[] PROGMEM = {0, 53, 20}; 
 
@@ -55,6 +56,7 @@ void fireShotgun();
 void initMuzzleFlash();
 void drawMuzzleFlash();
 void activateMuzzleFlash();
+bool updateBulletAnimation(bullet_t *bullet);
 
 void initBullets();
 void updateBullets();
