@@ -405,7 +405,7 @@ void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel) {
   if (activeGun == GunType::laser) return;
   for (uint8_t i = 0; i < MAX_AMMO; i++) {
     if (!bullet[i].active) continue;
-    Rect bulletRect = Rect(bullet->pos.x / PIXEL_SCALE + ((bulletSprite.offset & 0xF0) >> 4), bullet->pos.y / PIXEL_SCALE + (bulletSprite.offset & 0x0F), bulletSprite.dim & 0x0F, (bulletSprite.dim & 0xF0) >> 4);
+    Rect bulletRect = Rect(bullet[i].pos.x / PIXEL_SCALE + ((bulletSprite.offset & 0xF0) >> 4), bullet[i].pos.y / PIXEL_SCALE + (bulletSprite.offset & 0x0F), bulletSprite.dim & 0x0F, (bulletSprite.dim & 0xF0) >> 4);
     if (Utils::collides(enemy->animation, bulletRect)) {
       bullet[i].active = false;
       if (enemy->type == EnemyType::tortoise) {

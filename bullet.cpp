@@ -191,7 +191,7 @@ void drawMuzzleFlash() {
 bool updateBulletAnimation(bullet_t *bullet) {
   bullet->t++;
   if (bullet->t == (uint8_t)pgm_read_word(&bulletSprite.transitions[bullet->frame])) {
-    if (bullet->frame < 6) {
+    if (bullet->frame < bulletSprite.last) {
       bullet->frame++;
     } else {
       return false;
@@ -202,7 +202,6 @@ bool updateBulletAnimation(bullet_t *bullet) {
 
 void initBullets() {
   for (int i = 0; i < MAX_AMMO; i++) {
-    // bullet[i].sprite = &bulletSprite;
     bullet[i].active = false;
     bullet[i].frame = 0;
     bullet[i].t = 0;
@@ -287,7 +286,6 @@ void drawLaser() {
   Rect laserRect = Rect(x0, y0, x1 - x0, y1 - y0);
   bool collides = false;
   for (uint8_t i = i_x; i < i_x + 8; i++) {
-
 
     if (Enemies::checkLaserCollisions(laserRect)) {
       x0 += 4;
