@@ -99,7 +99,8 @@ void fireAuto() {
       chamber = (chamber + 1) % MAX_AMMO;
 
       bulletsRemaining--;
-      HUD::onShoot();
+      // HUD::onShoot();
+      if (bulletsRemaining == 0) HUD::onEmpty();
       Sound::playTone(110, 3);
 
       shootTimer = FIRE_RATE_INIT - 4 * power;  //fireRate;

@@ -8,12 +8,10 @@
 #define HUD_COUNTER_FRAMES   60
 #define HUD_COUNTER_IFRAMES  30
 
-// uint8_t comboTimer;
-
 typedef struct {
-  const unsigned char *sprite;
+  const unsigned char *sprite;  //TODO delete
   uint8_t t;
-  int8_t f;
+  int8_t f;                     // TODO delete
   position_t pos;
 } hud_t;
 
@@ -22,13 +20,14 @@ namespace HUD {
   void update();
   void draw();
 
-  void update(hud_t *hud);
-  void draw(hud_t hud, uint8_t frame);
+  void updateHud(hud_t *hud);
+  void drawHud(hud_t hud, uint8_t frame);
   void drawTop();
   void drawCombo();
 
   void onDamaged();
-  void onShoot();
+  void onShoot(); // TODO remove
+  void onEmpty();
   void onRecharge();
   void onComboEnd();
   
