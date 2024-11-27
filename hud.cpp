@@ -1,76 +1,39 @@
 #include "hud.h"
-
-hud_t damageCounter = {
-  HUD::minusOne,
-  0,
-  0,
-};
-
-hud_t ammoCounter = {
-  HUD::ammo,
-  0,
-  0,
-};
-
-
-//---//
 uint8_t comboTimer;
 hud_t empty;
-
-
+hud_t damage;
 
 namespace HUD {
 
 void init() {
-  damageCounter.t = 0;
-  damageCounter.f = 0;
-  ammoCounter.t = 0;
-  ammoCounter.f = 0;
-  
   comboTimer = 0;
   empty.t = 0;
+  damage.t = 0;
 }
 
 void update() {
-
-  if (damageCounter.t > 0) {
-    damageCounter.t--;
-    if (damageCounter.t > 50) {
-      damageCounter.pos.x += 128;
-      damageCounter.pos.y = player.animation.pos.y;
-    }
-  }
-
   if (empty.t > 0) {
     empty.t--;
   }
-  
 
-  // if (bulletsRemaining == 0 && ammoCounter.t > 0) {
-  //   ammoCounter.t--;
-  //   if (!Utils::flickering(&ammoCounter.f)) {
-  //     draw(ammoCounter, 0);
-  //   }
-  // }
+  if (damage.t > 0) {
+    damage.t--;
+    if (damage.t > DAMAGE_COUNTER_HOLD) {
+      damage.pos.x += 1;
+      damage.pos.y = player.animation.pos.y / PIXEL_SCALE;
+    }
+  }
 }
 
-void updateHud(hud_t *hud) {
-  hud->t--;
-  if (hud->t > HUD_COUNTER_IFRAMES || hud->f == 0) {
-    hud->pos.x = player.animation.pos.x + 9 * PIXEL_SCALE;
-    hud->pos.y = player.animation.pos.y - 8 * PIXEL_SCALE;
+void drawHud(hud_t hud, const unsigned char *sprite) {
+  if ((hud.t > HUD_COUNTER_IFRAMES) || Utils::flickering(&hud.t)) {
+    Sprites::drawSelfMasked(hud.pos.x - cameraOffset, hud.pos.y, sprite, 0);
   }
 }
 
 void draw() {
-
-  if (damageCounter.t > 0) {
-    drawHud(damageCounter, 0);
-  }
-
-  if ((empty.t > HUD_COUNTER_IFRAMES) || (empty.t > HUD_COUNTER_FRAMES && !Utils::flickering(&empty.t))) {
-    Sprites::drawSelfMasked(empty.pos.x - cameraOffset, empty.pos.y, HUD::ammo, 0);
-  }
+  drawHud(empty, HUD::ammo);
+  drawHud(damage, HUD::minusOne);
 
   if (comboTimer != 0) {
     if (Utils::flickering(&comboTimer)) {
@@ -80,28 +43,10 @@ void draw() {
       Player::resetCombo();
     }
   }
-
-  if (settings & 0x0F) {
-    drawTop();
-    return;
-  }
-
-  // if (HP.t > 0) {
-  //   if (player.hp > 3) {
-  //     Utils::printNum(HP.pos.x / PIXEL_SCALE - cameraOffset, HP.pos.y / PIXEL_SCALE + 8, player.hp, 1);
-  //     Sprites::drawSelfMasked(HP.pos.x / PIXEL_SCALE - cameraOffset, HP.pos.y / PIXEL_SCALE + 3, HUD::hp, 1);
-  //   } else {
-  //     draw(HP, player.hp);
-  //   }
-  // } else if (ammoCounter.t > 0) {
-  //   if (bulletsRemaining > 9) {
-  //     Utils::printNum(ammoCounter.pos.x / PIXEL_SCALE - cameraOffset, ammoCounter.pos.y / PIXEL_SCALE + 5, bulletsRemaining, 2);
-  //     Sprites::drawSelfMasked(ammoCounter.pos.x / PIXEL_SCALE - cameraOffset, ammoCounter.pos.y / PIXEL_SCALE + 4, HUD::ammo, 2);
-  //   } else {
-  //     draw(ammoCounter, bulletsRemaining);
-  //   }
-  // }
+  drawTop();
 }
+
+
 
 void drawTop() {
   arduboy.fillRect(122, 0, 6, 64, 0);
@@ -136,20 +81,13 @@ void drawCombo() {
 }
 
 void onComboEnd() {
-  comboTimer = 60;
+  comboTimer = HUD_COUNTER_FRAMES;
 }
 
 void onDamaged() {
-  damageCounter.pos = player.animation.pos;
-  damageCounter.t = DAMAGE_COUNTER_FRAMES + 10;
-
-  ammoCounter.t = 0;
-  ammoCounter.f = 0;
-}
-
-void onRecharge() {
-  ammoCounter.f = 0;
-  ammoCounter.t = HUD_COUNTER_FRAMES;
+  damage.pos.x = player.animation.pos.x / PIXEL_SCALE;
+  damage.pos.y = player.animation.pos.y / PIXEL_SCALE;
+  damage.t = DAMAGE_COUNTER_FRAMES;
 }
 
 void onEmpty() {
@@ -160,26 +98,15 @@ void onEmpty() {
   }
 }
 
-void onShoot() {
-  ammoCounter.t = HUD_COUNTER_FRAMES;
-  if (bulletsRemaining == 0) {
-    ammoCounter.f = HUD_COUNTER_IFRAMES;
-  } else {
-    ammoCounter.f = 0;
-  }
-}
 
-void drawHud(hud_t hud, uint8_t frame) {
-  sprites.drawSelfMasked(hud.pos.x / PIXEL_SCALE - cameraOffset, hud.pos.y / PIXEL_SCALE, hud.sprite, frame);
-}
 
 void onShiftMap() {
-  if (damageCounter.t > 0) {
-    Level::shiftPos(&damageCounter.pos);
+  if (damage.t > 0) {
+    Level::shiftPos(&damage.pos);
   }
 
-  if (ammoCounter.t > 0) {
-    Level::shiftPos(&ammoCounter.pos);
+  if (empty.t > 0) {
+    Level::shiftPos(&empty.pos);
   }
 }
 }

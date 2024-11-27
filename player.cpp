@@ -164,7 +164,6 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
         bounce();
         nextVel->x = BOUNCE_VELOCITY;
         Bullet::reload();
-        HUD::onRecharge();
         Enemies::kill(&enemy[i], false);
         Sound::playNoise(220, 1020, 6);
         combo++;

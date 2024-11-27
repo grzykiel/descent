@@ -86,8 +86,6 @@ extern uint8_t gameState;
 
 extern int16_t cameraOffset;
 
-extern uint8_t settings; 
-
 extern uint16_t score;
 
 enum class Direction : uint8_t {

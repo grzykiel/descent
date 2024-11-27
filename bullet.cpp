@@ -99,7 +99,6 @@ void fireAuto() {
       chamber = (chamber + 1) % MAX_AMMO;
 
       bulletsRemaining--;
-      // HUD::onShoot();
       if (bulletsRemaining == 0) HUD::onEmpty();
       Sound::playTone(110, 3);
 
@@ -127,7 +126,6 @@ void fireLaser() {
   activateMuzzleFlash();
 
   bulletsRemaining -= (power + LASER_CHARGES);
-  HUD::onShoot();
   Sound::playSweep(2400, 40, 15);
 }
 
@@ -161,7 +159,6 @@ void fireShotgun() {
   }
   Player::thrust(SHOT_THRUST_SCALE);
   bulletsRemaining -= SHOT_CHARGES;
-  HUD::onShoot();
   Sound::playNoise(200, 1600, 15);
 }
 
@@ -169,7 +166,6 @@ void reload() {
   if (bulletsRemaining < bulletCapacity) {
     bulletsRemaining = bulletCapacity;
     Particles::activateRecharge();
-    HUD::onRecharge();
   } else if (combo > 4) {
     Particles::activateRecharge();
   }

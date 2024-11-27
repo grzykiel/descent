@@ -64,7 +64,6 @@ void spawnUpgrade(uint16_t x, uint8_t y) {
 void collect(uint8_t type) {
   powerup[type].active = false;
   Particles::activateRecharge();  // TODO powerup animation
-  HUD::onRecharge();
 }
 
 

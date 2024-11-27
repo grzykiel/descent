@@ -7,8 +7,6 @@ uint8_t gameState = STATE_MENU;
 
 int16_t cameraOffset = 0;
 
-uint8_t settings = 0xFF; // sound | top display
-
 uint16_t score;
 
 namespace Utils {

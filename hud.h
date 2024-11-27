@@ -4,14 +4,13 @@
 #include "player.h"
 #include "bitmaps.h"
 
-#define DAMAGE_COUNTER_FRAMES 50
+#define DAMAGE_COUNTER_FRAMES 60
+#define DAMAGE_COUNTER_HOLD  50
 #define HUD_COUNTER_FRAMES   60
 #define HUD_COUNTER_IFRAMES  30
 
 typedef struct {
-  const unsigned char *sprite;  //TODO delete
-  uint8_t t;
-  int8_t f;                     // TODO delete
+  int8_t t;
   position_t pos;
 } hud_t;
 
@@ -20,15 +19,12 @@ namespace HUD {
   void update();
   void draw();
 
-  void updateHud(hud_t *hud);
-  void drawHud(hud_t hud, uint8_t frame);
+  void drawHud(hud_t hud, const unsigned char *sprite);
   void drawTop();
   void drawCombo();
 
   void onDamaged();
-  void onShoot(); // TODO remove
   void onEmpty();
-  void onRecharge();
   void onComboEnd();
   
 
