@@ -5,9 +5,11 @@ uint8_t duration;
 uint8_t soundType;
 uint16_t tone1;
 uint16_t tone2;
+uint16_t stompTone;
 
 namespace Sound {
   void init() {
+    stompTone = STOMP_TONE_INIT;
     stop();
   }
 
@@ -60,5 +62,14 @@ namespace Sound {
     framesLeft = 0;
     beep1.noTone();
     beep2.noTone();
+  }
+
+  void onIncreaseCombo() {
+    playTone(stompTone, STOMP_TONE_DURATION);
+    stompTone = (stompTone*25)/24;
+  }
+
+  void onResetCombo() {
+    stompTone = STOMP_TONE_INIT;
   }
 }

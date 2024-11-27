@@ -33,7 +33,7 @@ void init() {
   player.animation.t = 0;
   player.animation.iframe = 0;
   player.animation.pos.x = 128 * 3 * PIXEL_SCALE + 8;  //SCREENMID + 320;  //TODO #define
-  player.animation.pos.y = 28 * PIXEL_SCALE;   //TODO #define
+  player.animation.pos.y = 28 * PIXEL_SCALE;           //TODO #define
   player.animation.vel.x = 0;
   player.animation.vel.y = 0;
   player.animation.dir = Direction::right;
@@ -165,7 +165,6 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
         nextVel->x = BOUNCE_VELOCITY;
         Bullet::reload();
         Enemies::kill(&enemy[i], false);
-        Sound::playNoise(220, 1020, 6);
         combo++;
       }
     } else if (type.v == TOP) {
@@ -222,6 +221,7 @@ void jump() {
 
 void bounce() {
   // player.animation.vel.x = BOUNCE_VELOCITY;
+  Sound::playNoise(220, 1020, 6);
   player.animation.t = 30;
   player.state = PlayerState::bouncing;
   player.animation.sprite = &playerJumpSprite;  //TODO replace with bounce sprite
@@ -267,13 +267,12 @@ void onDamaged() {
   }
   resetCombo();
   resetPower();
-  Sound::playNoise(2000, 4000, 10);
-
+  Sound::playNoise(220, 1020, 6);
 }
 
 void onPickup(uint8_t type) {
   Powerups::collect(type);
-  Sound::playSweep(4800, 8800, 15);
+  Sound::playNoise(2000, 4000, 10);
   if (type == HEART) {
     player.hp = min(++player.hp, maxHP);
   } else if (type == HEART_UPGRADE) {
@@ -292,6 +291,7 @@ void onPickup(uint8_t type) {
 
 void increaseCombo() {
   combo = min(combo + 1, 255);
+  Sound::onIncreaseCombo();
 }
 
 void onComboEnd() {
@@ -306,9 +306,11 @@ void onComboEnd() {
 
 void resetCombo() {
   combo = 0;
+  Sound::onResetCombo();
 }
+
 void increasePower(uint8_t p) {
-  Sound::playSweep(4800, 8800, 15);
+  Sound::playNoise(2000, 4000, 10);
   if (p == 0) {
     power = min(power + 1, 3);
   } else {
