@@ -44,6 +44,7 @@ void spawnPop(position_t pos, int8_t dx, int8_t dy);
 void initSmoke();
 void spawnSmoke();
 
+void onComboEnd();
 void onShiftMap();
 }
 

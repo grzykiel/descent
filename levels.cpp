@@ -122,7 +122,6 @@ void shiftMap() {
   }
 }
 
-
 //TODO out of bounds checking
 void copyRoom(uint8_t from[], uint8_t f, uint8_t to[], uint8_t t) {
   for (uint8_t i = 0; i < ROOMSIZE; i++) {

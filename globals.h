@@ -184,7 +184,7 @@ collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider);
 
 bool updateAnimation(animation_t *animation);
 bool updateAnimation(particle_t *particle, uint8_t *transitions, uint8_t last);
-bool flickering(animation_t *animation);
+// bool flickering(animation_t *animation);
 bool flickering(int8_t *f);
 
 void printNum(uint8_t x, uint8_t y, uint16_t n, uint8_t length);

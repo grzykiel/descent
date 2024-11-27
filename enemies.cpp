@@ -479,7 +479,7 @@ void draw() {
     // Utils::printNum(enemy[i].animation.pos.x / PIXEL_SCALE - cameraOffset + 10, enemy[i].animation.pos.y / PIXEL_SCALE + 6, enemy[i].animation.active, 1);
     // Utils::printNum(enemy[i].animation.pos.x / PIXEL_SCALE - cameraOffset + 10, enemy[i].animation.pos.y / PIXEL_SCALE, enemy[i].animation.pos.x/PIXEL_SCALE, 3);
 
-    if (enemy[i].animation.active & !Utils::flickering(&enemy[i].animation)) {
+    if (enemy[i].animation.active & !Utils::flickering(&enemy[i].animation.iframe)) {
       if (enemy[i].animation.dir == Direction::left) {
         Sprites::drawSelfMasked((enemy[i].animation.pos.x / PIXEL_SCALE) - cameraOffset, enemy[i].animation.pos.y / PIXEL_SCALE, enemy[i].animation.sprite->spriteL, enemy[i].animation.frame);
       } else {

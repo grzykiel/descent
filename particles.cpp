@@ -22,6 +22,8 @@ const uint8_t rechargeTransitions[] PROGMEM = { 3, 6, 9, 12, 15 };
 particle_t smoke;
 const uint8_t smokeTransitions[] PROGMEM = { 5, 11, 17, 23 };
 
+bool comboEnd;
+
 namespace Particles {
 void init() {
   for (uint8_t i = 0; i < MAX_BLOCK_FRAGMENTS; i++) {
@@ -49,6 +51,8 @@ void init() {
 
   smoke.active = false;
   initSmoke();
+
+  comboEnd = false;
 }
 
 void initBlockFragment(uint8_t i) {
@@ -185,13 +189,18 @@ void draw() {
   }
 
   if (rechargeAnimation.active) {
-    if (combo > 4) {
+    if (comboEnd) {
       Sprites::drawSelfMasked(rechargeAnimation.pos.x - cameraOffset, rechargeAnimation.pos.y + 2, Particles::flame, rechargeAnimation.frame);
     } else {
       Sprites::drawSelfMasked(rechargeAnimation.pos.x - cameraOffset, rechargeAnimation.pos.y, Particles::recharge, rechargeAnimation.frame);
     }
     rechargeAnimation.active = Utils::updateAnimation(&rechargeAnimation, rechargeTransitions, RECHARGE_TRANSITIONS);
+    if (!rechargeAnimation.active) comboEnd = false;
   }
+}
+
+void onComboEnd() {
+  if (combo > 4) comboEnd = true;
 }
 
 void onShiftMap() {

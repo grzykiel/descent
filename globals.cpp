@@ -108,10 +108,6 @@ bool updateAnimation(particle_t *particle, uint8_t *transitions, uint8_t last) {
   return true;
 }
 
-bool flickering(animation_t *anim) {
-  return flickering(&anim->iframe);
-}
-
 bool flickering(int8_t *f) {
   if (*f == 0) return false;
   if (*f > 0) {

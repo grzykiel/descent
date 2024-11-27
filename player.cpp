@@ -113,7 +113,7 @@ void updateAnimation() {
 }
 
 void draw() {
-  if (Utils::flickering(&player.animation)) return;
+  if (Utils::flickering(&player.animation.iframe)) return;
   if (player.animation.dir == Direction::left) {
     Sprites::drawSelfMasked(player.animation.pos.x / PIXEL_SCALE - cameraOffset, player.animation.pos.y / PIXEL_SCALE, player.animation.sprite->spriteL, player.animation.frame);
   } else {
@@ -250,6 +250,7 @@ void land() {
 
   Player::onComboEnd();
   HUD::onComboEnd();
+  Particles::onComboEnd();
 }
 
 void flicker() {
