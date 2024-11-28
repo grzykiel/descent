@@ -18,6 +18,7 @@ void init() {
   Bullet::init();
   Powerups::init();
   HUD::init();
+  Sound::init();
 }
 
 void input() {

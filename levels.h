@@ -9,21 +9,17 @@
 #include "particles.h"
 #include "powerups.h"
 
-#define PASSAGE_MIN 2
-#define DASH_MIN 0
-#define DASH_MAX 8
-#define BLOCKS_MAX 4
-#define NARROW_INTERVAL 4
+#define PASSAGE_MIN       2
+#define DASH_MIN          0
+#define DASH_MAX          8
+#define BLOCKS_MAX        4
+#define ROOM_SHRINK_FREQ  4
 
-#define PBAT_MAX 50
-#define PCRAWLER_MAX 50
-#define MIN_ENEMIES_PER_ROOM 1
-#define MAX_ENEMIES_PER_ROOM 4
+#define PBAT_MAX              80
+#define PCRAWLER_MAX          50
+#define MAX_ENEMIES_PER_ROOM  5
+#define ENEMY_INCR_FREQ     5
 
-#define TOP_MARGIN    1
-#define BOTTOM_MARGIN 2
-
-extern uint16_t kills;
 
 namespace Level 
 {
@@ -61,6 +57,10 @@ namespace Level
 
   void increaseBatProbability();
   void increaseCrawlerProbability();
+
+  void onKill();
+
+  void debugDisplay();
 
 }
 

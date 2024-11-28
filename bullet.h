@@ -65,6 +65,7 @@ void collisionCheck();
 void drawBullets();
 void drawLaser();
 
+void onEmpty();
 void onShiftMap();
 
 void setActiveGun(GunType newType);

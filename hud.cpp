@@ -46,8 +46,6 @@ void draw() {
   drawTop();
 }
 
-
-
 void drawTop() {
   arduboy.fillRect(122, 0, 6, 64, 0);
 
@@ -97,8 +95,6 @@ void onEmpty() {
     empty.pos.y = player.animation.pos.y / PIXEL_SCALE - 8;
   }
 }
-
-
 
 void onShiftMap() {
   if (damage.t > 0) {

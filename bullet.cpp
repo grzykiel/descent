@@ -104,8 +104,7 @@ void fireAuto() {
 
       shootTimer = FIRE_RATE_INIT - 4 * power;  //fireRate;
     } else {
-      Particles::spawnSmoke();
-      Sound::playTone(80, 3);
+      onEmpty();
     }
   }
 }
@@ -114,8 +113,7 @@ void fireLaser() {
   if (bullet[chamber].active) return;
 
   if (bulletsRemaining < (power + LASER_CHARGES)) {
-    Particles::spawnSmoke();
-    Sound::playTone(80, 3);
+    onEmpty();
     return;
   }
 
@@ -131,7 +129,7 @@ void fireLaser() {
 
 void fireShotgun() {
   if (bulletsRemaining < SHOT_CHARGES) {
-    Particles::spawnSmoke();
+    onEmpty();
     return;
   }
 
@@ -159,7 +157,7 @@ void fireShotgun() {
   }
   Player::thrust(SHOT_THRUST_SCALE);
   bulletsRemaining -= SHOT_CHARGES;
-  Sound::playNoise(200, 1600, 15);
+  Sound::playNoise(20, 400, 15); //(200, 1600, 15);
 }
 
 void reload() {
@@ -215,7 +213,7 @@ void updateBullets() {
       } else {
         bullet[i].vel.x -= (26 + 5 * power);
       }
-      bullet[i].active = updateBulletAnimation(&bullet[i]); //Utils::updateAnimation(&bullet[i]);
+      bullet[i].active = updateBulletAnimation(&bullet[i]);  //Utils::updateAnimation(&bullet[i]);
     }
   }
   collisionCheck();
@@ -311,6 +309,12 @@ void drawLaser() {
     laserRect = Rect(x0, y0, x1 - x0, y1 - y0);
   }
   arduboy.fillRect(x0 - cameraOffset, y0, x1 - x0, y1 - y0);
+}
+
+void onEmpty() {
+  Particles::spawnSmoke();
+  // Sound::playNoise(100, 110, 6);
+  Sound::playTone(110, 3); //TODO sound check
 }
 
 void onShiftMap() {

@@ -165,7 +165,7 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
         nextVel->x = BOUNCE_VELOCITY;
         Bullet::reload();
         Enemies::kill(&enemy[i], false);
-        combo++;
+        increaseCombo();
       }
     } else if (type.v == TOP) {
       nextVel->x = -KICKBACK_V;
@@ -221,7 +221,6 @@ void jump() {
 
 void bounce() {
   // player.animation.vel.x = BOUNCE_VELOCITY;
-  Sound::playNoise(220, 1020, 6);
   player.animation.t = 30;
   player.state = PlayerState::bouncing;
   player.animation.sprite = &playerJumpSprite;  //TODO replace with bounce sprite
@@ -262,6 +261,7 @@ void onDamaged() {
   flicker();
   if (player.hp == 0) {
     Game::onDie();
+    return;
   } else {
     HUD::onDamaged();
   }

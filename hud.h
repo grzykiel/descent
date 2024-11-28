@@ -26,8 +26,6 @@ namespace HUD {
   void onDamaged();
   void onEmpty();
   void onComboEnd();
-  
-
   void onShiftMap();
 
 }

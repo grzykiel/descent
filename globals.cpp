@@ -33,7 +33,6 @@ window_t getCollisionWindow(uint16_t x, int16_t y) {
   return wd;
 }
 
-
 bool collides(animation_t anim, Rect block) {
   Rect spriteRect = Rect(anim.pos.x / PIXEL_SCALE + ((anim.sprite->offset & 0xF0) >> 4), anim.pos.y / PIXEL_SCALE + (anim.sprite->offset & 0x0F), anim.sprite->dim & 0x0F, (anim.sprite->dim & 0xF0) >> 4);
   // arduboy.drawRect(anim.pos.x/PIXEL_SCALE + anim.sprite->dx - cameraOffset, anim.pos.y/PIXEL_SCALE + (anim.sprite->offset & 0x0F), anim.sprite->h, anim.sprite->w);

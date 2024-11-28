@@ -11,7 +11,6 @@
 #include "bitmaps.h"
 #include "powerups.h"
 
-
 namespace Game {
   void loop();
   void input();

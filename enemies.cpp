@@ -458,8 +458,7 @@ void kill(enemy_t *enemy, bool shot) {
   } else if (enemy->type == EnemyType::tortoise || enemy->type == EnemyType::worm) {
     Level::increaseCrawlerProbability();
   }
-
-  kills++;
+  Level::onKill();
 }
 
 bool updateSprite(enemy_t *enemy) {

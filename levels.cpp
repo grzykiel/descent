@@ -16,6 +16,8 @@ constexpr uint8_t startRoom[SCREENWIDTH] = {
 
 uint8_t passageMin;
 uint8_t passageMax;
+uint8_t enemiesMin;
+uint8_t enemiesMax;
 uint8_t dashes;
 uint8_t roomsGenerated;
 uint8_t pbat;
@@ -36,6 +38,8 @@ void init() {
 
   passageMin = 5;
   passageMax = 8;
+  enemiesMin = 1;
+  enemiesMax = 1;
   dashes = 0x02;
   pbat = 20;
   pcrawler = 0;
@@ -45,6 +49,7 @@ void init() {
 }
 
 void draw() {
+  debugDisplay();
 
   //wall boundaries
   arduboy.drawFastHLine(0, 0, 128);
@@ -112,7 +117,7 @@ void shiftMap() {
   copyRoom(nextRoom, 0, levelMap, 32 * 4);
 
   roomsGenerated++;
-  if (roomsGenerated % NARROW_INTERVAL == 0) {
+  if (roomsGenerated % ROOM_SHRINK_FREQ == 0) {
     roomsGenerated = 0;
     if (random(0, 1)) {
       passageMax = max(passageMax - 1, passageMin + 1);
@@ -260,7 +265,7 @@ void eraseRoom() {
 }
 
 void generateEnemies() {
-  uint8_t n = random(MIN_ENEMIES_PER_ROOM, MAX_ENEMIES_PER_ROOM);
+  uint8_t n = random(enemiesMin, enemiesMax);
   for (uint8_t i = 0; i < n; i++) {
     if (random(0, 2) || kills < 5) {
       generateFlying();
@@ -361,5 +366,21 @@ void writeRoom(uint8_t room[], int16_t i, uint8_t j, uint8_t tile) {
   }
 }
 
+void onKill() {
+  kills++;
+  if (kills % ENEMY_INCR_FREQ == 0) {
+    if (enemiesMax < MAX_ENEMIES_PER_ROOM) {
+      enemiesMax++;
+    } else if (enemiesMin < enemiesMax) {
+      enemiesMin++;
+    }
+  }
+}
+
+void debugDisplay() {
+  // Utils::printNum(116, 0, kills, 2);
+  // Utils::printNum(110, 0, enemiesMin, 1);
+  // Utils::printNum(110, 8, enemiesMax, 1);
+}
 
 }

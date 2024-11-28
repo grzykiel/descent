@@ -4,8 +4,8 @@
 #define NOISE 1
 #define SWEEP 2
 
-#define STOMP_TONE_INIT     330
-#define STOMP_TONE_DURATION 30
+#define STOMP_TONE_INIT     130
+#define STOMP_TONE_DURATION 12
 
 namespace Sound {
   void init();
