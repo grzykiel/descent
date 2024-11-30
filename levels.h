@@ -18,7 +18,7 @@
 #define PBAT_MAX              80
 #define PCRAWLER_MAX          50
 #define MAX_ENEMIES_PER_ROOM  5
-#define ENEMY_INCR_FREQ     5
+#define ENEMY_INCR_FREQ       5
 
 
 namespace Level 

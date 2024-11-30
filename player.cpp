@@ -24,7 +24,7 @@ constexpr uint8_t walkAnimDelay = 6;
 uint8_t maxHP;
 uint8_t combo;
 uint8_t power;
-bool landed;
+bool firstLanded;
 
 namespace Player {
 void init() {
@@ -33,8 +33,8 @@ void init() {
   player.animation.frame = FALL_FRAME;
   player.animation.t = 0;
   player.animation.iframe = 0;
-  player.animation.pos.x = 128 * 3 * PIXEL_SCALE + 8;  //SCREENMID + 320;  //TODO #define
-  player.animation.pos.y = 28 * PIXEL_SCALE;           //TODO #define
+  player.animation.pos.x = BLOCKSIZE * PIXEL_SCALE * (MAPHEIGHT + 1);  //SCREENMID + 320;  //TODO #define
+  player.animation.pos.y = 28 * PIXEL_SCALE;                     //TODO #define
   player.animation.vel.x = 0;
   player.animation.vel.y = 0;
   player.animation.dir = Direction::right;
@@ -44,7 +44,7 @@ void init() {
   combo = 0;
   power = 0;
   score = 0;
-  landed = false;
+  firstLanded = false;
 }
 
 
@@ -60,11 +60,10 @@ void update() {
       fall();
     }
   }
-  nextVel.x = max(nextVel.x, -2 * PIXEL_SCALE);  // TODO re#define terminal velocity
+  nextVel.x = max(nextVel.x, TERMINAL_VELOCITY * PIXEL_SCALE);
 
   nextPos.x += nextVel.x;
-
-  nextPos.x = min(nextPos.x, CEILING);
+  if (firstLanded) nextPos.x = min(nextPos.x, CEILING);
 
   nextPos.y += nextVel.y;
 
@@ -245,14 +244,17 @@ void fall() {
 }
 
 void land() {
+  if (!firstLanded) {
+    firstLanded = true;
+    Sound::playIntro();
+  }
+
   player.state = PlayerState::grounded;
   player.animation.sprite = &playerRunSprite;
   triggerReleased = false;
+  player.animation.frame = 0;
 
-  if (!landed) {
-    landed = true;
-    Sound::playIntro();
-  }
+
 
   Player::onComboEnd();
   HUD::onComboEnd();
@@ -284,7 +286,6 @@ void onPickup(uint8_t type) {
     player.hp = min(++player.hp, maxHP);
   } else if (type == HEART_UPGRADE) {
     maxHP = min(++maxHP, HP_CAP);
-    player.hp = maxHP;
   } else if (type == SHOTGUN) {
     Bullet::setActiveGun(GunType::shot);
   } else if (type == LASER) {

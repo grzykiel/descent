@@ -11,9 +11,9 @@ void loop() {
 
 void init() {
   arduboy.setFrameRate(FPS);
+  Level::init();
   Player::init();
   Enemies::init();
-  Level::init();
   Particles::init();
   Bullet::init();
   Powerups::init();
@@ -47,7 +47,7 @@ void input() {
 
   //debug & tuning
   if (arduboy.justPressed(B_BUTTON)) {
-  } 
+  }
 
   if (arduboy.justPressed(up_btn)) {
   } else if (arduboy.justPressed(down_btn)) {

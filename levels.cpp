@@ -32,6 +32,35 @@ void init() {
     levelMap[i] = 0x00;
   }
 
+  // for (uint8_t i = 0; i < MAPHEIGHT; i += 15) {
+  //   for (uint8_t k = 0; k < 14; k++) {
+  //     for (uint8_t j = 0; j < 2 - i/15; j++) {
+  //       writeRoom(levelMap, i+k, j, 15);
+  //     }
+  //     writeRoom(levelMap, i+k, 2-i/15, 13);
+  //   }
+  //   writeRo
+  // }
+  for (uint8_t i = 0; i < 4*16; i+=4) {
+    levelMap[i] = 0xFF;
+    levelMap[i+1] = 0xD0;
+    levelMap[i+2] = 0x07;
+    levelMap[i+3] = 0xFF;
+  }
+  levelMap[4*15+1] = 0x90;
+  levelMap[4*15+2] = 0x03;
+  for (uint8_t i = 4*16; i < 4*24; i+=4) {
+    levelMap[i] = 0xFD;
+    levelMap[i+3] = 0x7F;
+  }
+  levelMap[4*23] = 0xF9;
+  levelMap[4*23+3] = 0x3F;
+  for (uint8_t i = 4*24; i < 4*32; i+=4) {
+    levelMap[i] = 0xD0;
+    levelMap[i+3] = 0x07;
+  }
+  levelMap[4*31] = 0x90;
+  levelMap[4*31+3] = 0x03;
   for (uint8_t i = 0; i < 8; i++) {
     levelMap[44 * 4 + i] = startRoom[i];
   }
@@ -52,16 +81,14 @@ void draw() {
   debugDisplay();
 
   //wall boundaries
-  arduboy.drawFastHLine(0, 0, 128);
-  arduboy.drawFastHLine(0, 63, 128);
+  arduboy.drawFastHLine(0, 0, 121);
+  arduboy.drawFastHLine(0, 63, 121);
 
   // levelMap
-  int xMin = ceil(player.animation.pos.x / PIXEL_SCALE / (1.0f * BLOCKSIZE)) + 8;
-  int xMax = floor(player.animation.pos.x / PIXEL_SCALE / (1.0f * BLOCKSIZE)) - 8;
-  xMin = max(MAPHEIGHT - 1 - xMin, 0);
-  xMax = min(MAPHEIGHT - xMax, MAPHEIGHT - 1);
+  int xMin = MAPHEIGHT - (player.animation.pos.x / PIXEL_SCALE) / BLOCKSIZE;
+  xMin = max(0, xMin - 8);
 
-  for (int i = xMin; i < xMax; i++) {
+  for (int i = xMin; i < min(MAPHEIGHT, xMin + 16); i++) {
     for (int j = 0; j < MAPWIDTH; j++) {
       if (getMap(i, j)) {
         if (getMap(i, j) == DASH || getMap(i, j) == BLOCK) {
@@ -80,7 +107,7 @@ void update() {
   }
 }
 
-void shiftPos(position_t *pos) {
+void shiftPos(position_t* pos) {
   pos->x += 128 * PIXEL_SCALE;
 }
 
@@ -382,5 +409,4 @@ void debugDisplay() {
   // Utils::printNum(110, 0, enemiesMin, 1);
   // Utils::printNum(110, 8, enemiesMax, 1);
 }
-
 }
