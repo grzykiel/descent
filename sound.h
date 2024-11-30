@@ -1,3 +1,6 @@
+#ifndef SOUND_H
+#define SOUND_H 
+
 #include "globals.h"
 
 #define TONE  0
@@ -16,4 +19,8 @@ namespace Sound {
   void stop();
   void onIncreaseCombo();
   void onResetCombo();
+  void playIntro();
+  void playGameover();
 }
+
+#endif

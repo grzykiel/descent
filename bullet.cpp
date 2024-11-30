@@ -313,8 +313,7 @@ void drawLaser() {
 
 void onEmpty() {
   Particles::spawnSmoke();
-  // Sound::playNoise(100, 110, 6);
-  Sound::playTone(110, 3); //TODO sound check
+  Sound::playTone(100, 3);
 }
 
 void onShiftMap() {

@@ -24,6 +24,7 @@ constexpr uint8_t walkAnimDelay = 6;
 uint8_t maxHP;
 uint8_t combo;
 uint8_t power;
+bool landed;
 
 namespace Player {
 void init() {
@@ -43,6 +44,7 @@ void init() {
   combo = 0;
   power = 0;
   score = 0;
+  landed = false;
 }
 
 
@@ -246,6 +248,11 @@ void land() {
   player.state = PlayerState::grounded;
   player.animation.sprite = &playerRunSprite;
   triggerReleased = false;
+
+  if (!landed) {
+    landed = true;
+    Sound::playIntro();
+  }
 
   Player::onComboEnd();
   HUD::onComboEnd();

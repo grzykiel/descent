@@ -87,7 +87,7 @@ void draw() {
 }
 
 void onDie() {
-  Sound::stop();
+  Sound::playGameover();
   arduboy.setFrameRate(15);
   gameState = STATE_DEATH;
   deathTimer = 45;

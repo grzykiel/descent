@@ -11,15 +11,14 @@
 #include "hud.h"
 #include "particles.h"
 #include "powerups.h"
-// #include "sound.h"
+
 
 
 void setup() {
   arduboy.begin();
   arduboy.setFrameRate(FPS);
   arduboy.initRandomSeed();
-  beep1.begin();
-  beep2.begin();
+  sound.volumeMode(VOLUME_ALWAYS_HIGH);
 
   switch (gameState) {
     case STATE_GAME:

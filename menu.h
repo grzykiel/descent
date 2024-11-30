@@ -9,7 +9,6 @@ namespace Menu
 {
   void loop();
   void input();
-  void update();
   void draw();
 
   void gameOver();

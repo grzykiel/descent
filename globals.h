@@ -2,6 +2,7 @@
 #define GLOBALS_H
 
 #include <Arduboy2.h>
+#include <ArduboyTones.h>
 #include <stdint.h>
 #include "bitmaps.h"
 
@@ -78,9 +79,8 @@
 #define PIXEL_SCALE 128
 
 extern Arduboy2Base arduboy;
+extern ArduboyTones sound;
 extern Sprites sprites;
-extern BeepPin1 beep1;
-extern BeepPin2 beep2;
 
 extern uint8_t gameState;
 

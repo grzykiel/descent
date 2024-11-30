@@ -17,7 +17,6 @@ void loop() {
     return;
   }
   input();
-  update();
   draw();
 }
 
@@ -27,10 +26,8 @@ void input() {
     gameState = STATE_GAME;
   } else if (arduboy.justPressed(B_BUTTON)) {
     arduboy.audio.toggle();
+    if (arduboy.audio.enabled()) sound.tone(880, 128);
   }
-}
-
-void update() {
 }
 
 void draw() {

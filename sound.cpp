@@ -6,11 +6,25 @@ uint8_t soundType;
 uint16_t tone1;
 uint16_t tone2;
 uint16_t stompTone;
+const uint16_t intro[] PROGMEM = {NOTE_E3, 400, NOTE_CS3, 800, NOTE_C3, 400, NOTE_A2, 800, TONES_END};
+const uint16_t gameover[] PROGMEM = {NOTE_FS2, 400, NOTE_C2, 800, TONES_END};
+
 
 namespace Sound {
+
   void init() {
     stompTone = STOMP_TONE_INIT;
     stop();
+  }
+
+  void playIntro() {
+    stop();
+    sound.tones(intro);
+  }
+  
+  void playGameover() {
+    stop();
+    sound.tones(gameover);
   }
 
   void update() {
@@ -24,22 +38,19 @@ namespace Sound {
     
     switch (soundType) {
       case (NOISE):
-        beep1.tone(beep1.freq(random(tone1, tone2)));
-        beep2.tone(beep2.freq(random(tone1, tone2)));
+        sound.tone(random(tone1, tone2));
         break;
       case (SWEEP):
         uint16_t tone = (tone2 - tone1)*(duration - framesLeft);
         tone = tone1 + tone/duration;
-        beep1.tone(beep1.freq(tone));
-        beep2.tone(beep2.freq(tone));
+        sound.tone(tone);
         break;
     }
   }
 
   void playTone(uint16_t tone, uint8_t frames) {
     soundType = TONE;
-    beep1.tone(beep1.freq(tone));
-    beep2.tone(beep2.freq(tone));
+    sound.tone(tone);
     framesLeft = frames;
   }
 
@@ -60,8 +71,7 @@ namespace Sound {
   
   void stop() {
     framesLeft = 0;
-    beep1.noTone();
-    beep2.noTone();
+    sound.noTone();
   }
 
   void onIncreaseCombo() {
