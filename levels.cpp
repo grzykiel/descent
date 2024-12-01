@@ -32,15 +32,6 @@ void init() {
     levelMap[i] = 0x00;
   }
 
-  // for (uint8_t i = 0; i < MAPHEIGHT; i += 15) {
-  //   for (uint8_t k = 0; k < 14; k++) {
-  //     for (uint8_t j = 0; j < 2 - i/15; j++) {
-  //       writeRoom(levelMap, i+k, j, 15);
-  //     }
-  //     writeRoom(levelMap, i+k, 2-i/15, 13);
-  //   }
-  //   writeRo
-  // }
   for (uint8_t i = 0; i < 4*16; i+=4) {
     levelMap[i] = 0xFF;
     levelMap[i+1] = 0xD0;

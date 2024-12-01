@@ -15,7 +15,7 @@ void init() {
   heartProb = HEART_PROB_INIT;
   upgradeProb = UPGRADE_PROB_INIT;
   nextHeart = HEART_PROB_INIT + random(0, heartProb);
-  nextUpgrade = UPGRADE_PROB_INIT + random(0, nextUpgrade);
+  nextUpgrade = UPGRADE_PROB_INIT + random(0, upgradeProb);
 }
 
 void draw() {
@@ -30,7 +30,7 @@ void onShiftMap() {
   for (uint8_t i = 0; i < N_POWERUPS; i++) {
     if (!powerup[i].active) continue;
     if (powerup[i].pos.x < OFFSCREEN) {
-      Level::shiftPos(&powerup[i].pos);
+      powerup[i].pos.x += 128;
     } else {
       powerup[i].active = false;
     }
@@ -63,9 +63,8 @@ void spawnUpgrade(uint16_t x, uint8_t y) {
 
 void collect(uint8_t type) {
   powerup[type].active = false;
-  Particles::activateRecharge();  // TODO powerup animation
+  Particles::activateRecharge(); 
 }
-
 
 
 }

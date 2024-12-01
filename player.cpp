@@ -254,8 +254,6 @@ void land() {
   triggerReleased = false;
   player.animation.frame = 0;
 
-
-
   Player::onComboEnd();
   HUD::onComboEnd();
   Particles::onComboEnd();
