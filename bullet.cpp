@@ -157,7 +157,7 @@ void fireShotgun() {
   }
   Player::thrust(SHOT_THRUST_SCALE);
   bulletsRemaining -= SHOT_CHARGES;
-  Sound::playNoise(20, 400, 15); //(200, 1600, 15);
+  Sound::playNoise(20, 400, 15);  //(200, 1600, 15);
 }
 
 void reload() {
@@ -329,6 +329,7 @@ void setActiveGun(GunType newType) {
   } else {
     activeGun = newType;
   }
+  Bullet::increaseCap();
 }
 
 void increaseCap() {

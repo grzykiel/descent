@@ -8,25 +8,25 @@
 
 #define FPS 60
 
-#define STATE_MENU 0
-#define STATE_GAME 1
-#define STATE_DEATH 2
-#define STATE_GAMEOVER 3
-#define STATE_SANDBOX 4
+#define STATE_MENU      0
+#define STATE_GAME      1
+#define STATE_DEATH     2
+#define STATE_GAMEOVER  3
+#define STATE_SANDBOX   4
 
-#define SCREENLEFT 0
-#define SCREENRIGHT 64
-#define SCREENTOP 128
-#define SCREENBOTTOM 0
-#define SCREENMID 64
-#define CEILING 370*128
+#define SCREENLEFT    0
+#define SCREENRIGHT   64
+#define SCREENTOP     128
+#define SCREENBOTTOM  0
+#define SCREENMID     64
+#define CEILING       370*128
 
 #define OFFSCREEN 128*128 //32768
 
-#define MAPWIDTH 8
+#define MAPWIDTH  8
 #define MAPHEIGHT 48
-#define MAPSIZE 192
-#define ROOMSIZE 64
+#define MAPSIZE   192
+#define ROOMSIZE  64
 
 #define REMAP_THRESHOLD 64
 
@@ -34,47 +34,47 @@
 #define SCREENWIDTH 8
 #define SCREENHEIGHT 16
 
-#define BLOCKSIZE 8
-#define PLAYER_WIDTH 6
+#define BLOCKSIZE     8
+#define PLAYER_WIDTH  6
 #define PLAYER_HEIGHT 8
 #define PLAYER_OFFSET 1  //sprite offset
 
-#define POWERUP_SIZE 8
-#define N_POWERUPS 6
+#define POWERUP_SIZE  8
+#define N_POWERUPS    6
 
 // special tile indices
-#define DASH 4 //17
+#define DASH  4 //17
 #define BLOCK 1 //18 
 
 #define DASH_OFFSET 5
 #define DASH_HEIGHT 3
 
 // Collision locations
-#define NONE 0
-#define RIGHT 1
-#define LEFT 2
-#define BOTTOM 1
-#define TOP 2
+#define NONE    0
+#define RIGHT   1
+#define LEFT    2
+#define BOTTOM  1
+#define TOP     2
 
 // Jump
-#define GRAVITY -7
-#define JUMP_VELOCITY 246
-#define THRUST 7
-#define BOUNCE_VELOCITY 128
-#define HALF_JUMP 15
-#define JUMP_TOP 25
-#define JUMPFRAMES 50
-#define FALL_FRAME 4
-#define TERMINAL_VELOCITY -6
+#define GRAVITY           -7
+#define JUMP_VELOCITY     246
+#define THRUST            7
+#define BOUNCE_VELOCITY   128
+#define HALF_JUMP         15
+#define JUMP_TOP          25
+#define JUMPFRAMES        50
+#define FALL_FRAME        4
+#define TERMINAL_VELOCITY -4
 
-#define RUN_ACCEL 64
-#define RUN_VELOCITY 128
+#define RUN_ACCEL     64
+#define RUN_VELOCITY  128
 
 #define KICKBACK_H 384
 #define KICKBACK_V 64
 
-#define PLAYER_IFRAMES 90
-#define FLICKER_DURATION 5
+#define PLAYER_IFRAMES    90
+#define FLICKER_DURATION  5
 
 #define PIXEL_SCALE 128
 

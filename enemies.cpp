@@ -189,15 +189,15 @@ void updateFlying(enemy_t *enemy, position_t *nextPos, velocity_t *nextVel) {
   int dy = player.animation.pos.y / PIXEL_SCALE - enemy->animation.pos.y / PIXEL_SCALE;
   if (enemy->type == EnemyType::blob) {
     if (dx > 0) {
-      nextVel->x = min(++enemy->animation.vel.x, BLOB_MAX_VEL);
+      nextVel->x = min(enemy->animation.vel.x+1, BLOB_MAX_VEL);
     } else if (dx < 0) {
-      nextVel->x = max(--enemy->animation.vel.x, -BLOB_MAX_VEL);
+      nextVel->x = max(enemy->animation.vel.x-1, -BLOB_MAX_VEL);
     }
 
     if (dy > 0) {
-      nextVel->y = min(++enemy->animation.vel.y, BLOB_MAX_VEL);
+      nextVel->y = min(enemy->animation.vel.y+1, BLOB_MAX_VEL);
     } else if (dy < 0) {
-      nextVel->y = max(--enemy->animation.vel.y, -BLOB_MAX_VEL);
+      nextVel->y = max(enemy->animation.vel.y-1, -BLOB_MAX_VEL);
     }
   } else if (enemy->type == EnemyType::bat) {
     nextVel->x = Utils::sign(dx) * BAT_VEL;

@@ -13,8 +13,6 @@
 #define HP_INIT 3
 
 typedef struct {
-  // Direction dir;
-
   animation_t animation;
 
   PlayerState state = PlayerState::falling;

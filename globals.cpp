@@ -46,8 +46,6 @@ bool collides(animation_t anim1, animation_t anim2) {
   return (arduboy.collide(rect1, rect2));
 }
 
-
-
 collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider, bool horizontal, bool vertical) {
   collision_t type = { NONE, NONE };
 

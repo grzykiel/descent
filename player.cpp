@@ -34,7 +34,7 @@ void init() {
   player.animation.t = 0;
   player.animation.iframe = 0;
   player.animation.pos.x = BLOCKSIZE * PIXEL_SCALE * (MAPHEIGHT + 1);  //SCREENMID + 320;  //TODO #define
-  player.animation.pos.y = 28 * PIXEL_SCALE;                     //TODO #define
+  player.animation.pos.y = 28 * PIXEL_SCALE;                           //TODO #define
   player.animation.vel.x = 0;
   player.animation.vel.y = 0;
   player.animation.dir = Direction::right;
@@ -167,6 +167,7 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
         Bullet::reload();
         Enemies::kill(&enemy[i], false);
         increaseCombo();
+        continue;
       }
     } else if (type.v == TOP) {
       nextVel->x = -KICKBACK_V;
@@ -281,9 +282,9 @@ void onPickup(uint8_t type) {
   Powerups::collect(type);
   Sound::playNoise(2000, 4000, 10);
   if (type == HEART) {
-    player.hp = min(++player.hp, maxHP);
+    player.hp = min(player.hp + 1, maxHP);
   } else if (type == HEART_UPGRADE) {
-    maxHP = min(++maxHP, HP_CAP);
+    maxHP = min(maxHP + 1, HP_CAP);
   } else if (type == SHOTGUN) {
     Bullet::setActiveGun(GunType::shot);
   } else if (type == LASER) {

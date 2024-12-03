@@ -8,15 +8,15 @@
 
 #define N_POWERUPS 6
 
-#define HEART 0
+#define HEART         0
 #define HEART_UPGRADE 1
-#define AMMO_UPGRADE 2
-#define SHOTGUN 3
-#define LASER 4
-#define MACHINEGUN 5
+#define AMMO_UPGRADE  2
+#define SHOTGUN       3
+#define LASER         4
+#define MACHINEGUN    5
 
-#define HEART_PROB_INIT 10
-#define UPGRADE_PROB_INIT 10
+#define HEART_PROB_INIT 3
+#define UPGRADE_PROB_INIT 5
 #define PROB_MAX 127
 
 extern powerup_t powerup[N_POWERUPS];

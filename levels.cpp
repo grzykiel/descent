@@ -23,7 +23,7 @@ uint8_t roomsGenerated;
 uint8_t pbat;
 uint8_t pcrawler;
 uint16_t kills;
-
+uint8_t blocksDestroyed;
 
 namespace Level {
 
@@ -32,26 +32,26 @@ void init() {
     levelMap[i] = 0x00;
   }
 
-  for (uint8_t i = 0; i < 4*16; i+=4) {
+  for (uint8_t i = 0; i < 4 * 16; i += 4) {
     levelMap[i] = 0xFF;
-    levelMap[i+1] = 0xD0;
-    levelMap[i+2] = 0x07;
-    levelMap[i+3] = 0xFF;
+    levelMap[i + 1] = 0xD0;
+    levelMap[i + 2] = 0x07;
+    levelMap[i + 3] = 0xFF;
   }
-  levelMap[4*15+1] = 0x90;
-  levelMap[4*15+2] = 0x03;
-  for (uint8_t i = 4*16; i < 4*24; i+=4) {
+  levelMap[4 * 15 + 1] = 0x90;
+  levelMap[4 * 15 + 2] = 0x03;
+  for (uint8_t i = 4 * 16; i < 4 * 24; i += 4) {
     levelMap[i] = 0xFD;
-    levelMap[i+3] = 0x7F;
+    levelMap[i + 3] = 0x7F;
   }
-  levelMap[4*23] = 0xF9;
-  levelMap[4*23+3] = 0x3F;
-  for (uint8_t i = 4*24; i < 4*32; i+=4) {
+  levelMap[4 * 23] = 0xF9;
+  levelMap[4 * 23 + 3] = 0x3F;
+  for (uint8_t i = 4 * 24; i < 4 * 32; i += 4) {
     levelMap[i] = 0xD0;
-    levelMap[i+3] = 0x07;
+    levelMap[i + 3] = 0x07;
   }
-  levelMap[4*31] = 0x90;
-  levelMap[4*31+3] = 0x03;
+  levelMap[4 * 31] = 0x90;
+  levelMap[4 * 31 + 3] = 0x03;
   for (uint8_t i = 0; i < 8; i++) {
     levelMap[44 * 4 + i] = startRoom[i];
   }
@@ -61,16 +61,14 @@ void init() {
   enemiesMin = 1;
   enemiesMax = 1;
   dashes = 0x02;
-  pbat = 20;
-  pcrawler = 0;
-  kills = 0;
-
+  pbat = PBAT_INIT;
+  pcrawler = PCRAWLER_INIT;
   roomsGenerated = 0;
+  kills = 0;
+  blocksDestroyed = 0;
 }
 
 void draw() {
-  debugDisplay();
-
   //wall boundaries
   arduboy.drawFastHLine(0, 0, 121);
   arduboy.drawFastHLine(0, 63, 121);
@@ -90,6 +88,8 @@ void draw() {
       }
     }
   }
+
+  debugDisplay();  // TODO remove
 }
 
 void update() {
@@ -137,7 +137,7 @@ void shiftMap() {
   roomsGenerated++;
   if (roomsGenerated % ROOM_SHRINK_FREQ == 0) {
     roomsGenerated = 0;
-    if (random(0, 1)) {
+    if (random(0, 2)) {
       passageMax = max(passageMax - 1, passageMin + 1);
     } else {
       passageMin = max(PASSAGE_MIN, passageMin - 1);
@@ -341,11 +341,11 @@ void generateCrawling() {
 }
 
 void increaseBatProbability() {
-  pbat = min(++pbat, PBAT_MAX);
+  pbat = min(pbat + 1, PBAT_MAX);
 }
 
 void increaseCrawlerProbability() {
-  pcrawler = min(++pcrawler, PCRAWLER_MAX);
+  pcrawler = min(pcrawler + 1, PCRAWLER_MAX);
 }
 
 void destroyBlock(int16_t i, uint8_t j) {
@@ -397,7 +397,7 @@ void onKill() {
 
 void debugDisplay() {
   // Utils::printNum(116, 0, kills, 2);
-  // Utils::printNum(110, 0, enemiesMin, 1);
-  // Utils::printNum(110, 8, enemiesMax, 1);
+  Utils::printNum(110, 0, passageMin, 1);
+  Utils::printNum(110, 8, passageMax, 1);
 }
 }

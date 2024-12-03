@@ -12,8 +12,6 @@
 #include "particles.h"
 #include "powerups.h"
 
-
-
 void setup() {
   arduboy.begin();
   arduboy.setFrameRate(FPS);

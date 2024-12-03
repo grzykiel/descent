@@ -37,14 +37,13 @@ void onShiftMap() {
   }
 }
 
-
 void spawnHeart(uint16_t x, uint8_t y) {
   nextHeart--;
   if (nextHeart == 0) {
     powerup[HEART].active = true;
     powerup[HEART].pos.x = x;
     powerup[HEART].pos.y = y;
-    heartProb = min(++heartProb, PROB_MAX);
+    heartProb = min(heartProb + 1, PROB_MAX);
     nextHeart = min(HEART_PROB_INIT + random(0, heartProb), PROB_MAX);
   }
 }
@@ -52,18 +51,18 @@ void spawnHeart(uint16_t x, uint8_t y) {
 void spawnUpgrade(uint16_t x, uint8_t y) {
   nextUpgrade--;
   if (nextUpgrade == 0) {
-    uint8_t ug = random(1, 6);
+    uint8_t ug = random(HEART_UPGRADE, MACHINEGUN + 1);
     powerup[ug].active = true;
     powerup[ug].pos.x = x;
     powerup[ug].pos.y = y;
-    upgradeProb = min(++upgradeProb, PROB_MAX);
+    upgradeProb = min(upgradeProb + 1, PROB_MAX);
     nextUpgrade = (UPGRADE_PROB_INIT + random(0, upgradeProb), PROB_MAX);
   }
 }
 
 void collect(uint8_t type) {
   powerup[type].active = false;
-  Particles::activateRecharge(); 
+  Particles::activateRecharge();
 }
 
 
