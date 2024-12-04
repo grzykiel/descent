@@ -2,15 +2,8 @@
 #include <math.h>
 
 #include "globals.h"
-#include "bitmaps.h"
-#include "controls.h"
 #include "menu.h"
 #include "game.h"
-#include "player.h"
-#include "enemies.h"
-#include "hud.h"
-#include "particles.h"
-#include "powerups.h"
 
 void setup() {
   arduboy.begin();
@@ -29,7 +22,6 @@ void loop() {
   if (!arduboy.nextFrame()) {
     return;
   }
-
   arduboy.pollButtons();
   arduboy.clear();
   stateLoop();

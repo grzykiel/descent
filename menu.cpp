@@ -32,11 +32,13 @@ void input() {
 
 void draw() {
   for (uint8_t i = 0; i < 7; i++) {
-    sprites.drawSelfMasked((uint8_t)pgm_read_word(&titleX[i]), 1 + i * 9, Fonts::titleFont, (uint8_t)pgm_read_word(&titleFrames[i]));
+    sprites.drawSelfMasked((uint8_t)pgm_read_word(&titleX[i]), 1 + i * 9, Fonts::titleFont, (
+                            uint8_t)pgm_read_word(&titleFrames[i]));
   }
 
   for (uint8_t i = 0; i < 10; i++) {
-    arduboy.fillRect((uint8_t)pgm_read_word(&blocksX[i]), (uint8_t)pgm_read_word(&blocksY[i]), (uint8_t)pgm_read_word(&blocksWidth[i]), (uint8_t)pgm_read_word(&blocksHeight[i]));
+    arduboy.fillRect((uint8_t)pgm_read_word(&blocksX[i]), (uint8_t)pgm_read_word(&blocksY[i]), 
+                    (uint8_t)pgm_read_word(&blocksWidth[i]), (uint8_t)pgm_read_word(&blocksHeight[i]));
   }
 
   Utils::printText(8, 10, startText, 7);

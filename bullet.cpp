@@ -8,7 +8,7 @@ sprite_t muzzleFlashSprite = {
   0x80,                    // offsets
   0x88                     // dim
 };
-animation_t muzzleFlash;  //TODO make particle_t
+animation_t muzzleFlash;
 
 sprite_t bulletSprite = {
   ShootShoes::bullet,  //sprite
@@ -40,9 +40,7 @@ void init() {
   triggerReleased = false;
   bulletCapacity = AMMO_INIT;
   bulletsRemaining = AMMO_INIT;
-
   fireRate = FIRE_RATE_INIT;
-
   activeGun = GunType::machine;
 }
 
@@ -53,7 +51,6 @@ void update() {
     updateLaser();
   }
 }
-
 
 void draw() {
   if (activeGun == GunType::machine || activeGun == GunType::shot) {
@@ -101,8 +98,7 @@ void fireAuto() {
       bulletsRemaining--;
       if (bulletsRemaining == 0) HUD::onEmpty();
       Sound::playTone(110, 3);
-
-      shootTimer = FIRE_RATE_INIT - 4 * power;  //fireRate;
+      shootTimer = FIRE_RATE_INIT - 4 * power;
     } else {
       onEmpty();
     }
@@ -120,9 +116,7 @@ void fireLaser() {
   bullet[chamber].active = true;
   bullet[chamber].t = LASER_TIME;
   Player::thrust(LASER_THRUST_SCALE);
-
   activateMuzzleFlash();
-
   bulletsRemaining -= (power + LASER_CHARGES);
   Sound::playSweep(2400, 40, 15);
 }
@@ -134,11 +128,11 @@ void fireShotgun() {
   }
 
   activateMuzzleFlash();
+
   for (uint8_t i = 0; i < N_SHOTS; i++) {
     bullet[chamber].active = true;
     bullet[chamber].pos.x = player.animation.pos.x;
     bullet[chamber].pos.y = player.animation.pos.y;
-
     if (i < 3) {
       bullet[chamber].vel.x = (int16_t)pgm_read_word(&shotVelocitiesX[i]) + 51 * power;
       if (i == 0) {
@@ -150,14 +144,13 @@ void fireShotgun() {
       bullet[chamber].vel.x = (int16_t)pgm_read_word(&shotVelocitiesX[i - 2]) + 51 * power;
       bullet[chamber].vel.y = -(int8_t)pgm_read_word(&shotVelocitiesY[i - 2]) - 10 * power;
     }
-
     bullet[chamber].frame = 0;
     bullet[chamber].t = 0;
     chamber = (chamber + 1) % MAX_AMMO;
   }
   Player::thrust(SHOT_THRUST_SCALE);
   bulletsRemaining -= SHOT_CHARGES;
-  Sound::playNoise(20, 400, 15);  //(200, 1600, 15);
+  Sound::playNoise(20, 400, 15);
 }
 
 void reload() {
@@ -178,7 +171,8 @@ void initMuzzleFlash() {
 
 void drawMuzzleFlash() {
   if (muzzleFlash.active) {
-    Sprites::drawSelfMasked(player.animation.pos.x / PIXEL_SCALE - cameraOffset - ((muzzleFlash.sprite->offset & 0xF0) >> 4), player.animation.pos.y / PIXEL_SCALE, muzzleFlash.sprite->spriteR, muzzleFlash.frame);
+    Sprites::drawSelfMasked(player.animation.pos.x / PIXEL_SCALE - cameraOffset - (muzzleFlash.sprite->offset >> 4), 
+                            player.animation.pos.y / PIXEL_SCALE, muzzleFlash.sprite->spriteR, muzzleFlash.frame);
     muzzleFlash.active = Utils::updateAnimation(&muzzleFlash);
   }
 }
@@ -213,7 +207,7 @@ void updateBullets() {
       } else {
         bullet[i].vel.x -= (26 + 5 * power);
       }
-      bullet[i].active = updateBulletAnimation(&bullet[i]);  //Utils::updateAnimation(&bullet[i]);
+      bullet[i].active = updateBulletAnimation(&bullet[i]); 
     }
   }
   collisionCheck();
@@ -232,7 +226,6 @@ void collisionCheck() {
   for (uint8_t b = 0; b < MAX_AMMO; b++) {
     if (!bullet[b].active) continue;
 
-    // window_t wd = Utils::getCollisionWindow(bullet[b].pos.x/PIXEL_SCALE, bullet[b].animation.pos.y/PIXEL_SCALE);
     window_t wd = Utils::getCollisionWindow(bullet[b].pos);
 
     for (int i = wd.xMin; i <= wd.xMax; i++) {
@@ -240,8 +233,9 @@ void collisionCheck() {
         if (Level::getMap(i, j) == 0) continue;
         if (Level::getMap(i, j) != DASH) {
           Rect blockRect = Rect((MAPHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
-          Rect bulletRect = Rect(bullet[b].pos.x / PIXEL_SCALE + ((bulletSprite.offset & 0xF0) >> 4), bullet[b].pos.y / PIXEL_SCALE + (bulletSprite.offset & 0x0F), bulletSprite.dim & 0x0F, (bulletSprite.dim & 0xF0) >> 4);
-
+          Rect bulletRect = Rect(bullet[b].pos.x / PIXEL_SCALE + (bulletSprite.offset >> 4), 
+                                 bullet[b].pos.y / PIXEL_SCALE + (bulletSprite.offset & 0x0F), 
+                                 bulletSprite.dim & 0x0F, bulletSprite.dim >> 4);
           if (arduboy.collide(bulletRect, blockRect)) {
             bullet[b].active = false;
             bullet[b].pos.x = blockRect.x * PIXEL_SCALE;
@@ -258,11 +252,11 @@ void collisionCheck() {
   }
 }
 
-
 void drawBullets() {
   for (uint8_t i = 0; i < MAX_AMMO; i++) {
     if (bullet[i].active) {
-      Sprites::drawSelfMasked(bullet[i].pos.x / PIXEL_SCALE - cameraOffset, bullet[i].pos.y / PIXEL_SCALE, bulletSprite.spriteR, bullet[i].frame);
+      Sprites::drawSelfMasked(bullet[i].pos.x / PIXEL_SCALE - cameraOffset, bullet[i].pos.y / PIXEL_SCALE, 
+                              bulletSprite.spriteR, bullet[i].frame);
     }
   }
 }

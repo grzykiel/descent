@@ -5,9 +5,9 @@
 #include "bitmaps.h"
 
 #define DAMAGE_COUNTER_FRAMES 60
-#define DAMAGE_COUNTER_HOLD  50
-#define HUD_COUNTER_FRAMES   60
-#define HUD_COUNTER_IFRAMES  30
+#define DAMAGE_COUNTER_HOLD   50
+#define HUD_COUNTER_FRAMES    60
+#define HUD_COUNTER_IFRAMES   30
 
 typedef struct {
   int8_t t;

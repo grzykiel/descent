@@ -70,11 +70,14 @@ void drawTop() {
 
 void drawCombo() {
   if (combo > 99) {
-    Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, player.animation.pos.y / PIXEL_SCALE - 3, combo, 3);
+    Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, 
+                    player.animation.pos.y / PIXEL_SCALE - 3, combo, 3);
   } else if (combo > 9) {
-    Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, player.animation.pos.y / PIXEL_SCALE, combo, 2);
+    Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, 
+                    player.animation.pos.y / PIXEL_SCALE, combo, 2);
   } else if (combo > 4) {
-    Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, player.animation.pos.y / PIXEL_SCALE + 2, combo, 1);
+    Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, 
+                    player.animation.pos.y / PIXEL_SCALE + 2, combo, 1);
   }
 }
 

@@ -15,9 +15,9 @@
 #define LASER         4
 #define MACHINEGUN    5
 
-#define HEART_PROB_INIT 3
-#define UPGRADE_PROB_INIT 5
-#define PROB_MAX 127
+#define HEART_PROB_INIT     3
+#define UPGRADE_PROB_INIT   5
+#define PROB_MAX            127
 
 extern powerup_t powerup[N_POWERUPS];
 

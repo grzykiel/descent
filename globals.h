@@ -19,6 +19,7 @@
 #define SCREENTOP     128
 #define SCREENBOTTOM  0
 #define SCREENMID     64
+#define WALL_OFFSET   2
 #define CEILING       370*128
 
 #define OFFSCREEN 128*128 //32768
@@ -83,9 +84,7 @@ extern ArduboyTones sound;
 extern Sprites sprites;
 
 extern uint8_t gameState;
-
 extern int16_t cameraOffset;
-
 extern uint16_t score;
 
 enum class Direction : uint8_t {
@@ -130,7 +129,7 @@ typedef struct {
   uint8_t *transitions;
 
   uint8_t offset; // dx, dy
-  uint8_t dim; // w, h
+  uint8_t dim;    // w, h
 } sprite_t;
 
 typedef struct {
@@ -184,13 +183,10 @@ collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider);
 
 bool updateAnimation(animation_t *animation);
 bool updateAnimation(particle_t *particle, uint8_t *transitions, uint8_t last);
-// bool flickering(animation_t *animation);
 bool flickering(int8_t *f);
 
 void printNum(uint8_t x, uint8_t y, uint16_t n, uint8_t length);
-//void printNum(...)
 void printText(uint8_t x, uint8_t y, uint8_t *text, uint8_t length);
-// void printLargeText(uint8_t x, uint8_t y, uint8_t *text, uint8_t length);
 
 
 }

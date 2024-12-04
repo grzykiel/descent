@@ -11,6 +11,7 @@
 
 #define HP_CAP 5
 #define HP_INIT 3
+#define N_WALKFRAMES 4
 
 typedef struct {
   animation_t animation;

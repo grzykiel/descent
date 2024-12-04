@@ -6,7 +6,7 @@
 #include "bullet.h"
 #include "powerups.h"
 
-#define MAX_ENEMIES   8
+#define MAX_ENEMIES     8
 
 #define BLOB_MAX_VEL    8
 #define BLOB_RECOIL_VEL -96
@@ -21,12 +21,12 @@
 #define TORTOISE_HP 1
 #define CRAWLER_HP  1
 
-#define CRAWLER_UP    0
-#define CRAWLER_RIGHT 1
-#define CRAWLER_DOWN  2
-#define CRAWLER_LEFT  3
-#define CRAWLER_WIDTH 5
-#define CRAWLER_HEIGHT 4
+#define CRAWLER_UP      0
+#define CRAWLER_RIGHT   1
+#define CRAWLER_DOWN    2
+#define CRAWLER_LEFT    3
+#define CRAWLER_WIDTH   5
+#define CRAWLER_HEIGHT  4
 
 enum class EnemyType : uint8_t {
   blob,
@@ -52,8 +52,6 @@ namespace Enemies {
   void update();
   void draw();
 
-  void updatePosition(enemy_t enemy, position_t *nextPos, velocity_t *nextVel); // TODO remove
-  void checkCollisions(enemy_t enemy, position_t *nextPos, velocity_t *nextVel); // TODO remove
   void checkBulletCollisions(enemy_t *enemy, velocity_t *nextVel);
   bool checkLaserCollisions(Rect laser);
   bool updateSprite(enemy_t *enemy);

@@ -81,9 +81,11 @@ void draw() {
     for (int j = 0; j < MAPWIDTH; j++) {
       if (getMap(i, j)) {
         if (getMap(i, j) == DASH || getMap(i, j) == BLOCK) {
-          Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, getMap(i, j));
+          Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, 
+                                  Tiles::wall, getMap(i, j));
         } else {
-          Sprites::drawOverwrite((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, Tiles::wall, getMap(i, j));
+          Sprites::drawOverwrite((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, 
+                                  Tiles::wall, getMap(i, j));
         }
       }
     }
@@ -103,7 +105,7 @@ void shiftPos(position_t* pos) {
 }
 
 void shiftMap() {
-  shiftPos(&player.animation.pos);  // TODO Player::onShiftMap();
+  shiftPos(&player.animation.pos);
 
   Bullet::onShiftMap();
   Enemies::onShiftMap();
@@ -145,7 +147,6 @@ void shiftMap() {
   }
 }
 
-//TODO out of bounds checking
 void copyRoom(uint8_t from[], uint8_t f, uint8_t to[], uint8_t t) {
   for (uint8_t i = 0; i < ROOMSIZE; i++) {
     to[i + t] = from[i + f];
@@ -209,7 +210,7 @@ void generateDashes() {
   uint8_t y2 = random(0, 3) ? y1 + 2 : y1 + 1;
   uint8_t attempts = 0;
 
-  while (!clearPath(x, y1, y2) && (attempts < 16 * 8)) {  //TODO #define MAX_ATTEMPTS
+  while (!clearPath(x, y1, y2) && (attempts < MAX_ATTEMPTS)) { 
     x = random(1, SCREENHEIGHT - 1);
     y1 = random(0, SCREENHEIGHT - 2);
     y2 = random(0, 3) ? y1 + 2 : y1 + 1;
@@ -300,7 +301,8 @@ void generateFlying() {
 
   if ((random(0, 100) < pbat) && kills > 5) {
     n = 0;
-    while ((getRoom(nextRoom, i, j) || !getRoom(nextRoom, i - 1, j) || getRoom(nextRoom, i - 1, j) == DASH) && (n < 100)) {
+    while ((getRoom(nextRoom, i, j) || !getRoom(nextRoom, i - 1, j) || 
+          getRoom(nextRoom, i - 1, j) == DASH) && (n < 100)) {
       i = random(1, SCREENHEIGHT - 1);
       j = random(0, SCREENWIDTH);
       n++;
@@ -322,7 +324,7 @@ void generateCrawling() {
   uint8_t j = random(0, SCREENWIDTH);
   uint8_t n = 0;
   n = 0;
-  while ((getRoom(nextRoom, i, j) || !getRoom(nextRoom, i + 1, j)) && (n < 100)) {  //TODO CHECK FLOOR
+  while ((getRoom(nextRoom, i, j) || !getRoom(nextRoom, i + 1, j)) && (n < 100)) {
     i = random(0, SCREENHEIGHT);
     j = random(0, SCREENWIDTH);
     n++;
@@ -397,7 +399,7 @@ void onKill() {
 
 void debugDisplay() {
   // Utils::printNum(116, 0, kills, 2);
-  Utils::printNum(110, 0, passageMin, 1);
-  Utils::printNum(110, 8, passageMax, 1);
+  // Utils::printNum(110, 0, passageMin, 1);
+  // Utils::printNum(110, 8, passageMax, 1);
 }
 }

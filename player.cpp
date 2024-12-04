@@ -153,8 +153,9 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
   if (player.animation.iframe != 0) return;
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
     if (!enemy[i].animation.active) continue;
-    Rect enemyRect = Rect(enemy[i].animation.pos.x / PIXEL_SCALE + ((enemy[i].animation.sprite->offset & 0xF0) >> 4), enemy[i].animation.pos.y / PIXEL_SCALE + (enemy[i].animation.sprite->offset & 0x0F), enemy[i].animation.sprite->dim & 0x0F, (enemy[i].animation.sprite->dim & 0xF0) >> 4);
-    // arduboy.drawRect(enemyRect.x - cameraOffset, enemyRect.y, enemyRect.width, enemyRect.height);
+    Rect enemyRect = Rect(enemy[i].animation.pos.x / PIXEL_SCALE + (enemy[i].animation.sprite->offset >> 4), 
+                        enemy[i].animation.pos.y / PIXEL_SCALE + (enemy[i].animation.sprite->offset & 0x0F), 
+                        enemy[i].animation.sprite->dim & 0x0F, enemy[i].animation.sprite->dim >> 4);
     collision_t type = Utils::collisionCorrect(player.animation, nextPos, enemyRect, true, true);
 
     if (type.v == BOTTOM) {
@@ -222,7 +223,6 @@ void jump() {
 }
 
 void bounce() {
-  // player.animation.vel.x = BOUNCE_VELOCITY;
   player.animation.t = 30;
   player.state = PlayerState::bouncing;
   player.animation.sprite = &playerJumpSprite;  //TODO replace with bounce sprite
