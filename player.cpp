@@ -156,7 +156,7 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
     Rect enemyRect = Rect(enemy[i].animation.pos.x / PIXEL_SCALE + (enemy[i].animation.sprite->offset >> 4), 
                         enemy[i].animation.pos.y / PIXEL_SCALE + (enemy[i].animation.sprite->offset & 0x0F), 
                         enemy[i].animation.sprite->dim & 0x0F, enemy[i].animation.sprite->dim >> 4);
-    collision_t type = Utils::collisionCorrect(player.animation, nextPos, enemyRect, true, true);
+    collision_t type = Utils::collisionCorrect(player.animation, nextPos, enemyRect);
 
     if (type.v == BOTTOM) {
       if (enemy[i].type == EnemyType::crawler || enemy[i].type == EnemyType::fallingCrawler) {

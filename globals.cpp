@@ -41,40 +41,46 @@ bool collides(animation_t anim, Rect block) {
 }
 
 bool collides(animation_t anim1, animation_t anim2) {
-  Rect rect1 = Rect(anim1.pos.x / PIXEL_SCALE + (anim1.sprite->offset >> 4), anim1.pos.y / PIXEL_SCALE + (anim1.sprite->offset & 0x0F), anim1.sprite->dim & 0x0F, (anim1.sprite->dim & 0xF0) >> 4);
-  Rect rect2 = Rect(anim2.pos.x / PIXEL_SCALE + (anim2.sprite->offset >> 4), anim2.pos.y / PIXEL_SCALE + (anim2.sprite->offset & 0x0F), anim2.sprite->dim & 0x0F, (anim2.sprite->dim & 0xF0) >> 4);
+  Rect rect1 = Rect(anim1.pos.x / PIXEL_SCALE + (anim1.sprite->offset >> 4), 
+                  anim1.pos.y / PIXEL_SCALE + (anim1.sprite->offset & 0x0F), 
+                  anim1.sprite->dim & 0x0F, anim1.sprite->dim >> 4);
+  Rect rect2 = Rect(anim2.pos.x / PIXEL_SCALE + (anim2.sprite->offset >> 4), 
+                  anim2.pos.y / PIXEL_SCALE + (anim2.sprite->offset & 0x0F), 
+                  anim2.sprite->dim & 0x0F, anim2.sprite->dim >> 4);
   return (arduboy.collide(rect1, rect2));
 }
 
-collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider, bool horizontal, bool vertical) {
-  collision_t type = { NONE, NONE };
+collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider) {
+  // return collisionCorrect(anim, next, collider, 0xFF);
+    collision_t type = { NONE, NONE };
 
-  Rect rect = Rect(anim.pos.x / PIXEL_SCALE + (anim.sprite->offset >> 4), next->y / PIXEL_SCALE + (anim.sprite->offset & 0x0F), anim.sprite->dim & 0x0F, (anim.sprite->dim & 0xF0) >> 4);
+  Rect rect = Rect(anim.pos.x / PIXEL_SCALE + (anim.sprite->offset >> 4), 
+                  next->y / PIXEL_SCALE + (anim.sprite->offset & 0x0F), 
+                  anim.sprite->dim & 0x0F, anim.sprite->dim >> 4);
   if (arduboy.collide(rect, collider)) {
     if (collider.y < anim.pos.y / PIXEL_SCALE + (anim.sprite->offset & 0x0F)) {
       type.h = LEFT;
-      if (horizontal) next->y = (collider.y + collider.height - (anim.sprite->offset & 0x0F)) * PIXEL_SCALE;
+      next->y = (collider.y + collider.height - (anim.sprite->offset & 0x0F)) * PIXEL_SCALE;
     } else if (anim.pos.y / PIXEL_SCALE + (anim.sprite->offset & 0x0F) < collider.y) {
       type.h = RIGHT;
-      if (horizontal) next->y = (collider.y - (anim.sprite->dim >> 4) - (anim.sprite->offset & 0x0F)) * PIXEL_SCALE;
+      next->y = (collider.y - (anim.sprite->dim >> 4) - (anim.sprite->offset & 0x0F)) * PIXEL_SCALE;
     }
   }
 
-  rect = Rect(next->x / PIXEL_SCALE + (anim.sprite->offset >> 4), anim.pos.y / PIXEL_SCALE + (anim.sprite->offset & 0x0F), anim.sprite->dim & 0x0F, (anim.sprite->dim & 0xF0) >> 4);
+  rect = Rect(next->x / PIXEL_SCALE + (anim.sprite->offset >> 4), 
+              anim.pos.y / PIXEL_SCALE + (anim.sprite->offset & 0x0F), 
+              anim.sprite->dim & 0x0F, anim.sprite->dim >> 4);
   if (arduboy.collide(rect, collider)) {
     if (collider.x < anim.pos.x / PIXEL_SCALE + (anim.sprite->offset >> 4)) {
       type.v = BOTTOM;
-      if (vertical) next->x = (collider.x + collider.width - ((anim.sprite->offset & 0xF0) >> 4)) * PIXEL_SCALE;
+      next->x = (collider.x + collider.width - (anim.sprite->offset >> 4)) * PIXEL_SCALE;
     } else if (anim.pos.x / PIXEL_SCALE + (anim.sprite->offset >> 4) < collider.x) {
       type.v = TOP;
-      if (vertical) next->x = (collider.x - (anim.sprite->dim & 0x0F) - (anim.sprite->offset >> 4)) * PIXEL_SCALE;
+      next->x = (collider.x - (anim.sprite->dim & 0x0F) - (anim.sprite->offset >> 4)) * PIXEL_SCALE;
     }
   }
   return type;
-}
 
-collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider) {
-  return collisionCorrect(anim, next, collider, true, true);
 }
 
 bool updateAnimation(animation_t *anim) {

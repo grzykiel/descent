@@ -178,7 +178,6 @@ window_t getCollisionWindow(position_t pos);
 window_t getCollisionWindow(uint16_t x, int16_t y);
 bool collides(animation_t anim, Rect block);
 bool collides(animation_t anim1, animation_t anim2);
-collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider, bool horizontal, bool vertical);
 collision_t collisionCorrect(animation_t anim, position_t *next, Rect collider);
 
 bool updateAnimation(animation_t *animation);
