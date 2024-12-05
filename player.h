@@ -9,43 +9,15 @@
 #include "bullet.h"
 #include "sound.h"
 
-#define HP_CAP 5
-#define HP_INIT 3
+#define HP_INIT      3
+#define HP_CAP       5
 #define N_WALKFRAMES 4
 
 typedef struct {
   animation_t animation;
-
   PlayerState state = PlayerState::falling;
-
   uint8_t hp;
-
 } player_t;
-
-/* typedef struct {
-  animation_t animation = {
-    .active = false,
-    .frame = 0,
-    .t = 0,
-    .x = SCREENMID + 128,
-    .y = 28,
-    .sprite = {
-      .sprite = Player::runRightSprite,
-      .last = null, // change for jumping
-      .transitions = null, // change for jumping
-      .dx = 0,
-      .dy = 1,
-      .w = 6,
-      .h = 8
-    }
-  }
-
-  Direction dir;
-  
-  float vx;
-  float vy;
-
-} player_t */
 
 extern player_t player;
 extern uint8_t combo;

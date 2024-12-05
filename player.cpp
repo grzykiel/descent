@@ -18,6 +18,17 @@ sprite_t playerJumpSprite = {
   0x01,
   0x68
 };
+
+const uint8_t bounceTransitions[4] PROGMEM = {15, 30, 45, 60};
+sprite_t playerBounceSprite = {
+  Player::bounceRightSprite,
+  Player::bounceLeftSprite,
+  3,
+  bounceTransitions,
+  0x01,
+  0x68
+};
+
 player_t player;
 
 constexpr uint8_t walkAnimDelay = 6;
@@ -28,12 +39,13 @@ bool firstLanded;
 
 namespace Player {
 void init() {
+  player.state = PlayerState::falling;
   player.animation.sprite = &playerJumpSprite;
   player.animation.active = true;
   player.animation.frame = FALL_FRAME;
-  player.animation.t = 0;
+  player.animation.t = JUMP_TOP;
   player.animation.iframe = 0;
-  player.animation.pos.x = BLOCKSIZE * PIXEL_SCALE * (MAPHEIGHT + 1);  //SCREENMID + 320;  //TODO #define
+  player.animation.pos.x = BLOCKSIZE * PIXEL_SCALE * (MAPHEIGHT + 1);  
   player.animation.pos.y = 28 * PIXEL_SCALE;                           //TODO #define
   player.animation.vel.x = 0;
   player.animation.vel.y = 0;
@@ -223,15 +235,16 @@ void jump() {
 }
 
 void bounce() {
-  player.animation.t = 30;
   player.state = PlayerState::bouncing;
-  player.animation.sprite = &playerJumpSprite;  //TODO replace with bounce sprite
-  player.animation.frame = 3;
+  player.animation.t = 0;
+  player.animation.frame = 0;
+  player.animation.sprite = &playerBounceSprite;
 }
 
 void thrust(uint8_t multiplier) {
-  player.animation.frame = 3;
-  player.animation.t = 30;
+  player.animation.t = 0;
+  player.animation.frame = 0;
+  player.animation.sprite = &playerBounceSprite;
   player.animation.vel.x = THRUST * multiplier;
 }
 

@@ -10,7 +10,7 @@
 #include "sound.h"
 
 #define MAX_AMMO  20
-#define AMMO_INIT 10 //8
+#define AMMO_INIT 8
 
 #define BULLET_ACCEL_INIT   26  
 #define BULLET_V0           500

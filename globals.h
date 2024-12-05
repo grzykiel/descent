@@ -62,9 +62,9 @@
 #define THRUST            7
 #define BOUNCE_VELOCITY   128
 #define HALF_JUMP         15
-#define JUMP_TOP          25
+#define JUMP_TOP          30
 #define JUMPFRAMES        50
-#define FALL_FRAME        4
+#define FALL_FRAME        3 //4
 #define TERMINAL_VELOCITY -4
 
 #define RUN_ACCEL     64

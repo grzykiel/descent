@@ -1,4 +1,5 @@
 #include "hud.h"
+
 uint8_t comboTimer;
 hud_t empty;
 hud_t damage;
@@ -43,6 +44,9 @@ void draw() {
       Player::resetCombo();
     }
   }
+
+  if (comboTimer == 0) drawCombo();
+
   drawTop();
 }
 
@@ -50,33 +54,31 @@ void drawTop() {
   arduboy.fillRect(122, 0, 6, 64, 0);
 
   if (player.hp > 3) {
-    Utils::printNum(123, 1, player.hp, 1);
-    Sprites::drawSelfMasked(123, -4, HUD::hp, 1);
+    Utils::printNum(123, 45, player.hp, 1);
+    Sprites::drawSelfMasked(123, 41, HUD::hp, 1);
   } else {
-    Sprites::drawSelfMasked(123, 3 * player.hp - 12, HUD::hp, player.hp);
+    Sprites::drawSelfMasked(123, 3 * player.hp + 33, HUD::hp, player.hp);
   }
 
   if (bulletsRemaining > 9) {
-    Utils::printNum(123, 45, bulletsRemaining, 2);
-    Sprites::drawSelfMasked(123, 44, HUD::ammo, 2);
+    Utils::printNum(123, 1, bulletsRemaining, 2);
+    Sprites::drawSelfMasked(123, 0, HUD::ammo, 2);
   } else if (bulletsRemaining > 0) {
-    Sprites::drawSelfMasked(123, 33 + bulletsRemaining, HUD::ammo, bulletsRemaining);
+    Sprites::drawSelfMasked(123, bulletsRemaining - 11, HUD::ammo, bulletsRemaining);
   }
 
   Utils::printNum(123, 20, score, 6);
-
-  if (comboTimer == 0) drawCombo();
 }
 
 void drawCombo() {
   if (combo > 99) {
-    Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, 
+    Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10,
                     player.animation.pos.y / PIXEL_SCALE - 3, combo, 3);
   } else if (combo > 9) {
-    Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, 
+    Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10,
                     player.animation.pos.y / PIXEL_SCALE, combo, 2);
   } else if (combo > 4) {
-    Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10, 
+    Utils::printNum(player.animation.pos.x / PIXEL_SCALE - cameraOffset + 10,
                     player.animation.pos.y / PIXEL_SCALE + 2, combo, 1);
   }
 }
