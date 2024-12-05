@@ -514,7 +514,7 @@ namespace HUD {
 }
 
 namespace Powerups {
-	constexpr unsigned char PROGMEM powerupSprite[] = {
+	constexpr unsigned char PROGMEM upgradeSprite[] = {
 		8, 8,
     // 0 Heart
 		0x10, 0x38, 0x7C, 0x7C, 0x28, 0x00, 0x00, 0x00,

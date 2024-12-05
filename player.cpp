@@ -153,9 +153,9 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
   if (player.animation.iframe != 0) return;
   for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
     if (!enemy[i].animation.active) continue;
-    Rect enemyRect = Rect(enemy[i].animation.pos.x / PIXEL_SCALE + (enemy[i].animation.sprite->offset >> 4), 
-                        enemy[i].animation.pos.y / PIXEL_SCALE + (enemy[i].animation.sprite->offset & 0x0F), 
-                        enemy[i].animation.sprite->dim & 0x0F, enemy[i].animation.sprite->dim >> 4);
+    Rect enemyRect = Rect(enemy[i].animation.pos.x / PIXEL_SCALE + (enemy[i].animation.sprite->offset >> 4),
+                          enemy[i].animation.pos.y / PIXEL_SCALE + (enemy[i].animation.sprite->offset & 0x0F),
+                          enemy[i].animation.sprite->dim & 0x0F, enemy[i].animation.sprite->dim >> 4);
     collision_t type = Utils::collisionCorrect(player.animation, nextPos, enemyRect);
 
     if (type.v == BOTTOM) {
@@ -187,9 +187,9 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
 }
 
 void checkPowerupCollisions(position_t nextPos) {
-  for (uint8_t i = 0; i < N_POWERUPS; i++) {
-    if (!powerup[i].active) continue;
-    Rect pb = Rect(powerup[i].pos.x, powerup[i].pos.y, POWERUP_SIZE, POWERUP_SIZE);
+  for (uint8_t i = 0; i < 2; i++) {
+    if (upgrade[i].type == INACTIVE) continue;
+    Rect pb = Rect(upgrade[i].pos.x, upgrade[i].pos.y, UPGRADE_SIZE, UPGRADE_SIZE);
     if (Utils::collides(player.animation, pb)) {
       onPickup(i);
     }
@@ -278,22 +278,22 @@ void onDamaged() {
   Sound::playNoise(220, 1020, 6);
 }
 
-void onPickup(uint8_t type) {
-  Powerups::collect(type);
-  Sound::playNoise(2000, 4000, 10);
-  if (type == HEART) {
+void onPickup(uint8_t p) {
+  if (upgrade[p].type == HEART) {
     player.hp = min(player.hp + 1, maxHP);
-  } else if (type == HEART_UPGRADE) {
+  } else if (upgrade[p].type == HEART_CONTAINER) {
     maxHP = min(maxHP + 1, HP_CAP);
-  } else if (type == SHOTGUN) {
+  } else if (upgrade[p].type == SHOTGUN) {
     Bullet::setActiveGun(GunType::shot);
-  } else if (type == LASER) {
+  } else if (upgrade[p].type == LASER) {
     Bullet::setActiveGun(GunType::laser);
-  } else if (type == MACHINEGUN) {
+  } else if (upgrade[p].type == MACHINEGUN) {
     Bullet::setActiveGun(GunType::machine);
-  } else if (type == AMMO_UPGRADE) {
+  } else if (upgrade[p].type == AMMO_CONTAINER) {
     Bullet::increaseCap();
   }
+  Powerups::collect(p);
+  Sound::playNoise(2000, 4000, 10);
 }
 
 void increaseCombo() {

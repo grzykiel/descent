@@ -40,8 +40,7 @@
 #define PLAYER_HEIGHT 8
 #define PLAYER_OFFSET 1  //sprite offset
 
-#define POWERUP_SIZE  8
-#define N_POWERUPS    6
+#define UPGRADE_SIZE  8
 
 // special tile indices
 #define DASH  4 //17
@@ -162,6 +161,11 @@ typedef struct {
   bool active;
   position_t pos;
 } powerup_t;
+
+typedef struct {
+  uint8_t type;
+  position_t pos;
+} upgrade_t;
 
 typedef struct {
   uint8_t xMin;

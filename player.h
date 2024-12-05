@@ -76,7 +76,7 @@ namespace Player {
   void checkPowerupCollisions(position_t nextPos);
 
   void onDamaged(); 
-  void onPickup(uint8_t type);
+  void onPickup(uint8_t p);
 
   void resetCombo();
   void increaseCombo();

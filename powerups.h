@@ -8,18 +8,23 @@
 
 #define N_POWERUPS 6
 
-#define HEART         0
-#define HEART_UPGRADE 1
-#define AMMO_UPGRADE  2
-#define SHOTGUN       3
-#define LASER         4
-#define MACHINEGUN    5
+#define HEALTH_UPGRADE  0
+#define WEAPON_UPGRADE  1
 
-#define HEART_PROB_INIT     3
-#define UPGRADE_PROB_INIT   5
+
+#define HEART           0
+#define HEART_CONTAINER 1
+#define AMMO_CONTAINER  2
+#define SHOTGUN         3
+#define LASER           4
+#define MACHINEGUN      5
+#define INACTIVE        6
+
+#define HEART_PROB_INIT     5
+#define UPGRADE_PROB_INIT   10
 #define PROB_MAX            127
 
-extern powerup_t powerup[N_POWERUPS];
+extern upgrade_t upgrade[2];
 
 namespace Powerups {
 void init();
