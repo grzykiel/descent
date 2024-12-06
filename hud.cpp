@@ -4,12 +4,15 @@ uint8_t comboTimer;
 hud_t empty;
 hud_t damage;
 
+uint16_t displayScore;
+
 namespace HUD {
 
 void init() {
   comboTimer = 0;
   empty.t = 0;
   damage.t = 0;
+  displayScore = 0;
 }
 
 void update() {
@@ -67,7 +70,8 @@ void drawTop() {
     Sprites::drawSelfMasked(123, bulletsRemaining - 11, HUD::ammo, bulletsRemaining);
   }
 
-  Utils::printNum(123, 20, score, 6);
+  if (displayScore < score) displayScore += SCORE_MULTIPLIER;
+  Utils::printNum(123, 20, displayScore, 6);
 }
 
 void drawCombo() {

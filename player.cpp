@@ -19,7 +19,7 @@ sprite_t playerJumpSprite = {
   0x68
 };
 
-const uint8_t bounceTransitions[4] PROGMEM = {15, 30, 45, 60};
+const uint8_t bounceTransitions[4] PROGMEM = { 15, 30, 45, 60 };
 sprite_t playerBounceSprite = {
   Player::bounceRightSprite,
   Player::bounceLeftSprite,
@@ -45,8 +45,8 @@ void init() {
   player.animation.frame = FALL_FRAME;
   player.animation.t = JUMP_TOP;
   player.animation.iframe = 0;
-  player.animation.pos.x = BLOCKSIZE * PIXEL_SCALE * (MAPHEIGHT + 1);  
-  player.animation.pos.y = 28 * PIXEL_SCALE;                           //TODO #define
+  player.animation.pos.x = BLOCKSIZE * PIXEL_SCALE * (MAPHEIGHT + 1);
+  player.animation.pos.y = PLAYER_START_Y * PIXEL_SCALE;  
   player.animation.vel.x = 0;
   player.animation.vel.y = 0;
   player.animation.dir = Direction::right;
@@ -82,7 +82,6 @@ void update() {
   //adjust for collisions
   checkEnemyCollisions(&nextPos, &nextVel);
   checkTileCollisions(&nextPos, &nextVel);
-
 
   //Boundary check
   if (nextPos.y / PIXEL_SCALE <= SCREENLEFT - (player.animation.sprite->offset & 0x0F)) {
@@ -307,6 +306,7 @@ void onPickup(uint8_t p) {
   }
   Powerups::collect(p);
   Sound::playNoise(2000, 4000, 10);
+  score += 5 * SCORE_MULTIPLIER;
 }
 
 void increaseCombo() {
@@ -322,6 +322,7 @@ void onComboEnd() {
   } else if (combo > 20) {
     increasePower(3);
   }
+  score += combo * SCORE_MULTIPLIER;
 }
 
 void resetCombo() {

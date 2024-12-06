@@ -436,7 +436,7 @@ bool checkLaserCollisions(Rect laser) {
 }
 
 void kill(enemy_t *enemy, bool shot) {
-  score += enemy->hp * 10;
+  score += enemy->hp * SCORE_MULTIPLIER;
   enemy->animation.active = false;
   if (shot) {
     Particles::spawnExplosion(enemy->animation.pos,
@@ -454,7 +454,9 @@ void kill(enemy_t *enemy, bool shot) {
 
   if (enemy->type == EnemyType::blob) {
     Level::increaseBatProbability();
-  } else if (enemy->type == EnemyType::tortoise || enemy->type == EnemyType::worm) {
+  } else if (enemy->type == EnemyType::worm) {
+    Level::increaseTortoiseProbability();
+  } else if (enemy->type == EnemyType::tortoise) {
     Level::increaseCrawlerProbability();
   }
   Level::onKill();

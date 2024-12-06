@@ -51,6 +51,7 @@ void update() {
     deathTimer--;
     if (deathTimer == 0) {
       gameState = STATE_GAMEOVER;
+      arduboy.setFrameRate(FPS);
     }
     return;
   }

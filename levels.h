@@ -18,7 +18,9 @@
 #define PBAT_INIT             20
 #define PBAT_MAX              80
 #define PCRAWLER_INIT         0
-#define PCRAWLER_MAX          50
+#define PCRAWLER_MAX          80
+#define PTORTOISE_INIT        0
+#define PTORTOISE_MAX         60
 #define MAX_ENEMIES_PER_ROOM  5
 #define ENEMY_INCR_FREQ       5
 
@@ -48,9 +50,10 @@ namespace Level
   void writeMap(int16_t i, uint8_t j, uint8_t tile);
   void writeRoom(uint8_t room[], int16_t i, uint8_t j, uint8_t tile);
   void increaseBatProbability();
+  void increaseTortoiseProbability();
   void increaseCrawlerProbability();
   void onKill();
-  void debugDisplay();
+  void debugDisplay(); //TODO REMOVE
 }
 
 #endif

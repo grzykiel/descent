@@ -22,6 +22,7 @@ uint8_t dashes;
 uint8_t roomsGenerated;
 uint8_t pbat;
 uint8_t pcrawler;
+uint8_t ptortoise;
 uint16_t kills;
 uint8_t blocksDestroyed;
 
@@ -62,6 +63,7 @@ void init() {
   enemiesMax = 1;
   dashes = 0x02;
   pbat = PBAT_INIT;
+  ptortoise = PTORTOISE_INIT;
   pcrawler = PCRAWLER_INIT;
   roomsGenerated = 0;
   kills = 0;
@@ -81,11 +83,11 @@ void draw() {
     for (int j = 0; j < MAPWIDTH; j++) {
       if (getMap(i, j)) {
         if (getMap(i, j) == DASH || getMap(i, j) == BLOCK) {
-          Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, 
+          Sprites::drawSelfMasked((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE,
                                   Tiles::wall, getMap(i, j));
         } else {
-          Sprites::drawOverwrite((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE, 
-                                  Tiles::wall, getMap(i, j));
+          Sprites::drawOverwrite((MAPHEIGHT - i - 1) * BLOCKSIZE - cameraOffset, j * BLOCKSIZE,
+                                 Tiles::wall, getMap(i, j));
         }
       }
     }
@@ -210,7 +212,7 @@ void generateDashes() {
   uint8_t y2 = random(0, 3) ? y1 + 2 : y1 + 1;
   uint8_t attempts = 0;
 
-  while (!clearPath(x, y1, y2) && (attempts < MAX_ATTEMPTS)) { 
+  while (!clearPath(x, y1, y2) && (attempts < MAX_ATTEMPTS)) {
     x = random(1, SCREENHEIGHT - 1);
     y1 = random(0, SCREENHEIGHT - 2);
     y2 = random(0, 3) ? y1 + 2 : y1 + 1;
@@ -301,8 +303,7 @@ void generateFlying() {
 
   if ((random(0, 100) < pbat) && kills > 5) {
     n = 0;
-    while ((getRoom(nextRoom, i, j) || !getRoom(nextRoom, i - 1, j) || 
-          getRoom(nextRoom, i - 1, j) == DASH) && (n < 100)) {
+    while ((getRoom(nextRoom, i, j) || !getRoom(nextRoom, i - 1, j) || getRoom(nextRoom, i - 1, j) == DASH) && (n < 100)) {
       i = random(1, SCREENHEIGHT - 1);
       j = random(0, SCREENWIDTH);
       n++;
@@ -333,10 +334,10 @@ void generateCrawling() {
     if (random(0, 100) < pcrawler) {
       Enemies::spawn(EnemyType::crawler, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
     } else {
-      if (random(0, 2)) {
-        Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
-      } else {
+      if (random(0, 100) < ptortoise) {
         Enemies::spawn(EnemyType::tortoise, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+      } else {
+        Enemies::spawn(EnemyType::worm, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
       }
     }
   }
@@ -348,6 +349,10 @@ void increaseBatProbability() {
 
 void increaseCrawlerProbability() {
   pcrawler = min(pcrawler + 1, PCRAWLER_MAX);
+}
+
+void increaseTortoiseProbability() {
+  ptortoise = min(ptortoise + 5, PTORTOISE_MAX);
 }
 
 void destroyBlock(int16_t i, uint8_t j) {
@@ -397,6 +402,7 @@ void onKill() {
   }
 }
 
+// TODO REMOVE
 void debugDisplay() {
   // Utils::printNum(116, 0, kills, 2);
   // Utils::printNum(110, 0, passageMin, 1);

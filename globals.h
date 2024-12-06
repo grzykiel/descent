@@ -22,7 +22,8 @@
 #define WALL_OFFSET   2
 #define CEILING       370*128
 
-#define OFFSCREEN 128*128 //32768
+#define OFFSCREEN 128*128
+#define PIXEL_SCALE 128
 
 #define MAPWIDTH  8
 #define MAPHEIGHT 48
@@ -36,15 +37,12 @@
 #define SCREENHEIGHT 16
 
 #define BLOCKSIZE     8
-#define PLAYER_WIDTH  6
-#define PLAYER_HEIGHT 8
-#define PLAYER_OFFSET 1  //sprite offset
 
 #define UPGRADE_SIZE  8
 
 // special tile indices
-#define DASH  4 //17
-#define BLOCK 1 //18 
+#define DASH  4
+#define BLOCK 1 
 
 #define DASH_OFFSET 5
 #define DASH_HEIGHT 3
@@ -56,27 +54,12 @@
 #define BOTTOM  1
 #define TOP     2
 
-// Jump
 #define GRAVITY           -7
-#define JUMP_VELOCITY     246
-#define THRUST            7
-#define BOUNCE_VELOCITY   128
-#define HALF_JUMP         15
-#define JUMP_TOP          30
-#define JUMPFRAMES        50
-#define FALL_FRAME        3
 #define TERMINAL_VELOCITY -4
 
-#define RUN_ACCEL     64
-#define RUN_VELOCITY  128
-
-#define KICKBACK_H 384
-#define KICKBACK_V 64
-
-#define PLAYER_IFRAMES    90
 #define FLICKER_DURATION  5
 
-#define PIXEL_SCALE 128
+#define SCORE_MULTIPLIER  10
 
 extern Arduboy2Base arduboy;
 extern ArduboyTones sound;

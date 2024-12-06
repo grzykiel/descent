@@ -11,6 +11,8 @@ const uint8_t blocksHeight[] PROGMEM = { 3, 3, 6, 6, 12, 6, 3, 3, 6, 9 };
 const uint8_t startText[] PROGMEM = {10, 36, 28, 29, 10, 27, 29};
 const uint8_t soundText[] PROGMEM = {11, 36, 28, 24, 30, 23, 13};
 
+uint16_t displayScore = 0;
+
 void loop() {
   if (gameState == STATE_GAMEOVER) {
     gameOver();
@@ -49,14 +51,16 @@ void draw() {
 }
 
 void gameOver() {
+  Sprites::drawSelfMasked(72, 18, Fonts::GameOver, 0);
+  Sprites::drawSelfMasked(65, 18, Fonts::GameOver, 1);
+  Utils::printNum(59, 19, displayScore, 7);
+  if (displayScore < score) displayScore+=10;
+  
   if (arduboy.justPressed(A_BUTTON)) {
     Game::init();
     gameState = STATE_GAME;
+    displayScore = 0;
   }
 
-  Sprites::drawSelfMasked(96, 18, Fonts::GameOver, 0);
-  Sprites::drawSelfMasked(89, 18, Fonts::GameOver, 1);
-
-  Utils::printNum(83, 19, score, 7); 
 }
 }

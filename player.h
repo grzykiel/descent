@@ -9,17 +9,20 @@
 #include "bullet.h"
 #include "sound.h"
 
+#define PLAYER_WIDTH  6
+#define PLAYER_HEIGHT 8
+#define PLAYER_OFFSET 1
+
 #define HP_INIT      3
 #define HP_CAP       5
-#define N_WALKFRAMES 4
 
+#define N_WALKFRAMES  4
 #define RUN_ACCEL     64
 #define RUN_VELOCITY  128
 
-#define KICKBACK_H 384
-#define KICKBACK_V 64
-
-#define PLAYER_IFRAMES    90
+#define KICKBACK_H      384
+#define KICKBACK_V      64
+#define PLAYER_IFRAMES  90
 
 #define JUMP_VELOCITY     246
 #define THRUST            7
@@ -28,6 +31,7 @@
 #define JUMP_TOP          25
 #define JUMPFRAMES        50
 #define FALL_FRAME        4
+#define PLAYER_START_Y    28
 
 
 typedef struct {
