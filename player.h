@@ -13,6 +13,23 @@
 #define HP_CAP       5
 #define N_WALKFRAMES 4
 
+#define RUN_ACCEL     64
+#define RUN_VELOCITY  128
+
+#define KICKBACK_H 384
+#define KICKBACK_V 64
+
+#define PLAYER_IFRAMES    90
+
+#define JUMP_VELOCITY     246
+#define THRUST            7
+#define BOUNCE_VELOCITY   128
+#define HALF_JUMP         15
+#define JUMP_TOP          25
+#define JUMPFRAMES        50
+#define FALL_FRAME        4
+
+
 typedef struct {
   animation_t animation;
   PlayerState state = PlayerState::falling;
