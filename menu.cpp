@@ -59,7 +59,7 @@ void gameOver() {
     sound.tone(880, 10);
   }
 
-  if (arduboy.justPressed(A_BUTTON)) {
+  if (arduboy.justPressed(A_BUTTON | B_BUTTON | up_btn | down_btn)) {
     Game::init();
     gameState = STATE_GAME;
     displayScore = 0;
