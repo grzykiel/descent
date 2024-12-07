@@ -46,7 +46,7 @@ void init() {
   player.animation.t = JUMP_TOP;
   player.animation.iframe = 0;
   player.animation.pos.x = BLOCKSIZE * PIXEL_SCALE * (MAPHEIGHT + 1);
-  player.animation.pos.y = PLAYER_START_Y * PIXEL_SCALE;  
+  player.animation.pos.y = PLAYER_START_Y * PIXEL_SCALE;
   player.animation.vel.x = 0;
   player.animation.vel.y = 0;
   player.animation.dir = Direction::right;
@@ -179,7 +179,6 @@ void checkEnemyCollisions(position_t *nextPos, velocity_t *nextVel) {
         Bullet::reload();
         Enemies::kill(&enemy[i], false);
         increaseCombo();
-        continue;
       }
     } else if (type.v == TOP) {
       nextVel->x = -KICKBACK_V;
@@ -315,6 +314,7 @@ void increaseCombo() {
 }
 
 void onComboEnd() {
+  if (combo <= 5) return;
   if (combo > 5) {
     increasePower(1);
   } else if (combo > 10) {
@@ -323,6 +323,7 @@ void onComboEnd() {
     increasePower(3);
   }
   score += combo * SCORE_MULTIPLIER;
+  Sound::playNoise(2000, 4000, 10);
 }
 
 void resetCombo() {

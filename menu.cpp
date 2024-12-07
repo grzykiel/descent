@@ -3,10 +3,10 @@
 namespace Menu {
 const uint8_t titleX[] PROGMEM = { 97, 94, 92, 91, 92, 94, 97 };
 const uint8_t titleFrames[] PROGMEM = { 0, 1, 2, 3, 1, 4, 5 };
-const uint8_t blocksX[] PROGMEM = { 47, 47, 50, 50, 53, 59, 59, 59, 62, 65 };
-const uint8_t blocksY[] PROGMEM = { 21, 33, 21, 33, 27, 21, 30, 36, 39, 27 };
-const uint8_t blocksWidth[] PROGMEM = { 3, 3, 3, 3, 6, 3, 6, 6, 3, 3 };
-const uint8_t blocksHeight[] PROGMEM = { 3, 3, 6, 6, 12, 6, 3, 3, 6, 9 };
+const uint8_t blocksX[] PROGMEM = { 47, 47, 50, 59, 59, 59, 62, 65 };
+const uint8_t blocksY[] PROGMEM = { 24, 33, 27, 21, 30, 36, 42, 27 };
+const uint8_t blocksWidth[] PROGMEM = { 6, 3, 9, 3, 6, 6, 3, 3 };
+const uint8_t blocksHeight[] PROGMEM = { 3, 3, 12, 3, 3, 3, 3, 9 };
 
 const uint8_t startText[] PROGMEM = {10, 36, 28, 29, 10, 27, 29};
 const uint8_t soundText[] PROGMEM = {11, 36, 28, 24, 30, 23, 13};
@@ -38,7 +38,7 @@ void draw() {
                             uint8_t)pgm_read_word(&titleFrames[i]));
   }
 
-  for (uint8_t i = 0; i < 10; i++) {
+  for (uint8_t i = 0; i < 8; i++) {
     arduboy.fillRect((uint8_t)pgm_read_word(&blocksX[i]), (uint8_t)pgm_read_word(&blocksY[i]), 
                     (uint8_t)pgm_read_word(&blocksWidth[i]), (uint8_t)pgm_read_word(&blocksHeight[i]));
   }
@@ -54,8 +54,11 @@ void gameOver() {
   Sprites::drawSelfMasked(72, 18, Fonts::GameOver, 0);
   Sprites::drawSelfMasked(65, 18, Fonts::GameOver, 1);
   Utils::printNum(59, 19, displayScore, 7);
-  if (displayScore < score) displayScore+=10;
-  
+  if (displayScore < score) {
+    displayScore+=10;
+    sound.tone(880, 10);
+  }
+
   if (arduboy.justPressed(A_BUTTON)) {
     Game::init();
     gameState = STATE_GAME;

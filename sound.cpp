@@ -50,8 +50,7 @@ namespace Sound {
 
   void playTone(uint16_t tone, uint8_t frames) {
     soundType = TONE;
-    sound.tone(tone);
-    framesLeft = frames;
+    sound.tone(tone, (frames*1024)/FPS);
   }
 
   void playNoise(uint16_t low, uint16_t high, uint8_t frames) {

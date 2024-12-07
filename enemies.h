@@ -11,7 +11,7 @@
 #define BLOB_MAX_VEL    8
 #define BLOB_RECOIL_VEL -96
 #define BAT_VEL         32
-#define CRAWLER_VEL     16
+#define CRAWLER_VEL     24
 #define WORM_VEL        1 //pixels moved on animation update
 #define TORTOISE_VEL    2 // """
 

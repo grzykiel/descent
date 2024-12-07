@@ -57,11 +57,11 @@ void init() {
     levelMap[44 * 4 + i] = startRoom[i];
   }
 
-  passageMin = 5;
-  passageMax = 8;
-  enemiesMin = 1;
-  enemiesMax = 1;
-  dashes = 0x02;
+  passageMin = PASSAGE_MIN_INIT;
+  passageMax = PASSAGE_MAX_INIT;
+  enemiesMin = ENEMIES_INIT;
+  enemiesMax = ENEMIES_INIT;
+  dashes = DASHES_INIT;
   pbat = PBAT_INIT;
   ptortoise = PTORTOISE_INIT;
   pcrawler = PCRAWLER_INIT;

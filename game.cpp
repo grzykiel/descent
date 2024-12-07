@@ -30,7 +30,7 @@ void input() {
     Player::stop();
   }
 
-  if (arduboy.justPressed(A_BUTTON)) {
+  if (arduboy.justPressed(A_BUTTON | up_btn | down_btn)) {
     if (player.state != PlayerState::grounded) {
       shootTimer = 0;
       Bullet::shoot();
@@ -38,9 +38,9 @@ void input() {
       Player::jump();
       triggerReleased = false;
     }
-  } else if (arduboy.pressed(A_BUTTON) && player.state != PlayerState::grounded && activeGun != GunType::laser && activeGun != GunType::shot) {
+  } else if (arduboy.anyPressed(A_BUTTON | up_btn | down_btn) && player.state != PlayerState::grounded && activeGun != GunType::laser && activeGun != GunType::shot) {
     if (triggerReleased) Bullet::shoot();
-  } else if (arduboy.justReleased(A_BUTTON)) {
+  } else if (arduboy.justReleased(A_BUTTON) || arduboy.justReleased(up_btn) || arduboy.justReleased(down_btn)) {
     triggerReleased = true;
     shootTimer = fireRate;
   }

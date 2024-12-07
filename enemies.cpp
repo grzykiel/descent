@@ -1,7 +1,7 @@
 #include "enemies.h"
 
 constexpr uint8_t blobTransitions[2] PROGMEM = { 45, 90 };
-constexpr uint8_t batTransitions[2] PROGMEM = { 15, 30 };
+constexpr uint8_t batTransitions[2] PROGMEM = { 10, 20 };
 constexpr uint8_t wormTransitions[2] PROGMEM = { 10, 20 };
 constexpr uint8_t tortoiseTransitions[2] PROGMEM = { 60, 120 };
 

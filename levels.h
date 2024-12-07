@@ -10,11 +10,13 @@
 #include "powerups.h"
 
 #define PASSAGE_MIN       2
-#define DASH_MIN          0
-#define DASH_MAX          8
+#define PASSAGE_MIN_INIT  5
+#define PASSAGE_MAX_INIT  8
+#define DASHES_INIT       0x03
 #define BLOCKS_MAX        4
 #define ROOM_SHRINK_FREQ  4
 
+#define ENEMIES_INIT          1
 #define PBAT_INIT             20
 #define PBAT_MAX              80
 #define PCRAWLER_INIT         0
