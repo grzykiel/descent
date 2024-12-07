@@ -210,14 +210,15 @@ void generateDashes() {
   uint8_t x = random(1, SCREENHEIGHT - 1);
   uint8_t y1 = random(0, SCREENWIDTH - 2);
   uint8_t y2 = random(0, 3) ? y1 + 2 : y1 + 1;
-  uint8_t attempts = 0;
+  uint8_t n = 0;
 
   while (!clearPath(x, y1, y2) && (attempts < MAX_ATTEMPTS)) {
     x = random(1, SCREENHEIGHT - 1);
     y1 = random(0, SCREENHEIGHT - 2);
     y2 = random(0, 3) ? y1 + 2 : y1 + 1;
-    attempts++;
+    n++;
   }
+  if (n == MAX_ATTEMPTS) return;
 
   for (uint8_t i = y1; i < y2; i++) {
     if (!getRoom(nextRoom, x, i)) writeRoom(nextRoom, x, i, DASH);
@@ -303,20 +304,20 @@ void generateFlying() {
 
   if ((random(0, 100) < pbat) && kills > 5) {
     n = 0;
-    while ((getRoom(nextRoom, i, j) || !getRoom(nextRoom, i - 1, j) || getRoom(nextRoom, i - 1, j) == DASH) && (n < 100)) {
+    while ((getRoom(nextRoom, i, j) || !getRoom(nextRoom, i - 1, j) || getRoom(nextRoom, i - 1, j) == DASH) && (n < MAX_ATTEMPTS)) {
       i = random(1, SCREENHEIGHT - 1);
       j = random(0, SCREENWIDTH);
       n++;
     }
-    if (n < 100) Enemies::spawn(EnemyType::hangingBat, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+    if (n < MAX_ATTEMPTS) Enemies::spawn(EnemyType::hangingBat, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
   } else {
     n = 0;
-    while ((getRoom(nextRoom, i, j)) && (n < 100)) {
+    while ((getRoom(nextRoom, i, j)) && (n < MAX_ATTEMPTS)) {
       i = random(0, SCREENHEIGHT);
       j = random(0, SCREENWIDTH);
       n++;
     }
-    if (n < 100) Enemies::spawn(EnemyType::blob, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
+    if (n < MAX_ATTEMPTS) Enemies::spawn(EnemyType::blob, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
   }
 }
 
@@ -325,12 +326,12 @@ void generateCrawling() {
   uint8_t j = random(0, SCREENWIDTH);
   uint8_t n = 0;
   n = 0;
-  while ((getRoom(nextRoom, i, j) || !getRoom(nextRoom, i + 1, j)) && (n < 100)) {
+  while ((getRoom(nextRoom, i, j) || !getRoom(nextRoom, i + 1, j)) && (n < MAX_ATTEMPTS)) {
     i = random(0, SCREENHEIGHT);
     j = random(0, SCREENWIDTH);
     n++;
   }
-  if (n < 100) {
+  if (n < MAX_ATTEMPTS) {
     if (random(0, 100) < pcrawler) {
       Enemies::spawn(EnemyType::crawler, (SCREENHEIGHT - i - 1) * BLOCKSIZE, j * BLOCKSIZE);
     } else {
