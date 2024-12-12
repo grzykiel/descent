@@ -29,9 +29,9 @@ void loop() {
 }
 
 void stateLoop() {
-  if (gameState == STATE_MENU || gameState == STATE_GAMEOVER) {
+  if (gameState == STATE_MENU || gameState == STATE_GAMEOVER || gameState == STATE_PAUSED) {
     Menu::loop();
   } else if (gameState == STATE_GAME || gameState == STATE_DEATH) {
     Game::loop();
-  }
+  } 
 }

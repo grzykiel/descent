@@ -212,7 +212,7 @@ void generateDashes() {
   uint8_t y2 = random(0, 3) ? y1 + 2 : y1 + 1;
   uint8_t n = 0;
 
-  while (!clearPath(x, y1, y2) && (attempts < MAX_ATTEMPTS)) {
+  while (!clearPath(x, y1, y2) && (n < MAX_ATTEMPTS)) {
     x = random(1, SCREENHEIGHT - 1);
     y1 = random(0, SCREENHEIGHT - 2);
     y2 = random(0, 3) ? y1 + 2 : y1 + 1;

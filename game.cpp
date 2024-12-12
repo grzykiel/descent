@@ -44,6 +44,10 @@ void input() {
     triggerReleased = true;
     shootTimer = fireRate;
   }
+
+  if (arduboy.justPressed(B_BUTTON)) {
+    gameState = STATE_PAUSED;
+  }
 }
 
 void update() {

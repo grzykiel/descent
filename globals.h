@@ -12,7 +12,7 @@
 #define STATE_GAME      1
 #define STATE_DEATH     2
 #define STATE_GAMEOVER  3
-#define STATE_SANDBOX   4
+#define STATE_PAUSED    4
 
 #define SCREENLEFT    0
 #define SCREENRIGHT   64
