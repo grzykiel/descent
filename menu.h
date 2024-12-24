@@ -3,6 +3,7 @@
 #include "globals.h"
 #include "player.h"
 #include "levels.h"
+#include "score.h"
 #endif
 
 namespace Menu

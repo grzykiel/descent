@@ -19,6 +19,7 @@ void init() {
   Powerups::init();
   HUD::init();
   Sound::init();
+  Score::init();
 }
 
 void input() {

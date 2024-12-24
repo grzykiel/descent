@@ -8,9 +8,11 @@ const uint8_t blocksY[] PROGMEM = { 24, 33, 27, 21, 30, 36, 42, 27 };
 const uint8_t blocksWidth[] PROGMEM = { 6, 3, 9, 3, 6, 6, 3, 3 };
 const uint8_t blocksHeight[] PROGMEM = { 3, 3, 12, 3, 3, 3, 3, 9 };
 
-const uint8_t startText[] PROGMEM = { 10, 36, 28, 29, 10, 27, 29 };
-const uint8_t soundText[] PROGMEM = { 11, 36, 28, 24, 30, 23, 13 };
-const uint8_t pausedText[] PROGMEM = { 25, 10, 30, 28, 14, 13 };
+const uint8_t startText[] PROGMEM = { A, COLN, S, T, A, R, T };
+const uint8_t soundText[] PROGMEM = { B, COLN, S, O, U, N, D };
+const uint8_t pausedText[] PROGMEM = { P, A, U, S, E, D };
+const uint8_t highText[] PROGMEM = { H, I, G, H };
+const uint8_t scoreText[] PROGMEM = { S, C, O, R, E };
 
 uint16_t displayScore = 0;
 
@@ -45,8 +47,8 @@ void draw() {
                      (uint8_t)pgm_read_word(&blocksWidth[i]), (uint8_t)pgm_read_word(&blocksHeight[i]));
   }
 
-  Utils::printText(8, 10, startText, 7);
-  Utils::printText(1, 10, soundText, 7);
+  Utils::printText(8, 15, startText, 7);
+  Utils::printText(1, 15, soundText, 7);
   if (arduboy.audio.enabled()) {
     sprites.drawSelfMasked(1, 46, Fonts::font_5x4, 10);
   }
@@ -56,12 +58,17 @@ void gameOver() {
   Sprites::drawSelfMasked(72, 18, Fonts::GameOver, 0);
   Sprites::drawSelfMasked(65, 18, Fonts::GameOver, 1);
   Utils::printNum(59, 19, displayScore, 7);
-  if (displayScore < score) {
+  if (displayScore < Score::getScore()) {
     displayScore += 10;
     sound.tone(880, 10);
   }
 
+  Utils::printText(51, 25, highText, 4);
+  Utils::printText(46, 23, scoreText, 5);
+  Utils::printNum(41, 19, Score::getHighscore(), 7);
+
   if (arduboy.justPressed(A_BUTTON | B_BUTTON | up_btn | down_btn)) {
+    Score::updateHighscore();
     Game::init();
     gameState = STATE_GAME;
     displayScore = 0;

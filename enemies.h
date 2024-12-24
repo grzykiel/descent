@@ -5,6 +5,7 @@
 #include "player.h"
 #include "bullet.h"
 #include "powerups.h"
+#include "score.h"
 
 #define MAX_ENEMIES     10
 

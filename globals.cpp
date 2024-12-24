@@ -8,8 +8,6 @@ uint8_t gameState = STATE_MENU;
 
 int16_t cameraOffset = 0;
 
-uint16_t score;
-
 namespace Utils {
 
 int trim(int p, int l, int h) {
@@ -140,7 +138,7 @@ void printNum(uint8_t x, uint8_t y, uint16_t n, uint8_t length) {
 void printText(uint8_t x, uint8_t y, uint8_t *text, uint8_t length) {
   for (uint8_t i = 0; i < length; i++) {
     Sprites::drawSelfMasked(x, y, Fonts::font_4x4, pgm_read_word(&text[i]));
-    y += 5;
+    y += 4;
   }
 }
 

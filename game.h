@@ -10,6 +10,7 @@
 #include "enemies.h"
 #include "bitmaps.h"
 #include "powerups.h"
+#include "score.h"
 
 namespace Game {
   void loop();

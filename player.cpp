@@ -55,7 +55,6 @@ void init() {
 
   combo = 0;
   power = 0;
-  score = 0;
   firstLanded = false;
 }
 
@@ -233,6 +232,7 @@ void jump() {
 }
 
 void bounce() {
+  onFirstLanding();
   player.state = PlayerState::bouncing;
   player.animation.t = 0;
   player.animation.frame = 0;
@@ -255,12 +255,15 @@ void fall() {
   player.animation.frame = FALL_FRAME;
 }
 
-void land() {
+void onFirstLanding() {
   if (!firstLanded) {
     firstLanded = true;
     Sound::playIntro();
   }
+}
 
+void land() {
+  onFirstLanding();
   player.state = PlayerState::grounded;
   player.animation.sprite = &playerRunSprite;
   triggerReleased = false;
@@ -305,7 +308,7 @@ void onPickup(uint8_t p) {
   }
   Powerups::collect(p);
   Sound::playNoise(2000, 4000, 10);
-  score += 5 * SCORE_MULTIPLIER;
+  Score::increaseScore(5);
 }
 
 void increaseCombo() {
@@ -322,7 +325,7 @@ void onComboEnd() {
   } else if (combo > 20) {
     increasePower(3);
   }
-  score += combo * SCORE_MULTIPLIER;
+  Score::increaseScore(combo);
   Sound::playNoise(2000, 4000, 10);
 }
 

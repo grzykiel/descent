@@ -49,11 +49,13 @@ namespace Sound {
   }
 
   void playTone(uint16_t tone, uint8_t frames) {
+    if (sound.playing()) return;
     soundType = TONE;
     sound.tone(tone, (frames*1024)/FPS);
   }
 
   void playNoise(uint16_t low, uint16_t high, uint8_t frames) {
+    if (sound.playing()) return;
     soundType = NOISE;
     tone1 = low;
     tone2 = high;
@@ -61,6 +63,7 @@ namespace Sound {
   }
 
   void playSweep(uint16_t start, uint16_t end, uint8_t frames) {
+    if (sound.playing()) return;
     soundType = SWEEP;
     tone1 = start;
     tone2 = end;

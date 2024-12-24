@@ -20,7 +20,7 @@
 #define MACHINEGUN      5
 #define INACTIVE        6
 
-#define HEART_PROB_INIT     5
+#define HEART_PROB_INIT     3
 #define UPGRADE_PROB_INIT   10
 #define PROB_MAX            127
 

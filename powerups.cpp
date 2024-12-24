@@ -43,7 +43,7 @@ void spawnHeart(uint16_t x, uint8_t y) {
     upgrade[HEALTH_UPGRADE].type = random(0, 2) ? HEART : HEART_CONTAINER;
     upgrade[HEALTH_UPGRADE].pos.x = x;
     upgrade[HEALTH_UPGRADE].pos.y = y;
-    heartProb = min(heartProb + 1, PROB_MAX);
+    heartProb = min(heartProb + 1, PROB_MAX - HEART_PROB_INIT);
     nextHeart = min(HEART_PROB_INIT + random(0, heartProb), PROB_MAX);
   }
 }
@@ -55,7 +55,7 @@ void spawnUpgrade(uint16_t x, uint8_t y) {
     upgrade[WEAPON_UPGRADE].type = ug;
     upgrade[WEAPON_UPGRADE].pos.x = x;
     upgrade[WEAPON_UPGRADE].pos.y = y;
-    upgradeProb = min(upgradeProb + 1, PROB_MAX);
+    upgradeProb = min(upgradeProb + 1, PROB_MAX - UPGRADE_PROB_INIT);
     nextUpgrade = min(UPGRADE_PROB_INIT + random(0, upgradeProb), PROB_MAX);
   }
 }

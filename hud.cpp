@@ -70,7 +70,7 @@ void drawTop() {
     Sprites::drawSelfMasked(123, bulletsRemaining - 11, HUD::ammo, bulletsRemaining);
   }
 
-  if (displayScore < score) displayScore += SCORE_MULTIPLIER;
+  if (displayScore < Score::getScore()) displayScore += SCORE_MULTIPLIER;
   Utils::printNum(123, 20, displayScore, 6);
 }
 

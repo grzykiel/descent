@@ -3,6 +3,7 @@
 #include "globals.h"
 #include "player.h"
 #include "bitmaps.h"
+#include "score.h"
 
 #define DAMAGE_COUNTER_FRAMES 60
 #define DAMAGE_COUNTER_HOLD   50

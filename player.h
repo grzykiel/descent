@@ -8,6 +8,7 @@
 #include "enemies.h"
 #include "bullet.h"
 #include "sound.h"
+#include "score.h"
 
 #define PLAYER_WIDTH  6
 #define PLAYER_HEIGHT 8
@@ -74,6 +75,7 @@ namespace Player {
   void resetCombo();
   void increaseCombo();
   void onComboEnd();
+  void onFirstLanding();
 
   void increasePower(uint8_t p);
   void resetPower();
