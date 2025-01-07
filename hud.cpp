@@ -1,6 +1,6 @@
 #include "hud.h"
 
-uint8_t comboTimer;
+int8_t comboTimer;
 hud_t empty;
 hud_t damage;
 

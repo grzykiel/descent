@@ -1,7 +1,6 @@
 #ifndef SCORE_H
 #define SCORE_H
 #include "globals.h"
-#endif
 
 #define SCORE_MULTIPLIER 10
 
@@ -13,3 +12,5 @@ namespace Score {
   void increaseScore(uint8_t s);
   void updateHighscore();
 }
+
+#endif

@@ -464,7 +464,7 @@ void kill(enemy_t *enemy, bool shot) {
 }
 
 bool updateSprite(enemy_t *enemy) {
-  if (enemy->type == EnemyType::hangingBat) return;
+  if (enemy->type == EnemyType::hangingBat) return false;
   if (!Utils::updateAnimation(&enemy->animation)) {
     enemy->animation.t = 0;
     enemy->animation.frame = 0;
